@@ -6,7 +6,7 @@
  * Time: 9:08 PM
  */
 
-namespace Componizer;
+namespace Gavrya\Componizer;
 
 
 class Editor
