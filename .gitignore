@@ -1,3 +1,4 @@
 # Componizer gitignore
 vendor
 composer.lock
+.idea
