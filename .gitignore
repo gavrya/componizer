@@ -1,0 +1,3 @@
+# Componizer gitignore
+vendor
+composer.lock
