@@ -77,6 +77,29 @@ class PluginManager implements ComponizerPluginManager
         return false;
     }
 
+    private function initComponent(ComponizerComponent $component)
+    {
+        // TODO: do all component related checks: cache/public dirs exists (create if not) ...
+
+        // check and sync assets dir
+
+        // call init() method
+    }
+
+    private function enableComponent(ComponizerComponent $component)
+    {
+        // sync assets dir
+
+        // call up() method
+    }
+
+    private function disableComponent(ComponizerComponent $component)
+    {
+        // unsync assets dir
+
+        // call down() method
+    }
+
     //-----------------------------------------------------
     // ComponizerPluginManager implementation section
     //-----------------------------------------------------
@@ -90,32 +113,43 @@ class PluginManager implements ComponizerPluginManager
         $plugins = [];
         $fsHelper = $this->componizer->resolve(FsHelper::class);
 
-        if ($fsHelper instanceof FsHelper) {
-            // prepare plugins data
-            $vendorPath = $fsHelper->composerVendorDir();
-            $jsonFiles = $fsHelper->pluginsJsonFiles($vendorPath, Componizer::PLUGIN_JSON_FILE_NAME);
-            $jsonData = $fsHelper->pluginsJsonData($jsonFiles);
+        // prepare plugins data
+        $vendorPath = $fsHelper->composerVendorDir();
+        $jsonFiles = $fsHelper->pluginsJsonFiles($vendorPath, Componizer::PLUGIN_JSON_FILE_NAME);
+        $jsonData = $fsHelper->pluginsJsonData($jsonFiles);
 
-            // check plugin data
-            foreach ($jsonData as $data) {
-                // check version
-                if (!isset($data['componizer_version']) || $data['componizer_version'] !== Componizer::VERSION) {
-                    continue;
-                }
+        // check plugin data
+        foreach ($jsonData as $data) {
+            // check version
+            if (!isset($data['componizer_version']) || $data['componizer_version'] !== Componizer::VERSION) {
+                continue;
+            }
 
-                // check plugin class
-                if (!isset($data['plugin_class'])) {
-                    continue;
-                }
+            // check plugin class
+            if (!isset($data['plugin_class'])) {
+                continue;
+            }
 
-                // create plugin instance from class name
-                // this action may throw FatalException if class does not exists or it cant be loaded by any autoloader
-                $plugin = new $data['plugin_class'];
+            // create plugin instance from class name
+            // this action may throw FatalException if class does not exists or it cant be loaded by any autoloader
+            $plugin = new $data['plugin_class'];
 
-                // init plugin and add to available plugins
-                if ($this->initPlugin($plugin)) {
-                    $plugins[$plugin->id()] = $plugin;
-                }
+            // check plugin instance
+            if (!($plugin instanceof ComponizerComponent && $plugin instanceof ComponizerPlugin)) {
+                continue;
+            }
+
+            // check plugin id
+            $pluginId = $plugin->id();
+
+            // check plugin id is lowercase md5
+            if (!preg_match('/^[a-f0-9]{32}$/', $pluginId)) {
+                continue;
+            }
+
+            // init plugin and add to available plugins
+            if ($this->initPlugin($plugin)) {
+                $plugins[$pluginId] = $plugin;
             }
         }
 
@@ -141,11 +175,9 @@ class PluginManager implements ComponizerPluginManager
     public function enabled()
     {
         $storageHelper = $this->componizer->resolve(StorageHelper::class);
-        if ($storageHelper instanceof StorageHelper) {
-            $plugins = $storageHelper->get('enabled_plugins', []);
+        $plugins = $storageHelper->get('enabled_plugins', []);
 
-            return array_intersect_key($this->all(), $plugins);
-        }
+        return array_intersect_key($this->all(), $plugins);
     }
 
     public function disabled()
@@ -164,25 +196,24 @@ class PluginManager implements ComponizerPluginManager
         // save to storage
         try {
             $storageHelper = $this->componizer->resolve(StorageHelper::class);
-            if ($storageHelper instanceof StorageHelper) {
-                $plugins = $storageHelper->get('enabled_plugins', []);
-                if (!isset($plugins[$plugin->id()])) {
-                    // TODO: copy/symlink assets dir to public dir
+            $plugins = $storageHelper->get('enabled_plugins', []);
 
-                    // call up() method
-                    $plugin->up();
+            if (!isset($plugins[$plugin->id()])) {
+                // TODO: copy/symlink assets dir to public dir
 
-                    // enable plugin components
+                // call up() method
+                $plugin->up();
 
-                    // update enabled plugins
-                    $plugins[$plugin->id()] = get_class($plugin);
+                // enable plugin components
 
-                    // update storage
-                    $storageHelper->set('enabled_plugins', $plugins);
-                    $storageHelper->save();
+                // update enabled plugins
+                $plugins[$plugin->id()] = get_class($plugin);
 
-                    return true;
-                }
+                // update storage
+                $storageHelper->set('enabled_plugins', $plugins);
+                $storageHelper->save();
+
+                return true;
             }
         } catch (Exception $ex) {
             throw new ComponizerException('Unable to enable plugin with id: ' . $plugin->id());
@@ -202,26 +233,25 @@ class PluginManager implements ComponizerPluginManager
         // delete from storage
         try {
             $storageHelper = $this->componizer->resolve(StorageHelper::class);
-            if ($storageHelper instanceof StorageHelper) {
-                $plugins = $storageHelper->get('enabled_plugins', []);
-                // check if exists
-                if (isset($plugins[$plugin->id()])) {
-                    // call down() method
-                    $plugin->down();
+            $plugins = $storageHelper->get('enabled_plugins', []);
 
-                    // TODO: delete assets dir/symlink from public dir
+            // check if exists
+            if (isset($plugins[$plugin->id()])) {
+                // call down() method
+                $plugin->down();
 
-                    // disable plugin components
+                // TODO: delete assets dir/symlink from public dir
 
-                    // update enabled plugins
-                    unset($plugins[$plugin->id()]);
+                // disable plugin components
 
-                    // update storage
-                    $storageHelper->set('enabled_plugins', $plugins);
-                    $storageHelper->save();
+                // update enabled plugins
+                unset($plugins[$plugin->id()]);
 
-                    return true;
-                }
+                // update storage
+                $storageHelper->set('enabled_plugins', $plugins);
+                $storageHelper->save();
+
+                return true;
             }
         } catch (Exception $ex) {
             throw new ComponizerException('Unable to disable plugin with id: ' . $plugin->id());

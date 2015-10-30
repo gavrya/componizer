@@ -17,7 +17,7 @@ class ExamplePlugin extends ComponizerPlugin implements ComponizerComponent
 
     public function id()
     {
-        return md5('example');
+        return '1a79a4d60de6718e8e5b326e338ae533';
     }
 
     public function name()
