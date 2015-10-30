@@ -40,7 +40,7 @@ class PluginManager implements GravitizerPluginManager
     // Helpers section
     //-----------------------------------------------------
 
-    private function validateInit($plugin)
+    private function initPlugin($plugin)
     {
         if ($plugin instanceof GravitizerComponent && $plugin instanceof GravitizerPlugin) {
             // gravitizer config
@@ -55,7 +55,7 @@ class PluginManager implements GravitizerPluginManager
                 mkdir($pluginCacheDir);
             }
 
-            // TODO: do all plugin related checks
+            // TODO: do all plugin related checks: cache/public dirs exists (create if not) ...
 
             // init plugin
             $plugin->init($lang);
@@ -110,7 +110,7 @@ class PluginManager implements GravitizerPluginManager
                     $plugin = new $data['plugin_class'];
 
                     // validate plugin init
-                    if($this->validateInit($plugin)) {
+                    if($this->initPlugin($plugin)) {
                         // add plugin to plugin list
                         // check plugin already exists, throw exception ?
                         $plugins[$plugin->id()] = $plugin;
