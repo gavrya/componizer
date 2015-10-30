@@ -9,6 +9,8 @@
 namespace Gavrya\Gravitizer\Helper;
 
 
+use Exception;
+use Gavrya\Gravitizer\Skeleton\GravitizerException;
 use RecursiveCallbackFilterIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -17,73 +19,86 @@ use SplFileInfo;
 class FsHelper
 {
 
-    public static function run()
+    public function composerVendorDir()
     {
-        die('It works');
-
-        // 1) Get array of componizer package files (full path to ComponizerPackage.php files inside composer package)
-        // 2) Get array of full class names with namespaces (parse class name, namespace and some interface implementation check)
-        // 3) Get array of componizer package object instances from class names
+        $path = dirname(__FILE__);
+        for ($i = 0; $i < 10; $i++) {
+            $path = dirname($path);
+            if (basename($path) == 'vendor') { // check if this working on windows?
+                // case: when installed as composer package
+                // example: /vendor/gavrya/gravitizer/src/Helper/FsHelper.php
+                return $path;
+            }
+            $alternativePath = rtrim($path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . 'vendor';
+            if (file_exists($alternativePath)) {
+                // case: when installed from github as project
+                // example: |- /gravitizer/src/Helper/FsHelper.php
+                //          |- /vendor/...
+                return $alternativePath;
+            }
+        }
+        throw new GravitizerException('Composer vendor directory not found');
     }
 
-    public static function searchPackageFiles($path = '/Users/gavrya/Projects/Gravitizer/vendor', $fileName = 'ComponizerPackage.php')
+    public function pluginsJsonFiles($path, $fileName)
     {
-        $matches = [];
+        $jsonFiles = [];
         $dirIterator = new RecursiveDirectoryIterator($path);
         // filter for directory iterator
-        $filteredIterator = new RecursiveCallbackFilterIterator($dirIterator, function ($current, $key, $iterator) use ($fileName) {
-            if ($current instanceof SplFileInfo) {
-                $realPath = $current->getRealPath();
-                // last position index
-                $index = strrpos($realPath, DIRECTORY_SEPARATOR . 'vendor');
-                if ($index === false) {
-                    return false;
+        $filteredIterator = new RecursiveCallbackFilterIterator($dirIterator,
+            function ($current, $key, $iterator) use ($fileName) {
+                if ($current instanceof SplFileInfo) {
+                    $realPath = $current->getRealPath();
+                    // last position index
+                    $index = strrpos($realPath, DIRECTORY_SEPARATOR . 'vendor');
+                    if ($index === false) {
+                        return false;
+                    }
+                    // path elements
+                    $elements = array_filter(explode(DIRECTORY_SEPARATOR, substr($realPath, $index)));
+                    $elementsCount = count($elements);
+                    // check path elements
+                    if ($current->isDir() && $elementsCount <= 3) {
+                        // case: /vendor or /vendor/* or /vendor/*/*
+                        return true;
+                    } elseif ($current->isFile() && $elementsCount == 4 && $current->getFilename() == $fileName) {
+                        // case: /vendor/*/*/$fileName
+                        return true;
+                    }
                 }
-                $targetPath = substr($realPath, $index);
-                // path elements
-                $elements = array_filter(explode(DIRECTORY_SEPARATOR, $targetPath));
-                $elementsCount = count($elements);
-                // check path elements
-                /*
-                $exclude = ['composer', 'laravel', 'yiisoft', 'symfony', 'swiftmailer', 'phpunit', 'doctrine', 'bin'];
-                if ($current->isDir() && $elementsCount == 2 && in_array($elements[1], $exclude)) {
-                    // case: /vendor/(composer|laravel|...) for ignoring some popular packages dirs
-                    return false;
-                } else
-                */
-                if ($current->isDir() && $elementsCount <= 3) {
-                    // case: /vendor or /vendor/* or /vendor/*/*
-                    return true;
-                } elseif ($current->isDir() && $elementsCount == 4 && $elements[3] == 'src') {
-                    // case: /vendor/*/*/src
-                    return true;
-                } elseif ($current->isFile() && $elementsCount == 5 && $elements[3] == 'src' && $elements[4] == $fileName) {
-                    // case: /vendor/*/*/src/ComponizerPackage.php
-                    return true;
-                }
+
+                return false;
             }
-            return false;
-        });
+        );
 
         $iterator = new RecursiveIteratorIterator($filteredIterator);
         foreach ($iterator as $fileInfo) {
-            if ($fileInfo instanceof SplFileInfo) {
-                $matches[] = $fileInfo;
+            if ($fileInfo instanceof SplFileInfo && $fileInfo->isFile() && $fileInfo->getFilename() == $fileName) {
+                $jsonFiles[] = $fileInfo;
             }
         }
 
-        var_dump($matches);
-
-        return $matches;
+        return $jsonFiles;
     }
 
+    public function pluginsJsonData(array $jsonFiles)
+    {
+        $jsonData = [];
+        foreach ($jsonFiles as $jsonFile) {
+            if ($jsonFile instanceof SplFileInfo && $jsonFile->isReadable()) {
+                try {
+                    $jsonString = $jsonFile->openFile()->fread($jsonFile->getSize());
+                    $data = json_decode($jsonString, true);
+                    if (is_array($data) && !empty($data)) {
+                        $jsonData[] = $data;
+                    }
+                } catch (Exception $ex) {
+                    // ignoring
+                }
+            }
+        }
+
+        return $jsonData;
+    }
 
 }
-
-FsHelper::search();
-
-//$path = '/vendor/vendor_name/vendor_package_name/src/ComponizerPackage.php';
-
-//$explode = explode(DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR, $path);
-
-//var_dump($explode);
