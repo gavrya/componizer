@@ -6,7 +6,7 @@
  * Time: 11:03 AM
  */
 
-namespace Gavrya\Componizer\Example;
+namespace Gavrya\Componizer\Plugin;
 
 
 use Gavrya\Componizer\Skeleton\ComponizerComponent;

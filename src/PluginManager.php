@@ -51,7 +51,7 @@ class PluginManager implements ComponizerPluginManager
 
             // create plugin cache dir
             $pluginCacheDir = $config[Componizer::CONFIG_CACHE_DIR] . DIRECTORY_SEPARATOR . $plugin->id();
-            if(!is_dir($pluginCacheDir)) {
+            if (!is_dir($pluginCacheDir)) {
                 mkdir($pluginCacheDir);
             }
 
@@ -91,7 +91,7 @@ class PluginManager implements ComponizerPluginManager
         $fsHelper = $this->componizer->resolve(FsHelper::class);
 
         if ($fsHelper instanceof FsHelper) {
-            // prepare data
+            // prepare plugins data
             $vendorPath = $fsHelper->composerVendorDir();
             $jsonFiles = $fsHelper->pluginsJsonFiles($vendorPath, Componizer::PLUGIN_JSON_FILE_NAME);
             $jsonData = $fsHelper->pluginsJsonData($jsonFiles);
@@ -100,21 +100,21 @@ class PluginManager implements ComponizerPluginManager
             foreach ($jsonData as $data) {
                 // check version
                 if (!isset($data['componizer_version']) || $data['componizer_version'] !== Componizer::VERSION) {
-                    // ignore plugin with wrong version
                     continue;
                 }
 
-                // load plugin by full class name
-                if (isset($data['plugin_class'])) {
-                    // this action may throw FatalException if class does not exists or it cant be loaded by any autoloader
-                    $plugin = new $data['plugin_class'];
+                // check plugin class
+                if (!isset($data['plugin_class'])) {
+                    continue;
+                }
 
-                    // validate plugin init
-                    if($this->initPlugin($plugin)) {
-                        // add plugin to plugin list
-                        // check plugin already exists, throw exception ?
-                        $plugins[$plugin->id()] = $plugin;
-                    }
+                // create plugin instance from class name
+                // this action may throw FatalException if class does not exists or it cant be loaded by any autoloader
+                $plugin = new $data['plugin_class'];
+
+                // init plugin and add to available plugins
+                if ($this->initPlugin($plugin)) {
+                    $plugins[$plugin->id()] = $plugin;
                 }
             }
         }
