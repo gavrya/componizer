@@ -6,10 +6,10 @@
  * Time: 12:26 AM
  */
 
-namespace Gavrya\Gravitizer\Skeleton;
+namespace Gavrya\Componizer\Skeleton;
 
 
-interface GravitizerInstance
+interface ComponizerInstance
 {
     public static function setup($config);
 

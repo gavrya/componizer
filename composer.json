@@ -1,6 +1,6 @@
 {
-  "name": "gavrya/gravitizer",
-  "description": "Gravitizer",
+  "name": "gavrya/componizer",
+  "description": "Componizer",
   "minimum-stability": "dev",
   "license": "proprietary",
   "authors": [
@@ -15,7 +15,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Gavrya\\Gravitizer\\": "src/"
+      "Gavrya\\Componizer\\": "src/"
     }
   }
 }

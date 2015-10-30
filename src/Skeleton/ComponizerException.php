@@ -6,12 +6,12 @@
  * Time: 5:17 PM
  */
 
-namespace Gavrya\Gravitizer\Skeleton;
+namespace Gavrya\Componizer\Skeleton;
 
 
 use Exception;
 
-class GravitizerException extends Exception
+class ComponizerException extends Exception
 {
 
     public function __construct($message = "", $code = 0, Exception $previous = null)

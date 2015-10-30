@@ -5,30 +5,28 @@
  * Date: 10/23/15
  * Time: 5:50 PM
  */
-require('/Users/gavrya/Projects/gravitizer/vendor/autoload.php');
+require('/Users/gavrya/Projects/componizer/vendor/autoload.php');
 
-use Gavrya\Gravitizer\Gravitizer;
-use Gavrya\Gravitizer\Helper\FsHelper;
-use Gavrya\Gravitizer\Helper\StorageHelper;
-use Gavrya\Gravitizer\PluginManager;
+use Gavrya\Componizer\Componizer;
+use Gavrya\Componizer\Helper\FsHelper;
+use Gavrya\Componizer\Helper\StorageHelper;
+use Gavrya\Componizer\PluginManager;
 
 $ts = microtime(true);
 
 $config = [
-    Gravitizer::CONFIG_LANG => 'en',
-    Gravitizer::CONFIG_CACHE_DIR => '/Users/gavrya/Projects/gravitizer/vendor/test_cache',
-    Gravitizer::CONFIG_PUBLIC_DIR => '/Users/gavrya/Projects/gravitizer/vendor/test_public',
-    Gravitizer::CONFIG_ASSETS_HANDLER => Gravitizer::ASSETS_HANDLER_SYMLINK_BY_PHP,
-    Gravitizer::CONFIG_PREVIEW_URL => '/preview.php',
+    Componizer::CONFIG_LANG => 'en',
+    Componizer::CONFIG_CACHE_DIR => '/Users/gavrya/Projects/gravitizer/vendor/test_cache',
+    Componizer::CONFIG_PUBLIC_DIR => '/Users/gavrya/Projects/gravitizer/vendor/test_public',
+    Componizer::CONFIG_ASSETS_HANDLER => Componizer::ASSETS_HANDLER_SYMLINK_BY_PHP,
+    Componizer::CONFIG_PREVIEW_URL => '/preview.php',
 ];
 
-Gravitizer::setup($config);
-$gr = Gravitizer::instance();
+Componizer::setup($config);
+$gr = Componizer::instance();
 $gr->resolve(FsHelper::class);
 $gr->resolve(StorageHelper::class);
 $pm = $gr->resolve(PluginManager::class);
-
-//$pm->enable('1a79a4d60de6718e8e5b326e338ae533');
 
 var_dump($pm->all());
 

@@ -6,10 +6,10 @@
  * Time: 2:49 PM
  */
 
-namespace Gavrya\Gravitizer\Skeleton;
+namespace Gavrya\Componizer\Skeleton;
 
 
-interface GravitizerComponent
+interface ComponizerComponent
 {
 
     public function id();

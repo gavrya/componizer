@@ -6,11 +6,11 @@
  * Time: 9:08 PM
  */
 
-namespace Gavrya\Gravitizer\Helper;
+namespace Gavrya\Componizer\Helper;
 
 
 use Exception;
-use Gavrya\Gravitizer\Skeleton\GravitizerException;
+use Gavrya\Componizer\Skeleton\ComponizerException;
 use RecursiveCallbackFilterIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -26,18 +26,18 @@ class FsHelper
             $path = dirname($path);
             if (basename($path) == 'vendor') { // check if this working on windows?
                 // case: when installed as composer package
-                // example: /vendor/gavrya/gravitizer/src/Helper/FsHelper.php
+                // example: /vendor/gavrya/componizer/src/Helper/FsHelper.php
                 return $path;
             }
             $alternativePath = rtrim($path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . 'vendor';
             if (file_exists($alternativePath)) {
                 // case: when installed from github as project
-                // example: |- /gravitizer/src/Helper/FsHelper.php
+                // example: |- /componizer/src/Helper/FsHelper.php
                 //          |- /vendor/...
                 return $alternativePath;
             }
         }
-        throw new GravitizerException('Composer vendor directory not found');
+        throw new ComponizerException('Composer vendor directory not found');
     }
 
     public function pluginsJsonFiles($path, $fileName)

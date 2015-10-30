@@ -6,13 +6,13 @@
  * Time: 11:03 AM
  */
 
-namespace Gavrya\Gravitizer\Example;
+namespace Gavrya\Componizer\Example;
 
 
-use Gavrya\Gravitizer\Skeleton\GravitizerComponent;
-use Gavrya\Gravitizer\Skeleton\GravitizerPlugin;
+use Gavrya\Componizer\Skeleton\ComponizerComponent;
+use Gavrya\Componizer\Skeleton\ComponizerPlugin;
 
-class ExamplePlugin extends GravitizerPlugin implements GravitizerComponent
+class ExamplePlugin extends ComponizerPlugin implements ComponizerComponent
 {
 
     public function id()

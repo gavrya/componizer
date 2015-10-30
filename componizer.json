@@ -1,0 +1,4 @@
+{
+  "componizer_version": "0.0.1",
+  "plugin_class": "Gavrya\\Componizer\\Example\\ExamplePlugin"
+}

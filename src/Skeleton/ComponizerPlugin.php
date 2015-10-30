@@ -6,10 +6,10 @@
  * Time: 3:08 PM
  */
 
-namespace Gavrya\Gravitizer\Skeleton;
+namespace Gavrya\Componizer\Skeleton;
 
 
-abstract class GravitizerPlugin
+abstract class ComponizerPlugin
 {
 
     //-----------------------------------------------------

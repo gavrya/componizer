@@ -6,10 +6,10 @@
  * Time: 2:34 PM
  */
 
-namespace Gavrya\Gravitizer\Helper;
+namespace Gavrya\Componizer\Helper;
 
 
-use Gavrya\Gravitizer\Skeleton\GravitizerException;
+use Gavrya\Componizer\Skeleton\ComponizerException;
 
 class StorageHelper
 {
@@ -34,15 +34,15 @@ class StorageHelper
     private function init()
     {
         if (!is_dir($this->cacheDir) || !is_readable($this->cacheDir) || !is_writable($this->cacheDir)) {
-            throw new GravitizerException('Invalid storage cache dir');
+            throw new ComponizerException('Invalid storage cache dir');
         }
 
         if (!is_file($this->storageFile) && !touch($this->storageFile) && !chmod($this->storageFile, 0777)) {
-            throw new GravitizerException('Unable to create storage file');
+            throw new ComponizerException('Unable to create storage file');
         }
 
         if (!is_file($this->storageFile) || !is_readable($this->storageFile) || !is_writable($this->storageFile)) {
-            throw new GravitizerException('Invalid storage file');
+            throw new ComponizerException('Invalid storage file');
         }
 
         $jsonData = json_decode(file_get_contents($this->storageFile), true);

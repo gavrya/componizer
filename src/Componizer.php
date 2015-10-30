@@ -6,21 +6,21 @@
  * Time: 8:32 PM
  */
 
-namespace Gavrya\Gravitizer;
+namespace Gavrya\Componizer;
 
 
 use Closure;
-use Gavrya\Gravitizer\Helper\FsHelper;
-use Gavrya\Gravitizer\Helper\StorageHelper;
-use Gavrya\Gravitizer\Skeleton\GravitizerInstance;
-use Gavrya\Gravitizer\Skeleton\GravitizerException;
+use Gavrya\Componizer\Helper\FsHelper;
+use Gavrya\Componizer\Helper\StorageHelper;
+use Gavrya\Componizer\Skeleton\ComponizerInstance;
+use Gavrya\Componizer\Skeleton\ComponizerException;
 
-class Gravitizer implements GravitizerInstance
+class Componizer implements ComponizerInstance
 {
 
     // Config keys
     const VERSION = '0.0.1';
-    const PLUGIN_JSON_FILE_NAME = 'gravitizer.json';
+    const PLUGIN_JSON_FILE_NAME = 'componizer.json';
 
     // Config keys
     const CONFIG_LANG = 'lang';
@@ -74,7 +74,7 @@ class Gravitizer implements GravitizerInstance
     public static function setup($config)
     {
         if (self::$config !== null) {
-            throw new GravitizerException('Unable to setup config multiple times', self::EX_CONFIG_SETUP_ERROR);
+            throw new ComponizerException('Unable to setup config multiple times', self::EX_CONFIG_SETUP_ERROR);
         }
 
         $config = self::validateConfig($config);
@@ -87,7 +87,7 @@ class Gravitizer implements GravitizerInstance
     {
         // check config type
         if (!is_array($config)) {
-            throw new GravitizerException('Invalid config', self::EX_CONFIG_SETUP_ERROR);
+            throw new ComponizerException('Invalid config', self::EX_CONFIG_SETUP_ERROR);
         }
 
         // config keys
@@ -130,7 +130,7 @@ class Gravitizer implements GravitizerInstance
 
         // check/modify lang
         if (!in_array($config[self::CONFIG_LANG], ['en', 'ru'])) {
-            throw new GravitizerException('Invalid lang', self::EX_LANG_INVALID);
+            throw new ComponizerException('Invalid lang', self::EX_LANG_INVALID);
         }
 
         return $config;
@@ -140,7 +140,7 @@ class Gravitizer implements GravitizerInstance
     {
         // check if param provided
         if (!isset($config[self::CONFIG_CACHE_DIR])) {
-            throw new GravitizerException('Invalid cache directory', self::EX_CACHE_DIR_INVALID);
+            throw new ComponizerException('Invalid cache directory', self::EX_CACHE_DIR_INVALID);
         }
 
         // cache dir path (must be an absolute not relative)
@@ -148,18 +148,18 @@ class Gravitizer implements GravitizerInstance
 
         // check dir exists
         if (!file_exists($dirPath)) {
-            throw new GravitizerException('Cache directory is not exists: ' . $dirPath, self::EX_CACHE_DIR_NOT_EXISTS);
+            throw new ComponizerException('Cache directory is not exists: ' . $dirPath, self::EX_CACHE_DIR_NOT_EXISTS);
         }
 
         // check dir
         if (!is_dir($dirPath)) {
-            throw new GravitizerException('Cache directory is not a directory: ' . $dirPath,
+            throw new ComponizerException('Cache directory is not a directory: ' . $dirPath,
                 self::EX_CACHE_DIR_NOT_DIRECTORY);
         }
 
         // check dir writable
         if (!is_writable($dirPath)) {
-            throw new GravitizerException('Cache directory is not writable: ' . $dirPath,
+            throw new ComponizerException('Cache directory is not writable: ' . $dirPath,
                 self::EX_CACHE_DIR_NOT_WRITABLE);
         }
 
@@ -176,13 +176,13 @@ class Gravitizer implements GravitizerInstance
 
             // check dir exists and writable
             if (is_dir($dirPath) && !is_writable($dirPath)) {
-                throw new GravitizerException('Cache directory is not writable: ' . $dirPath,
+                throw new ComponizerException('Cache directory is not writable: ' . $dirPath,
                     self::EX_CACHE_DIR_NOT_WRITABLE);
             }
 
             // make dir
             if (!is_dir($dirPath) && !mkdir($dirPath)) {
-                throw new GravitizerException('Unable to create cache directory: ' . $dirPath,
+                throw new ComponizerException('Unable to create cache directory: ' . $dirPath,
                     self::EX_CACHE_DIR_UNABLE_CREATE);
             }
 
@@ -197,7 +197,7 @@ class Gravitizer implements GravitizerInstance
     {
         // check if param provided
         if (!isset($config[self::CONFIG_PUBLIC_DIR])) {
-            throw new GravitizerException('Invalid public directory', self::EX_PUBLIC_DIR_INVALID);
+            throw new ComponizerException('Invalid public directory', self::EX_PUBLIC_DIR_INVALID);
         }
 
         // public dir path (must be an absolute not relative)
@@ -205,19 +205,19 @@ class Gravitizer implements GravitizerInstance
 
         // check dir exists
         if (!file_exists($dirPath)) {
-            throw new GravitizerException('Public directory is not exists: ' . $dirPath,
+            throw new ComponizerException('Public directory is not exists: ' . $dirPath,
                 self::EX_PUBLIC_DIR_NOT_EXISTS);
         }
 
         // check dir
         if (!is_dir($dirPath)) {
-            throw new GravitizerException('Public directory is not a directory: ' . $dirPath,
+            throw new ComponizerException('Public directory is not a directory: ' . $dirPath,
                 self::EX_PUBLIC_DIR_NOT_DIRECTORY);
         }
 
         // check writable
         if (!is_writable($dirPath)) {
-            throw new GravitizerException('Public directory is not writable: ' . $dirPath,
+            throw new ComponizerException('Public directory is not writable: ' . $dirPath,
                 self::EX_PUBLIC_DIR_NOT_WRITABLE);
         }
 
@@ -234,13 +234,13 @@ class Gravitizer implements GravitizerInstance
 
             // check dir exists and writable
             if (is_dir($dirPath) && !is_writable($dirPath)) {
-                throw new GravitizerException('Public directory is not writable: ' . $dirPath,
+                throw new ComponizerException('Public directory is not writable: ' . $dirPath,
                     self::EX_PUBLIC_DIR_NOT_WRITABLE);
             }
 
             // make dir
             if (!is_dir($dirPath) && !mkdir($dirPath)) {
-                throw new GravitizerException('Unable to create public directory: ' . $dirPath,
+                throw new ComponizerException('Unable to create public directory: ' . $dirPath,
                     self::EX_PUBLIC_DIR_UNABLE_CREATE);
             }
 
@@ -269,7 +269,7 @@ class Gravitizer implements GravitizerInstance
 
         // check param value
         if (!in_array($config[self::CONFIG_ASSETS_HANDLER], $handlers)) {
-            throw new GravitizerException('Invalid assets handler', self::EX_ASSETS_HANDLER_INVALID);
+            throw new ComponizerException('Invalid assets handler', self::EX_ASSETS_HANDLER_INVALID);
         }
 
         return $config;
@@ -279,7 +279,7 @@ class Gravitizer implements GravitizerInstance
     {
         // check if param provided
         if (!isset($config[self::CONFIG_PREVIEW_URL])) {
-            throw new GravitizerException('Invalid preview url', self::EX_PREVIEW_URL_INVALID);
+            throw new ComponizerException('Invalid preview url', self::EX_PREVIEW_URL_INVALID);
         }
 
         return $config;
@@ -292,7 +292,7 @@ class Gravitizer implements GravitizerInstance
     public static function instance()
     {
         if (self::$config === null) {
-            throw new GravitizerException('Unable to create instance without config');
+            throw new ComponizerException('Unable to create instance without config');
         }
 
         return self::$instance !== null ? self::$instance : self::$instance = new self();
@@ -306,22 +306,22 @@ class Gravitizer implements GravitizerInstance
     private function init()
     {
         // alias
-        $gravitizer = $this;
+        $componizer = $this;
 
         // Helpers init
         $this->container[FsHelper::class] = function () {
             return new FsHelper();
         };
 
-        $this->container[StorageHelper::class] = function () use ($gravitizer) {
-            $config = $gravitizer->config();
+        $this->container[StorageHelper::class] = function () use ($componizer) {
+            $config = $componizer->config();
 
-            return new StorageHelper($config[Gravitizer::CONFIG_CACHE_DIR]);
+            return new StorageHelper($config[Componizer::CONFIG_CACHE_DIR]);
         };
 
         // Component Managers init
-        $this->container[PluginManager::class] = function () use ($gravitizer) {
-            return new PluginManager($gravitizer);
+        $this->container[PluginManager::class] = function () use ($componizer) {
+            return new PluginManager($componizer);
         };
     }
 
@@ -340,11 +340,11 @@ class Gravitizer implements GravitizerInstance
             }
         }
 
-        throw new GravitizerException('Unable to resolve class: ' . $class);
+        throw new ComponizerException('Unable to resolve class: ' . $class);
     }
 
     //-----------------------------------------------------
-    // GravitizerInstance implementation section
+    // ComponizerInstance implementation section
     //-----------------------------------------------------
 
     public function version()

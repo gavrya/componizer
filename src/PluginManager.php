@@ -6,22 +6,22 @@
  * Time: 4:54 PM
  */
 
-namespace Gavrya\Gravitizer;
+namespace Gavrya\Componizer;
 
 
 use Exception;
-use Gavrya\Gravitizer\Helper\FsHelper;
-use Gavrya\Gravitizer\Helper\StorageHelper;
-use Gavrya\Gravitizer\Skeleton\GravitizerComponent;
-use Gavrya\Gravitizer\Skeleton\GravitizerException;
-use Gavrya\Gravitizer\Skeleton\GravitizerPlugin;
-use Gavrya\Gravitizer\Skeleton\GravitizerPluginManager;
+use Gavrya\Componizer\Helper\FsHelper;
+use Gavrya\Componizer\Helper\StorageHelper;
+use Gavrya\Componizer\Skeleton\ComponizerComponent;
+use Gavrya\Componizer\Skeleton\ComponizerException;
+use Gavrya\Componizer\Skeleton\ComponizerPlugin;
+use Gavrya\Componizer\Skeleton\ComponizerPluginManager;
 
-class PluginManager implements GravitizerPluginManager
+class PluginManager implements ComponizerPluginManager
 {
 
-    // Gravitizer
-    private $gravitizer = null;
+    // Componizer
+    private $componizer = null;
 
     // Plugins
     private $plugins = null;
@@ -30,9 +30,9 @@ class PluginManager implements GravitizerPluginManager
     // Instance creation/init section
     //-----------------------------------------------------
 
-    public function __construct(Gravitizer $gravitizer)
+    public function __construct(Componizer $componizer)
     {
-        $this->gravitizer = $gravitizer;
+        $this->componizer = $componizer;
 
     }
 
@@ -42,15 +42,15 @@ class PluginManager implements GravitizerPluginManager
 
     private function initPlugin($plugin)
     {
-        if ($plugin instanceof GravitizerComponent && $plugin instanceof GravitizerPlugin) {
+        if ($plugin instanceof ComponizerComponent && $plugin instanceof ComponizerPlugin) {
             // gravitizer config
-            $config = $this->gravitizer->config();
+            $config = $this->componizer->config();
 
             // lang
-            $lang = $config[Gravitizer::CONFIG_LANG];
+            $lang = $config[Componizer::CONFIG_LANG];
 
             // create plugin cache dir
-            $pluginCacheDir = $config[Gravitizer::CONFIG_CACHE_DIR] . DIRECTORY_SEPARATOR . $plugin->id();
+            $pluginCacheDir = $config[Componizer::CONFIG_CACHE_DIR] . DIRECTORY_SEPARATOR . $plugin->id();
             if(!is_dir($pluginCacheDir)) {
                 mkdir($pluginCacheDir);
             }
@@ -64,7 +64,7 @@ class PluginManager implements GravitizerPluginManager
             /*
             if($plugin->hasWidgets()) {
                 foreach($plugin->widgets() as $widget) {
-                    if($widget instanceof GravitizerComponent && $widget instanceof Widget) {
+                    if($widget instanceof ComponizerComponent && $widget instanceof Widget) {
                         $widget->init($lang);
                     }
                 }
@@ -78,7 +78,7 @@ class PluginManager implements GravitizerPluginManager
     }
 
     //-----------------------------------------------------
-    // GravitizerPluginManager implementation section
+    // ComponizerPluginManager implementation section
     //-----------------------------------------------------
 
     public function all()
@@ -88,18 +88,18 @@ class PluginManager implements GravitizerPluginManager
         }
 
         $plugins = [];
-        $fsHelper = $this->gravitizer->resolve(FsHelper::class);
+        $fsHelper = $this->componizer->resolve(FsHelper::class);
 
         if ($fsHelper instanceof FsHelper) {
             // prepare data
             $vendorPath = $fsHelper->composerVendorDir();
-            $jsonFiles = $fsHelper->pluginsJsonFiles($vendorPath, Gravitizer::PLUGIN_JSON_FILE_NAME);
+            $jsonFiles = $fsHelper->pluginsJsonFiles($vendorPath, Componizer::PLUGIN_JSON_FILE_NAME);
             $jsonData = $fsHelper->pluginsJsonData($jsonFiles);
 
             // check plugin data
             foreach ($jsonData as $data) {
                 // check version
-                if (!isset($data['gravitizer_version']) || $data['gravitizer_version'] !== Gravitizer::VERSION) {
+                if (!isset($data['componizer_version']) || $data['componizer_version'] !== Componizer::VERSION) {
                     // ignore plugin with wrong version
                     continue;
                 }
@@ -125,7 +125,7 @@ class PluginManager implements GravitizerPluginManager
     public function get($plugin)
     {
         $pluginId = null;
-        if ($plugin instanceof GravitizerComponent && $plugin instanceof GravitizerPlugin) {
+        if ($plugin instanceof ComponizerComponent && $plugin instanceof ComponizerPlugin) {
             $pluginId = $plugin->id();
         } elseif (is_string($plugin) || is_numeric($plugin)) {
             $pluginId = $plugin;
@@ -140,7 +140,7 @@ class PluginManager implements GravitizerPluginManager
 
     public function enabled()
     {
-        $storageHelper = $this->gravitizer->resolve(StorageHelper::class);
+        $storageHelper = $this->componizer->resolve(StorageHelper::class);
         if ($storageHelper instanceof StorageHelper) {
             $plugins = $storageHelper->get('enabled_plugins', []);
 
@@ -163,7 +163,7 @@ class PluginManager implements GravitizerPluginManager
 
         // save to storage
         try {
-            $storageHelper = $this->gravitizer->resolve(StorageHelper::class);
+            $storageHelper = $this->componizer->resolve(StorageHelper::class);
             if ($storageHelper instanceof StorageHelper) {
                 $plugins = $storageHelper->get('enabled_plugins', []);
                 if (!isset($plugins[$plugin->id()])) {
@@ -185,7 +185,7 @@ class PluginManager implements GravitizerPluginManager
                 }
             }
         } catch (Exception $ex) {
-            throw new GravitizerException('Unable to enable plugin with id: ' . $plugin->id());
+            throw new ComponizerException('Unable to enable plugin with id: ' . $plugin->id());
         }
 
         return false;
@@ -201,7 +201,7 @@ class PluginManager implements GravitizerPluginManager
 
         // delete from storage
         try {
-            $storageHelper = $this->gravitizer->resolve(StorageHelper::class);
+            $storageHelper = $this->componizer->resolve(StorageHelper::class);
             if ($storageHelper instanceof StorageHelper) {
                 $plugins = $storageHelper->get('enabled_plugins', []);
                 // check if exists
@@ -224,7 +224,7 @@ class PluginManager implements GravitizerPluginManager
                 }
             }
         } catch (Exception $ex) {
-            throw new GravitizerException('Unable to disable plugin with id: ' . $plugin->id());
+            throw new ComponizerException('Unable to disable plugin with id: ' . $plugin->id());
         }
 
         return false;
