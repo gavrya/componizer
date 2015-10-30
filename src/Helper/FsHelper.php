@@ -58,7 +58,10 @@ class FsHelper
                     $elements = array_filter(explode(DIRECTORY_SEPARATOR, substr($realPath, $index)));
                     $elementsCount = count($elements);
                     // check path elements
-                    if ($current->isDir() && $elementsCount <= 3) {
+                    if ($current->isDir() && $elementsCount == 2 && $current->getFilename() == 'composer') {
+                        // case: /vendor/composer
+                        return false;
+                    } elseif ($current->isDir() && $elementsCount <= 3) {
                         // case: /vendor or /vendor/* or /vendor/*/*
                         return true;
                     } elseif ($current->isFile() && $elementsCount == 4 && $current->getFilename() == $fileName) {
