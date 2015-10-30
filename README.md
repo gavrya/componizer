@@ -1,2 +1,2 @@
-# gravitizer
-gravitizer
+# componizer
+componizer
