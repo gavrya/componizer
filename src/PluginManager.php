@@ -36,6 +36,10 @@ class PluginManager implements GravitizerPluginManager
 
     }
 
+    //-----------------------------------------------------
+    // Helpers section
+    //-----------------------------------------------------
+
     private function validateInit($plugin)
     {
         if ($plugin instanceof GravitizerComponent && $plugin instanceof GravitizerPlugin) {
@@ -50,6 +54,8 @@ class PluginManager implements GravitizerPluginManager
             if(!is_dir($pluginCacheDir)) {
                 mkdir($pluginCacheDir);
             }
+
+            // TODO: do all plugin related checks
 
             // init plugin
             $plugin->init($lang);
