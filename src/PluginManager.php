@@ -33,6 +33,42 @@ class PluginManager implements GravitizerPluginManager
     public function __construct(Gravitizer $gravitizer)
     {
         $this->gravitizer = $gravitizer;
+
+    }
+
+    private function validateInit($plugin)
+    {
+        if ($plugin instanceof GravitizerComponent && $plugin instanceof GravitizerPlugin) {
+            // gravitizer config
+            $config = $this->gravitizer->config();
+
+            // lang
+            $lang = $config[Gravitizer::CONFIG_LANG];
+
+            // create plugin cache dir
+            $pluginCacheDir = $config[Gravitizer::CONFIG_CACHE_DIR] . DIRECTORY_SEPARATOR . $plugin->id();
+            if(!is_dir($pluginCacheDir)) {
+                mkdir($pluginCacheDir);
+            }
+
+            // init plugin
+            $plugin->init($lang);
+
+            // init plugin components
+            /*
+            if($plugin->hasWidgets()) {
+                foreach($plugin->widgets() as $widget) {
+                    if($widget instanceof GravitizerComponent && $widget instanceof Widget) {
+                        $widget->init($lang);
+                    }
+                }
+            }
+            */
+
+            return true;
+        }
+
+        return false;
     }
 
     //-----------------------------------------------------
@@ -67,34 +103,8 @@ class PluginManager implements GravitizerPluginManager
                     // this action may throw FatalException if class does not exists or it cant be loaded by any autoloader
                     $plugin = new $data['plugin_class'];
 
-                    // check instance
-                    if ($plugin instanceof GravitizerComponent && $plugin instanceof GravitizerPlugin) {
-                        // gravitizer config
-                        $config = $this->gravitizer->config();
-
-                        // lang
-                        $lang = $config[Gravitizer::CONFIG_LANG];
-
-                        // create plugin cache dir
-                        $pluginCacheDir = $config[Gravitizer::CONFIG_CACHE_DIR] . DIRECTORY_SEPARATOR . $plugin->id();
-                        if(!is_dir($pluginCacheDir)) {
-                            mkdir($pluginCacheDir);
-                        }
-
-                        // init plugin
-                        $plugin->init($lang);
-
-                        // init plugin components
-                        /*
-                        if($plugin->hasWidgets()) {
-                            foreach($plugin->widgets() as $widget) {
-                                if($widget instanceof GravitizerComponent && $widget instanceof Widget) {
-                                    $widget->init($lang);
-                                }
-                            }
-                        }
-                        */
-
+                    // validate plugin init
+                    if($this->validateInit($plugin)) {
                         // add plugin to plugin list
                         // check plugin already exists, throw exception ?
                         $plugins[$plugin->id()] = $plugin;
