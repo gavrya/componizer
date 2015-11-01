@@ -85,23 +85,17 @@ class PluginManager implements ComponizerPluginManager
             // this action may throw FatalException if class does not exists or it cant be loaded by any autoloader
             $plugin = new $data['plugin']['class'];
 
-            // check plugin instance
-            if (!($plugin instanceof ComponizerComponent && $plugin instanceof ComponizerPlugin)) {
+            // validate plugin
+            if (!$this->validPlugin($plugin)) {
+                // throw ComponizerException ???
                 continue;
             }
 
-            // plugin id
-            $pluginId = $plugin->id();
+            // init plugin
+            $this->initPlugin($plugin);
 
-            // check plugin id is lowercase md5
-            if (!preg_match('/^[a-f0-9]{32}$/', $pluginId)) {
-                continue;
-            }
-
-            // init plugin and add to available plugins
-            if ($this->initPlugin($plugin)) {
-                $plugins[$pluginId] = $plugin;
-            }
+            // add plugin to available plugins
+            $plugins[$plugin->id()] = $plugin;
         }
 
         return $this->plugins = $plugins;
@@ -149,16 +143,13 @@ class PluginManager implements ComponizerPluginManager
             $storageHelper = $this->componizer->resolve(StorageHelper::class);
             $plugins = $storageHelper->get('enabled_plugins', []);
 
+            // check existance
             if (isset($plugins[$plugin->id()])) {
                 return false;
             }
 
-            // TODO: copy/symlink assets dir to public dir
-
-            // call up() method
-            $plugin->up();
-
-            // enable plugin components
+            // enable plugin component
+            $this->enableComponent($plugin);
 
             // update enabled plugins
             $plugins[$plugin->id()] = get_class($plugin);
@@ -188,17 +179,13 @@ class PluginManager implements ComponizerPluginManager
             $storageHelper = $this->componizer->resolve(StorageHelper::class);
             $plugins = $storageHelper->get('enabled_plugins', []);
 
-            // check if exists
+            // check existance
             if (!isset($plugins[$plugin->id()])) {
                 return false;
             }
 
-            // call down() method
-            $plugin->down();
-
-            // TODO: delete assets dir/symlink from public dir
-
-            // disable plugin components
+            // disable plugin component
+            $this->disableComponent($plugin);
 
             // update enabled plugins
             unset($plugins[$plugin->id()]);
@@ -227,50 +214,122 @@ class PluginManager implements ComponizerPluginManager
     // Helpers section
     //-----------------------------------------------------
 
-    private function initPlugin($plugin)
+    private function validPlugin($plugin)
     {
-        if ($plugin instanceof ComponizerComponent && $plugin instanceof ComponizerPlugin) {
-            // componizer config
-            $config = $this->componizer->config();
-
-            // lang
-            $lang = $config[Componizer::CONFIG_LANG];
-
-            // create plugin cache dir
-            $pluginCacheDir = $config[Componizer::CONFIG_CACHE_DIR] . DIRECTORY_SEPARATOR . $plugin->id();
-            if (!is_dir($pluginCacheDir)) {
-                mkdir($pluginCacheDir);
-            }
-
-            // TODO: do all plugin related checks: cache/public dirs exists (create if not) ...
-
-            // init plugin
-            $plugin->init($lang);
-
-            // init plugin components
-            /*
-            if($plugin->hasWidgets()) {
-                foreach($plugin->widgets() as $widget) {
-                    if($widget instanceof ComponizerComponent && $widget instanceof Widget) {
-                        $widget->init($lang);
-                    }
-                }
-            }
-            */
-
-            return true;
+        // check plugin instance
+        if (!($plugin instanceof ComponizerComponent && $plugin instanceof ComponizerPlugin)) {
+            return false;
         }
 
-        return false;
+        // check component
+        if(!$this->validComponent($plugin)) {
+            return false;
+        }
+
+        // check plugin widgets related data
+
+        if (!is_array($plugin->widgets())) {
+            return false;
+        }
+
+        if (count($plugin->widgets()) !== $plugin->countWidgets()) {
+            return false;
+        }
+
+        if ($plugin->hasWidgets() !== (bool) $plugin->countWidgets()) {
+            return false;
+        }
+
+        foreach ($plugin->widgets() as $widget) {
+            if (!($widget instanceof ComponizerComponent)) { // && instanceof ComponizerWidget
+                return false;
+            }
+
+            if (!$plugin->hasWidget($widget)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private function initPlugin($plugin)
+    {
+        $this->initComponent($plugin);
+
+        // init plugin components
+        $pluginComponents = array_merge($plugin->widgets());
+        foreach ($pluginComponents as $pluginComponent) {
+            if ($pluginComponent instanceof ComponizerComponent && $this->validComponent($pluginComponent)) {
+                $this->initComponent($pluginComponent);
+            }
+        }
+    }
+
+    private function validComponent($component)
+    {
+        // check instance
+        if (!($component instanceof ComponizerComponent)) {
+            return false;
+        }
+
+        // check component id (lowercase md5)
+        if (!preg_match('/^[a-f0-9]{32}$/', $component->id())) {
+            return false;
+        }
+
+        // check assets dir
+        if ($component->hasAssets() && !is_dir($component->assetsDir())) {
+            return false;
+        }
+
+        // check assets dir real path
+        if ($component->hasAssets() && $component->assetsDir() !== realpath($component->assetsDir())) {
+            return false;
+        }
+
+        // check assets dir name
+        if ($component->hasAssets() && basename($component->assetsDir()) !== $component->id()) {
+            return false;
+        }
+
+        return true;
     }
 
     private function initComponent(ComponizerComponent $component)
     {
-        // TODO: do all component related checks: cache dir exists (create if not) ...
+        // componizer config
+        $config = $this->componizer->config();
 
-        // check and sync assets dir
+        // lang
+        $lang = $config[Componizer::CONFIG_LANG];
 
-        // call init() method
+        // cache dir
+        $cacheDir = $config[Componizer::CONFIG_CACHE_DIR];
+
+        // public dir
+        $publicDir = $config[Componizer::CONFIG_PUBLIC_DIR];
+
+        // create component cache dir
+        $componentCacheDir = $cacheDir . DIRECTORY_SEPARATOR . $component->id();
+        if (!is_dir($componentCacheDir)) {
+            mkdir($componentCacheDir);
+        }
+
+        // create public dir symlink
+        if ($component->hasAssets()) {
+            // FsHelper
+            $fsHelper = $this->componizer->resolve(FsHelper::class);
+
+            // component public dir symlink
+            $targetLink = $publicDir . DIRECTORY_SEPARATOR . $component->id();
+
+            // create symlink
+            $fsHelper->createSymlink($component->assetsDir(), $targetLink);
+        }
+
+        // init component
+        $component->init($lang);
     }
 
     private function enableComponent(ComponizerComponent $component)
@@ -278,6 +337,8 @@ class PluginManager implements ComponizerPluginManager
         // sync assets dir
 
         // call up() method
+
+        // if plugin, also enable plugin components
     }
 
     private function disableComponent(ComponizerComponent $component)
@@ -285,6 +346,8 @@ class PluginManager implements ComponizerPluginManager
         // unsync assets dir
 
         // call down() method
+
+        // if plugin, also disable plugin components
     }
 
 }
