@@ -24,10 +24,16 @@ $config = [
 
 Componizer::setup($config);
 $gr = Componizer::instance();
-$gr->resolve(FsHelper::class);
+$fsh = $gr->resolve(FsHelper::class);
 $gr->resolve(StorageHelper::class);
 $pm = $gr->resolve(PluginManager::class);
 
-var_dump($pm->all());
+//var_dump($pm->all());
+
+
+$fsh->symlinkDirs('/Users/gavrya/Projects/tdir', '/Users/gavrya/Projects/brdir');
+
 
 echo round(microtime(true) - $ts, 3) . PHP_EOL;
+
+

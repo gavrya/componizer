@@ -9,6 +9,7 @@
 namespace Gavrya\Componizer\Helper;
 
 
+use DirectoryIterator;
 use Exception;
 use Gavrya\Componizer\Skeleton\ComponizerException;
 use RecursiveCallbackFilterIterator;
@@ -18,6 +19,10 @@ use SplFileInfo;
 
 class FsHelper
 {
+
+    //-----------------------------------------------------
+    // Helpers section
+    //-----------------------------------------------------
 
     public function composerVendorDir()
     {
@@ -39,6 +44,10 @@ class FsHelper
         }
         throw new ComponizerException('Composer vendor directory not found');
     }
+
+    //-----------------------------------------------------
+    // Plugins search section
+    //-----------------------------------------------------
 
     public function pluginsJsonFiles($path, $fileName)
     {
@@ -103,5 +112,54 @@ class FsHelper
 
         return $jsonData;
     }
+
+    //-----------------------------------------------------
+    // Symlinks section
+    //-----------------------------------------------------
+
+    public function createSymlink($sourceDir, $targetDir)
+    {
+        if (!is_dir($sourceDir)) {
+            return false;
+        }
+
+        // remove invalid symlink
+        if (is_link($targetDir) && $sourceDir !== realpath($targetDir)) {
+            $this->removeSymlink($targetDir);
+        }
+
+        if (is_link($targetDir)) {
+            return true;
+        }
+
+        return symlink($sourceDir, $targetDir);
+    }
+
+    public function removeSymlink($targetDir)
+    {
+        if (!is_link($targetDir)) {
+            return false;
+        }
+
+        return unlink($targetDir) || rmdir($targetDir);
+    }
+
+    public function removeBrokenSymlinks($dir)
+    {
+        if (!is_dir($dir)) {
+            return;
+        }
+
+        foreach (new DirectoryIterator($dir) as $fileInfo) {
+            if ($fileInfo instanceof SplFileInfo) {
+                $linkPath = $fileInfo->getPathname();
+                $targetPath = $fileInfo->getRealPath();
+                if ($fileInfo->isLink() && !is_dir($targetPath)) {
+                    $this->removeSymlink($linkPath);
+                }
+            }
+        }
+    }
+
 
 }

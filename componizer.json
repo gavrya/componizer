@@ -1,4 +1,8 @@
 {
-  "componizer_version": "0.0.1",
-  "plugin_class": "Gavrya\\Componizer\\Plugin\\ExamplePlugin"
+  "componizer": {
+    "version" : "0.0.1"
+  },
+  "plugin": {
+    "class" : "Gavrya\\Componizer\\Plugin\\ExamplePlugin"
+  }
 }

@@ -152,7 +152,7 @@ class Componizer implements ComponizerInstance
         }
 
         // check dir
-        if (!is_dir($dirPath)) {
+        if (is_link($dirPath) || !is_dir($dirPath)) {
             throw new ComponizerException('Cache directory is not a directory: ' . $dirPath,
                 self::EX_CACHE_DIR_NOT_DIRECTORY);
         }
@@ -210,7 +210,7 @@ class Componizer implements ComponizerInstance
         }
 
         // check dir
-        if (!is_dir($dirPath)) {
+        if (is_link($dirPath) || !is_dir($dirPath)) {
             throw new ComponizerException('Public directory is not a directory: ' . $dirPath,
                 self::EX_PUBLIC_DIR_NOT_DIRECTORY);
         }
