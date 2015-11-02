@@ -28,11 +28,7 @@ $fsh = $gr->resolve(FsHelper::class);
 $gr->resolve(StorageHelper::class);
 $pm = $gr->resolve(PluginManager::class);
 
-//var_dump($pm->all());
-
-
-$fsh->symlinkDirs('/Users/gavrya/Projects/tdir', '/Users/gavrya/Projects/brdir');
-
+var_dump($pm->all());
 
 echo round(microtime(true) - $ts, 3) . PHP_EOL;
 

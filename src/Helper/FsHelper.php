@@ -11,6 +11,7 @@ namespace Gavrya\Componizer\Helper;
 
 use DirectoryIterator;
 use Exception;
+use FilesystemIterator;
 use Gavrya\Componizer\Skeleton\ComponizerException;
 use RecursiveCallbackFilterIterator;
 use RecursiveDirectoryIterator;
@@ -161,5 +162,33 @@ class FsHelper
         }
     }
 
+    //-----------------------------------------------------
+    // Dirs section
+    //-----------------------------------------------------
+
+    public function makeDir($dir)
+    {
+        if (!is_dir($dir)) {
+            mkdir($dir);
+        }
+    }
+
+    public function removeDir($dir)
+    {
+        if(!is_dir($dir)) {
+            return;
+        }
+
+        $dirIterator = new RecursiveDirectoryIterator($dir, FilesystemIterator::SKIP_DOTS);
+        $iterator = new RecursiveIteratorIterator($dirIterator, RecursiveIteratorIterator::CHILD_FIRST);
+
+        foreach ($iterator as $path) {
+            if ($path instanceof SplFileInfo) {
+                $path->isDir() && !$path->isLink() ? rmdir($path->getPathname()) : unlink($path->getPathname());
+            }
+        }
+
+        rmdir($dir);
+    }
 
 }

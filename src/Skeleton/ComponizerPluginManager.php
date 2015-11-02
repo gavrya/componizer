@@ -29,7 +29,7 @@ interface ComponizerPluginManager
      * @param $plugin
      * @return mixed
      */
-    public function get($plugin);
+    public function find($plugin);
 
     //-----------------------------------------------------
     // Enable/Disable section

@@ -319,9 +319,13 @@ class Componizer implements ComponizerInstance
             return new StorageHelper($config[Componizer::CONFIG_CACHE_DIR]);
         };
 
-        // Component Managers init
+        // Managers init
         $this->container[PluginManager::class] = function () use ($componizer) {
             return new PluginManager($componizer);
+        };
+
+        $this->container[ComponentManager::class] = function () use ($componizer) {
+            return new ComponentManager($componizer);
         };
     }
 
