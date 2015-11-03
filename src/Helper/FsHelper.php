@@ -54,6 +54,7 @@ class FsHelper
     {
         $jsonFiles = [];
         $dirIterator = new RecursiveDirectoryIterator($path);
+
         // filter for directory iterator
         $filteredIterator = new RecursiveCallbackFilterIterator($dirIterator,
             function ($current, $key, $iterator) use ($fileName) {
@@ -151,7 +152,9 @@ class FsHelper
             return;
         }
 
-        foreach (new DirectoryIterator($dir) as $fileInfo) {
+        $dirIterator = new DirectoryIterator($dir);
+
+        foreach ($dirIterator as $fileInfo) {
             if ($fileInfo instanceof SplFileInfo) {
                 $linkPath = $fileInfo->getPathname();
                 $targetPath = $fileInfo->getRealPath();
@@ -197,7 +200,9 @@ class FsHelper
             return;
         }
 
-        foreach (new DirectoryIterator($dir) as $fileInfo) {
+        $dirIterator = new DirectoryIterator($dir);
+
+        foreach ($dirIterator as $fileInfo) {
             if ($fileInfo instanceof SplFileInfo) {
                 if ($fileInfo->isDir() && in_array($fileInfo->getFilename(), $dirNames)) {
                     $this->removeDir($fileInfo->getPathname());
