@@ -66,12 +66,6 @@ class ComponentManager
 
     public function init(ComponizerComponent $component)
     {
-        // create component cache dir
-        $this->createCacheDir($component);
-
-        // sync assets
-        $this->syncAssetsDir($component);
-
         // componizer config
         $config = $this->componizer->config();
 
@@ -82,13 +76,31 @@ class ComponentManager
         $component->init($lang);
     }
 
-    public function enable(ComponizerComponent $component)
+    public function activate(ComponizerComponent $component)
     {
         // create component cache dir
         $this->createCacheDir($component);
 
         // sync assets
         $this->syncAssetsDir($component);
+
+        // componizer config
+        $config = $this->componizer->config();
+
+        // cache dir
+        $cacheDir = $config[Componizer::CONFIG_CACHE_DIR];
+
+        // create component cache dir
+        $componentCacheDir = $cacheDir . DIRECTORY_SEPARATOR . $component->id();
+
+        // activate component
+        $component->activate($componentCacheDir);
+    }
+
+    public function enable(ComponizerComponent $component)
+    {
+        // activate
+        $this->activate($component);
 
         // call up() method
         $component->up();

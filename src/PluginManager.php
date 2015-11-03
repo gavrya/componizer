@@ -44,13 +44,23 @@ class PluginManager implements ComponizerPluginManager
         // cache dir
         $cacheDir = $config[Componizer::CONFIG_CACHE_DIR];
 
+        // public dir
+        $publicDir = $config[Componizer::CONFIG_PUBLIC_DIR];
+
         // FsHelper
         $fsHelper = $this->componizer->resolve(FsHelper::class);
 
         // remove broken symlinks
-        $fsHelper->removeBrokenSymlinks($cacheDir);
+        $fsHelper->removeBrokenSymlinks($publicDir);
 
-        // TODO: remove broken cache dirs ???
+        // storage helper
+        $storageHelper = $this->componizer->resolve(StorageHelper::class);
+
+        // enabled plugins by config
+        $plugins = $storageHelper->get('enabled_plugins', []);
+
+        // remove broken cache dirs
+        $fsHelper->removeDirs($cacheDir, array_keys($plugins));
     }
 
     //-----------------------------------------------------
@@ -140,7 +150,7 @@ class PluginManager implements ComponizerPluginManager
                     return false;
                 }
                 // enable plugin
-                if ($this->enable($item) === false) {
+                if ($this->enable($item)) {
                     return false;
                 }
             }
@@ -161,7 +171,7 @@ class PluginManager implements ComponizerPluginManager
 
             // check existance
             if (isset($plugins[$plugin->id()])) {
-                return false;
+                return true;
             }
 
             // component manager
@@ -203,7 +213,7 @@ class PluginManager implements ComponizerPluginManager
                     return false;
                 }
                 // disable plugin
-                if ($this->disable($item) === false) {
+                if ($this->disable($item)) {
                     return false;
                 }
             }
@@ -224,7 +234,7 @@ class PluginManager implements ComponizerPluginManager
 
             // check existance
             if (!isset($plugins[$plugin->id()])) {
-                return false;
+                return true;
             }
 
             // component manager
@@ -256,12 +266,17 @@ class PluginManager implements ComponizerPluginManager
         return false;
     }
 
-    public function isEnabled($plugin)
+    public function isEnabled($plugin, $checkConfig = false)
     {
         $plugin = $this->find($plugin);
+
+        if($plugin === null) {
+            return false;
+        }
+
         $plugins = $this->enabled();
 
-        return $plugin !== null && isset($plugins[$plugin->id()]);
+        return isset($plugins[$plugin->id()]);
     }
 
     //-----------------------------------------------------
@@ -312,19 +327,39 @@ class PluginManager implements ComponizerPluginManager
         return true;
     }
 
-    private function initPlugin($plugin)
+    private function initPlugin(ComponizerPlugin $plugin)
     {
         // component manager
         $componentManager = $this->componizer->resolve(ComponentManager::class);
 
+        // storage helper
+        $storageHelper = $this->componizer->resolve(StorageHelper::class);
+
+        // enabled plugins by config
+        $plugins = $storageHelper->get('enabled_plugins', []);
+
+        // check if was enabled
+        $enabled = isset($plugins[$plugin->id()]);
+
         // init component
         $componentManager->init($plugin);
+
+        // activate enabled component
+        if ($enabled) {
+            $componentManager->activate($plugin);
+        }
 
         // init plugin components
         $pluginComponents = array_merge($plugin->widgets());
         foreach ($pluginComponents as $pluginComponent) {
             if ($pluginComponent instanceof ComponizerComponent && $componentManager->valid($pluginComponent)) {
+                // init component
                 $componentManager->init($pluginComponent);
+
+                // activate enabled component
+                if ($enabled) {
+                    $componentManager->activate($pluginComponent);
+                }
             }
         }
     }

@@ -191,4 +191,19 @@ class FsHelper
         rmdir($dir);
     }
 
+    public function removeDirs($dir, $dirNames)
+    {
+        if (!is_dir($dir) || empty($dirNames)) {
+            return;
+        }
+
+        foreach (new DirectoryIterator($dir) as $fileInfo) {
+            if ($fileInfo instanceof SplFileInfo) {
+                if ($fileInfo->isDir() && in_array($fileInfo->getFilename(), $dirNames)) {
+                    $this->removeDir($fileInfo->getPathname());
+                }
+            }
+        }
+    }
+
 }

@@ -26,10 +26,10 @@ interface ComponizerComponent
 
     public function init($lang);
 
-    //public function setup($cacheDir, $otherResource);
+    public function activate($cacheDir);
 
-    public function up(); // rename to enabled
+    public function up();
 
-    public function down();  // rename to disabled
+    public function down();
 
 }

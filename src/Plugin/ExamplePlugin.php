@@ -50,6 +50,11 @@ class ExamplePlugin extends ComponizerPlugin implements ComponizerComponent
         echo 'example plugin init' . PHP_EOL;
     }
 
+    public function activate($cacheDir)
+    {
+        echo 'example plugin activate' . PHP_EOL;
+    }
+
     public function up()
     {
         echo 'example plugin up' . PHP_EOL;
@@ -59,4 +64,6 @@ class ExamplePlugin extends ComponizerPlugin implements ComponizerComponent
     {
         echo 'example plugin down' . PHP_EOL;
     }
+
+
 }
