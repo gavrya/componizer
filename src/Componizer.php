@@ -30,8 +30,8 @@ class Componizer implements ComponizerInstance
     const CONFIG_PREVIEW_URL = 'preview_url';
 
     // Directory names
-    const CACHE_DIR_NAME = 'gravitizer';
-    const PUBLIC_DIR_NAME = 'gravitizer';
+    const CACHE_DIR_NAME = 'componizer';
+    const PUBLIC_DIR_NAME = 'componizer';
 
     // Assets handlers
     const ASSETS_HANDLER_COPY_BY_PHP = 'copy_by_php';
@@ -363,7 +363,7 @@ class Componizer implements ComponizerInstance
 
     public function pluginManager()
     {
-        $this->resolve(PluginManager::class);
+        return $this->resolve(PluginManager::class);
     }
 
     public function widgetManager()

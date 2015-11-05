@@ -37,12 +37,12 @@ class ExamplePlugin extends ComponizerPlugin implements ComponizerComponent
 
     public function hasAssets()
     {
-        return false;
+        return true;
     }
 
     public function assetsDir()
     {
-        return null;
+        return dirname(__DIR__) . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR . $this->id();
     }
 
     public function init($lang, $cacheDir)
