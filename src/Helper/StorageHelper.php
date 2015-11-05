@@ -37,7 +37,7 @@ class StorageHelper
             throw new ComponizerException('Invalid storage cache dir');
         }
 
-        if ((!file_exists($this->storageFile) || !is_file($this->storageFile)) && !touch($this->storageFile) && !chmod($this->storageFile, 0777)) {
+        if ((!file_exists($this->storageFile) || !is_file($this->storageFile)) && (!touch($this->storageFile) || !chmod($this->storageFile, 0777))) {
             throw new ComponizerException('Unable to create storage file');
         }
 
