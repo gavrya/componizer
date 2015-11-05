@@ -121,7 +121,7 @@ class FsHelper
 
     public function createSymlink($sourceDir, $targetDir)
     {
-        if (!is_dir($sourceDir)) {
+        if (!file_exists($sourceDir) || !is_dir($sourceDir)) {
             return false;
         }
 
@@ -148,7 +148,7 @@ class FsHelper
 
     public function removeBrokenSymlinks($dir)
     {
-        if (!is_dir($dir)) {
+        if (!file_exists($dir) || !is_dir($dir)) {
             return;
         }
 
@@ -158,7 +158,7 @@ class FsHelper
             if ($fileInfo instanceof SplFileInfo) {
                 $linkPath = $fileInfo->getPathname();
                 $targetPath = $fileInfo->getRealPath();
-                if ($fileInfo->isLink() && !is_dir($targetPath)) {
+                if ($fileInfo->isLink() && (!file_exists($targetPath) || !is_dir($targetPath))) {
                     $this->removeSymlink($linkPath);
                 }
             }
@@ -171,14 +171,14 @@ class FsHelper
 
     public function makeDir($dir)
     {
-        if (!is_dir($dir)) {
+        if (!file_exists($dir) || !is_dir($dir)) {
             mkdir($dir);
         }
     }
 
     public function removeDir($dir)
     {
-        if(!is_dir($dir)) {
+        if(!file_exists($dir) || !is_dir($dir)) {
             return;
         }
 
@@ -196,15 +196,15 @@ class FsHelper
 
     public function removeDirs($dir, $dirNames)
     {
-        if (!is_dir($dir) || empty($dirNames)) {
+        if (!file_exists($dir) || !is_dir($dir) || empty($dirNames)) {
             return;
         }
 
         $dirIterator = new DirectoryIterator($dir);
 
         foreach ($dirIterator as $fileInfo) {
-            if ($fileInfo instanceof SplFileInfo) {
-                if ($fileInfo->isDir() && !in_array($fileInfo->getFilename(), $dirNames)) {
+            if ($fileInfo instanceof DirectoryIterator) {
+                if ($fileInfo->isDir() && !$fileInfo->isDot() && !in_array($fileInfo->getFilename(), $dirNames)) {
                     $this->removeDir($fileInfo->getPathname());
                 }
             }

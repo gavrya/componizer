@@ -33,4 +33,4 @@ var_dump($pm->all());
 echo round(microtime(true) - $ts, 3) . PHP_EOL;
 
 
-
+is_dir('/Users/gavrya/Projects/componizer/vendor/test_public/componisdfzer');

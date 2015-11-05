@@ -33,15 +33,15 @@ class StorageHelper
 
     private function init()
     {
-        if (!is_dir($this->cacheDir) || !is_readable($this->cacheDir) || !is_writable($this->cacheDir)) {
+        if (!file_exists($this->cacheDir) || !is_dir($this->cacheDir) || !is_readable($this->cacheDir) || !is_writable($this->cacheDir)) {
             throw new ComponizerException('Invalid storage cache dir');
         }
 
-        if (!is_file($this->storageFile) && !touch($this->storageFile) && !chmod($this->storageFile, 0777)) {
+        if ((!file_exists($this->storageFile) || !is_file($this->storageFile)) && !touch($this->storageFile) && !chmod($this->storageFile, 0777)) {
             throw new ComponizerException('Unable to create storage file');
         }
 
-        if (!is_file($this->storageFile) || !is_readable($this->storageFile) || !is_writable($this->storageFile)) {
+        if (!file_exists($this->storageFile) || !is_file($this->storageFile) || !is_readable($this->storageFile) || !is_writable($this->storageFile)) {
             throw new ComponizerException('Invalid storage file');
         }
 

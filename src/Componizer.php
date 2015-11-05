@@ -175,13 +175,13 @@ class Componizer implements ComponizerInstance
             $dirPath = $dirPath . DIRECTORY_SEPARATOR . self::CACHE_DIR_NAME;
 
             // check dir exists and writable
-            if (is_dir($dirPath) && !is_writable($dirPath)) {
+            if (file_exists($dirPath) && is_dir($dirPath) && !is_writable($dirPath)) {
                 throw new ComponizerException('Cache directory is not writable: ' . $dirPath,
                     self::EX_CACHE_DIR_NOT_WRITABLE);
             }
 
             // make dir
-            if (!is_dir($dirPath) && !mkdir($dirPath)) {
+            if ((!file_exists($dirPath) || !is_dir($dirPath)) && !mkdir($dirPath)) {
                 throw new ComponizerException('Unable to create cache directory: ' . $dirPath,
                     self::EX_CACHE_DIR_UNABLE_CREATE);
             }
@@ -233,13 +233,13 @@ class Componizer implements ComponizerInstance
             $dirPath = $dirPath . DIRECTORY_SEPARATOR . self::PUBLIC_DIR_NAME;
 
             // check dir exists and writable
-            if (is_dir($dirPath) && !is_writable($dirPath)) {
+            if (file_exists($dirPath) && is_dir($dirPath) && !is_writable($dirPath)) {
                 throw new ComponizerException('Public directory is not writable: ' . $dirPath,
                     self::EX_PUBLIC_DIR_NOT_WRITABLE);
             }
 
             // make dir
-            if (!is_dir($dirPath) && !mkdir($dirPath)) {
+            if ((!file_exists($dirPath) || !is_dir($dirPath)) && !mkdir($dirPath)) {
                 throw new ComponizerException('Unable to create public directory: ' . $dirPath,
                     self::EX_PUBLIC_DIR_UNABLE_CREATE);
             }

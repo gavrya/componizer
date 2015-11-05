@@ -47,7 +47,7 @@ class ComponentManager
         $assetsDir = $component->assetsDir();
 
         // check assets dir
-        if ($component->hasAssets() && !is_dir($assetsDir)) {
+        if ($component->hasAssets() && (!file_exists($assetsDir) || !is_dir($assetsDir))) {
             return false;
         }
 
