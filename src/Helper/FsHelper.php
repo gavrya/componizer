@@ -204,7 +204,7 @@ class FsHelper
 
         foreach ($dirIterator as $fileInfo) {
             if ($fileInfo instanceof SplFileInfo) {
-                if ($fileInfo->isDir() && in_array($fileInfo->getFilename(), $dirNames)) {
+                if ($fileInfo->isDir() && !in_array($fileInfo->getFilename(), $dirNames)) {
                     $this->removeDir($fileInfo->getPathname());
                 }
             }

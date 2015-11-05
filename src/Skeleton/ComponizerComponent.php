@@ -24,9 +24,7 @@ interface ComponizerComponent
 
     public function assetsDir();
 
-    public function init($lang);
-
-    public function activate($cacheDir);
+    public function init($lang, $cacheDir);
 
     public function up();
 

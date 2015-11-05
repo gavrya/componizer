@@ -45,14 +45,9 @@ class ExamplePlugin extends ComponizerPlugin implements ComponizerComponent
         return null;
     }
 
-    public function init($lang)
+    public function init($lang, $cacheDir)
     {
         echo 'example plugin init' . PHP_EOL;
-    }
-
-    public function activate($cacheDir)
-    {
-        echo 'example plugin activate' . PHP_EOL;
     }
 
     public function up()

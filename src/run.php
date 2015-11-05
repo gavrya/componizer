@@ -30,6 +30,9 @@ $pm = $gr->resolve(PluginManager::class);
 
 var_dump($pm->all());
 
+$pm->disable($pm->enabled());
+$pm->enable($pm->disabled());
+
 echo round(microtime(true) - $ts, 3) . PHP_EOL;
 
 

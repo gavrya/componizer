@@ -332,22 +332,8 @@ class PluginManager implements ComponizerPluginManager
         // component manager
         $componentManager = $this->componizer->resolve(ComponentManager::class);
 
-        // storage helper
-        $storageHelper = $this->componizer->resolve(StorageHelper::class);
-
-        // enabled plugins by config
-        $plugins = $storageHelper->get('enabled_plugins', []);
-
-        // check if was enabled
-        $enabled = isset($plugins[$plugin->id()]);
-
         // init component
         $componentManager->init($plugin);
-
-        // activate enabled component
-        if ($enabled) {
-            $componentManager->activate($plugin);
-        }
 
         // init plugin components
         $pluginComponents = array_merge($plugin->widgets());
@@ -355,11 +341,6 @@ class PluginManager implements ComponizerPluginManager
             if ($pluginComponent instanceof ComponizerComponent && $componentManager->valid($pluginComponent)) {
                 // init component
                 $componentManager->init($pluginComponent);
-
-                // activate enabled component
-                if ($enabled) {
-                    $componentManager->activate($pluginComponent);
-                }
             }
         }
     }

@@ -66,18 +66,6 @@ class ComponentManager
 
     public function init(ComponizerComponent $component)
     {
-        // componizer config
-        $config = $this->componizer->config();
-
-        // lang
-        $lang = $config[Componizer::CONFIG_LANG];
-
-        // init component
-        $component->init($lang);
-    }
-
-    public function activate(ComponizerComponent $component)
-    {
         // create component cache dir
         $this->createCacheDir($component);
 
@@ -87,20 +75,26 @@ class ComponentManager
         // componizer config
         $config = $this->componizer->config();
 
+        // lang
+        $lang = $config[Componizer::CONFIG_LANG];
+
         // cache dir
         $cacheDir = $config[Componizer::CONFIG_CACHE_DIR];
 
-        // create component cache dir
+        // component cache dir
         $componentCacheDir = $cacheDir . DIRECTORY_SEPARATOR . $component->id();
 
-        // activate component
-        $component->activate($componentCacheDir);
+        // init component
+        $component->init($lang, $componentCacheDir);
     }
 
     public function enable(ComponizerComponent $component)
     {
-        // activate
-        $this->activate($component);
+        // create component cache dir
+        $this->createCacheDir($component);
+
+        // sync assets
+        $this->syncAssetsDir($component);
 
         // call up() method
         $component->up();
@@ -126,7 +120,7 @@ class ComponentManager
         // cache dir
         $cacheDir = $config[Componizer::CONFIG_CACHE_DIR];
 
-        // create component cache dir
+        // component cache dir
         $componentCacheDir = $cacheDir . DIRECTORY_SEPARATOR . $component->id();
 
         // FsHelper
@@ -144,7 +138,7 @@ class ComponentManager
         // cache dir
         $cacheDir = $config[Componizer::CONFIG_CACHE_DIR];
 
-        // create component cache dir
+        // component cache dir
         $componentCacheDir = $cacheDir . DIRECTORY_SEPARATOR . $component->id();
 
         // FsHelper
