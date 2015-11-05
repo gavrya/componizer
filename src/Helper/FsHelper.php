@@ -53,7 +53,7 @@ class FsHelper
     public function pluginsJsonFiles($path, $fileName)
     {
         $jsonFiles = [];
-        $dirIterator = new RecursiveDirectoryIterator($path);
+        $dirIterator = new RecursiveDirectoryIterator($path, FilesystemIterator::SKIP_DOTS);
 
         // filter for directory iterator
         $filteredIterator = new RecursiveCallbackFilterIterator($dirIterator,
