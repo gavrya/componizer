@@ -13,6 +13,46 @@ abstract class ComponizerPlugin
 {
 
     //-----------------------------------------------------
+    // Components section
+    //-----------------------------------------------------
+
+    public function components()
+    {
+        return array_merge($this->widgets()); // array_merge($this->widgets(), $this->layouts(), ...);
+    }
+
+    public function countComponents()
+    {
+        return count($this->components());
+    }
+
+    public function hasComponents()
+    {
+        return !empty($this->components());
+    }
+
+    public function hasComponent($component)
+    {
+        $componentId = null;
+
+        if(is_string($component) && is_numeric($component)){
+            $componentId = (string) $component;
+        } elseif($component instanceof ComponizerComponent) {
+            $componentId = $component->id();
+        } else {
+            return false;
+        }
+
+        foreach($this->components() as $item) {
+            if($item instanceof ComponizerComponent && $item->id() === $componentId) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    //-----------------------------------------------------
     // Widgets section
     //-----------------------------------------------------
 
@@ -23,17 +63,17 @@ abstract class ComponizerPlugin
 
     public function countWidgets()
     {
-        return 0;
+        return count($this->widgets());
     }
 
     public function hasWidgets()
     {
-        return false;
+        return !empty($this->widgets());
     }
 
     public function hasWidget($widget)
     {
-        return false;
+        return $this->hasComponent($widget);
     }
 
     //-----------------------------------------------------

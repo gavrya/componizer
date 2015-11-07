@@ -38,8 +38,16 @@ class ComponentManager
             return false;
         }
 
-        // check component id (lowercase md5)
-        if (!preg_match('/^[a-f0-9]{32}$/', $component->id())) {
+        // check component id
+        $componentId = $component->id();
+
+        // check component id
+        if (!is_string($componentId)) {
+            return false;
+        }
+
+        // check component id format (lowercase md5)
+        if (!preg_match('/^[a-f0-9]{32}$/', $componentId)) {
             return false;
         }
 
@@ -57,7 +65,7 @@ class ComponentManager
         }
 
         // check assets dir name = component id
-        if ($component->hasAssets() && basename($assetsDir) !== $component->id()) {
+        if ($component->hasAssets() && basename($assetsDir) !== $componentId) {
             return false;
         }
 
@@ -67,7 +75,7 @@ class ComponentManager
     public function init(ComponizerComponent $component)
     {
         // create component cache dir
-        $this->createCacheDir($component);
+        $componentCacheDir = $this->createCacheDir($component);
 
         // sync assets
         $this->syncAssetsDir($component);
@@ -77,12 +85,6 @@ class ComponentManager
 
         // lang
         $lang = $config[Componizer::CONFIG_LANG];
-
-        // cache dir
-        $cacheDir = $config[Componizer::CONFIG_CACHE_DIR];
-
-        // component cache dir
-        $componentCacheDir = $cacheDir . DIRECTORY_SEPARATOR . $component->id();
 
         // init component
         $component->init($lang, $componentCacheDir);
@@ -128,6 +130,8 @@ class ComponentManager
 
         // make dir
         $fsHelper->makeDir($componentCacheDir);
+
+        return $componentCacheDir;
     }
 
     private function removeCacheDir(ComponizerComponent $component)
@@ -168,6 +172,8 @@ class ComponentManager
 
         // create symlink
         $fsHelper->createSymlink($component->assetsDir(), $targetLink);
+
+        return $targetLink;
     }
 
     private function unsyncAssetsDir(ComponizerComponent $component)

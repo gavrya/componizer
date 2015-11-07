@@ -28,6 +28,7 @@ class FsHelper
     public function composerVendorDir()
     {
         $path = dirname(__FILE__);
+
         for ($i = 0; $i < 10; $i++) {
             $path = dirname($path);
             if (basename($path) == 'vendor') { // check if this working on windows?
@@ -36,13 +37,14 @@ class FsHelper
                 return $path;
             }
             $alternativePath = rtrim($path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . 'vendor';
-            if (file_exists($alternativePath)) {
+            if (file_exists($alternativePath) && is_dir($alternativePath)) {
                 // case: when installed from github as project
                 // example: |- /componizer/src/Helper/FsHelper.php
                 //          |- /vendor/...
                 return $alternativePath;
             }
         }
+
         throw new ComponizerException('Composer vendor directory not found');
     }
 
@@ -139,7 +141,7 @@ class FsHelper
 
     public function removeSymlink($targetDir)
     {
-        if (!is_link($targetDir)) {
+        if (!file_exists($targetDir) || !is_link($targetDir)) {
             return false;
         }
 

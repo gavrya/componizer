@@ -78,6 +78,7 @@ class Componizer implements ComponizerInstance
         }
 
         $config = self::validateConfig($config);
+
         if (self::$config === null) {
             self::$config = $config;
         }

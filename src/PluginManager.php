@@ -96,7 +96,7 @@ class PluginManager implements ComponizerPluginManager
             // create plugin instance from class name (may throw FatalException if not loadable)
             $plugin = new $data['plugin']['class'];
 
-            // validate plugin
+            // validate plugin and its components
             if (!$this->validPlugin($plugin)) {
                 continue;
             }
@@ -114,12 +114,13 @@ class PluginManager implements ComponizerPluginManager
     public function find($plugin)
     {
         $pluginId = null;
+
         if ($plugin instanceof ComponizerComponent && $plugin instanceof ComponizerPlugin) {
             $pluginId = $plugin->id();
         } elseif (is_string($plugin) || is_numeric($plugin)) {
-            $pluginId = $plugin;
+            $pluginId = (string) $plugin;
         } else {
-            return $pluginId;
+            return null;
         }
 
         $plugins = $this->all();
@@ -130,6 +131,7 @@ class PluginManager implements ComponizerPluginManager
     public function enabled()
     {
         $storageHelper = $this->componizer->resolve(StorageHelper::class);
+
         $plugins = $storageHelper->get('enabled_plugins', []);
 
         return array_intersect_key($this->all(), $plugins);
@@ -146,12 +148,9 @@ class PluginManager implements ComponizerPluginManager
         if (is_array($plugin) && !empty($plugin)) {
             foreach ($plugin as $item) {
                 // check instance
-                if (!($item instanceof ComponizerComponent && $item instanceof ComponizerPlugin)) {
-                    return false;
-                }
-                // enable plugin
-                if ($this->enable($item)) {
-                    return false;
+                if ($item instanceof ComponizerComponent && $item instanceof ComponizerPlugin) {
+                    // enable plugin
+                    $this->enable($item);
                 }
             }
 
@@ -160,6 +159,7 @@ class PluginManager implements ComponizerPluginManager
 
         // check plugin
         $plugin = $this->find($plugin);
+
         if ($plugin === null) {
             return false;
         }
@@ -167,6 +167,7 @@ class PluginManager implements ComponizerPluginManager
         // save to storage
         try {
             $storageHelper = $this->componizer->resolve(StorageHelper::class);
+
             $plugins = $storageHelper->get('enabled_plugins', []);
 
             // check existance
@@ -181,9 +182,8 @@ class PluginManager implements ComponizerPluginManager
             $componentManager->enable($plugin);
 
             // enable plugin components
-            $pluginComponents = array_merge($plugin->widgets());
-            foreach ($pluginComponents as $pluginComponent) {
-                if ($pluginComponent instanceof ComponizerComponent && $componentManager->valid($pluginComponent)) {
+            foreach ($plugin->components() as $pluginComponent) {
+                if ($pluginComponent instanceof ComponizerComponent) {
                     $componentManager->enable($pluginComponent);
                 }
             }
@@ -209,12 +209,9 @@ class PluginManager implements ComponizerPluginManager
         if (is_array($plugin) && !empty($plugin)) {
             foreach ($plugin as $item) {
                 // check instance
-                if (!($item instanceof ComponizerComponent && $item instanceof ComponizerPlugin)) {
-                    return false;
-                }
-                // disable plugin
-                if ($this->disable($item)) {
-                    return false;
+                if ($item instanceof ComponizerComponent && $item instanceof ComponizerPlugin) {
+                    // disable plugin
+                    $this->disable($item);
                 }
             }
 
@@ -230,6 +227,7 @@ class PluginManager implements ComponizerPluginManager
         // delete from storage
         try {
             $storageHelper = $this->componizer->resolve(StorageHelper::class);
+
             $plugins = $storageHelper->get('enabled_plugins', []);
 
             // check existance
@@ -244,9 +242,8 @@ class PluginManager implements ComponizerPluginManager
             $componentManager->disable($plugin);
 
             // disable plugin components
-            $pluginComponents = array_merge($plugin->widgets());
-            foreach ($pluginComponents as $pluginComponent) {
-                if ($pluginComponent instanceof ComponizerComponent && $componentManager->valid($pluginComponent)) {
+            foreach ($plugin->components() as $pluginComponent) {
+                if ($pluginComponent instanceof ComponizerComponent) {
                     $componentManager->disable($pluginComponent);
                 }
             }
@@ -300,6 +297,8 @@ class PluginManager implements ComponizerPluginManager
 
         // plugin widgets
         $widgets = $plugin->widgets();
+
+        // plugin widgets count
         $countWidgets = $plugin->countWidgets();
 
         if (!is_array($widgets)) {
@@ -315,10 +314,17 @@ class PluginManager implements ComponizerPluginManager
         }
 
         foreach ($widgets as $widget) {
+            // check instance
             if (!($widget instanceof ComponizerComponent)) { // && instanceof ComponizerWidget
                 return false;
             }
 
+            // validate component
+            if(!$componentManager->valid($widget)) {
+                return false;
+            }
+
+            // check contains existed widget
             if (!$plugin->hasWidget($widget)) {
                 return false;
             }
@@ -336,10 +342,8 @@ class PluginManager implements ComponizerPluginManager
         $componentManager->init($plugin);
 
         // init plugin components
-        $pluginComponents = array_merge($plugin->widgets());
-        foreach ($pluginComponents as $pluginComponent) {
-            if ($pluginComponent instanceof ComponizerComponent && $componentManager->valid($pluginComponent)) {
-                // init component
+        foreach ($plugin->components() as $pluginComponent) {
+            if ($pluginComponent instanceof ComponizerComponent) {
                 $componentManager->init($pluginComponent);
             }
         }
