@@ -118,8 +118,8 @@ class PluginManager implements ComponizerPluginManager
 
         if ($plugin instanceof ComponizerComponent && $plugin instanceof ComponizerPlugin) {
             $pluginId = $plugin->id();
-        } elseif (is_string($plugin) || is_numeric($plugin)) {
-            $pluginId = (string) $plugin;
+        } elseif (is_string($plugin)) {
+            $pluginId = $plugin;
         } else {
             return null;
         }

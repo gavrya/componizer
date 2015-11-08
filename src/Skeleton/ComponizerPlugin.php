@@ -31,25 +31,36 @@ abstract class ComponizerPlugin
         return !empty($this->components());
     }
 
-    public function hasComponent($component)
+    public function findComponent($component, array $components = null)
     {
         $componentId = null;
 
-        if(is_string($component) && is_numeric($component)){
-            $componentId = (string) $component;
+        if(is_string($component)){
+            $componentId = $component;
         } elseif($component instanceof ComponizerComponent) {
             $componentId = $component->id();
         } else {
-            return false;
+            return null;
         }
 
-        foreach($this->components() as $item) {
+        $components = $components !== null ? $components : $this->components();
+
+        foreach($components as $item) {
+            if($component instanceof ComponizerComponent && $item === $component) {
+                return $item;
+            }
+
             if($item instanceof ComponizerComponent && $item->id() === $componentId) {
-                return true;
+                return $item;
             }
         }
 
-        return false;
+        return null;
+    }
+
+    public function hasComponent($component)
+    {
+        return $this->findComponent($component) !== null;
     }
 
     //-----------------------------------------------------
@@ -73,7 +84,7 @@ abstract class ComponizerPlugin
 
     public function hasWidget($widget)
     {
-        return $this->hasComponent($widget);
+        return $this->findComponent($widget, $this->widgets()) instanceof ComponizerWidget;
     }
 
     //-----------------------------------------------------
