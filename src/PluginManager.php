@@ -16,6 +16,7 @@ use Gavrya\Componizer\Skeleton\ComponizerComponent;
 use Gavrya\Componizer\Skeleton\ComponizerException;
 use Gavrya\Componizer\Skeleton\ComponizerPlugin;
 use Gavrya\Componizer\Skeleton\ComponizerPluginManager;
+use Gavrya\Componizer\Skeleton\ComponizerWidget;
 
 class PluginManager implements ComponizerPluginManager
 {
@@ -220,6 +221,7 @@ class PluginManager implements ComponizerPluginManager
 
         // check plugin
         $plugin = $this->find($plugin);
+
         if ($plugin === null) {
             return false;
         }
@@ -315,7 +317,7 @@ class PluginManager implements ComponizerPluginManager
 
         foreach ($widgets as $widget) {
             // check instance
-            if (!($widget instanceof ComponizerComponent)) { // && instanceof ComponizerWidget
+            if (!($widget instanceof ComponizerComponent && $widget instanceof ComponizerWidget)) {
                 return false;
             }
 
