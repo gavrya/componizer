@@ -18,7 +18,7 @@ abstract class ComponizerWidget
     // Widget section
     //-----------------------------------------------------
 
-    public function parse(Closure $parserHelper, array $jsonData, $contentType, $content = null)
+    public function make(Closure $parser, array $jsonParams, $contentType, $content = null)
     {
         echo __FUNCTION__;
     }
