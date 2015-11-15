@@ -14,6 +14,7 @@ use Gavrya\Componizer\Helper\FsHelper;
 use Gavrya\Componizer\Helper\StorageHelper;
 use Gavrya\Componizer\Skeleton\ComponizerInstance;
 use Gavrya\Componizer\Skeleton\ComponizerException;
+use Helper\DomHelper;
 
 class Componizer implements ComponizerInstance
 {
@@ -315,9 +316,11 @@ class Componizer implements ComponizerInstance
         };
 
         $this->container[StorageHelper::class] = function () use ($componizer) {
-            $config = $componizer->config();
+            return new StorageHelper($componizer->config()[Componizer::CONFIG_CACHE_DIR]);
+        };
 
-            return new StorageHelper($config[Componizer::CONFIG_CACHE_DIR]);
+        $this->container[DomHelper::class] = function () {
+            return new DomHelper();
         };
 
         // Managers init
@@ -327,6 +330,10 @@ class Componizer implements ComponizerInstance
 
         $this->container[ComponentManager::class] = function () use ($componizer) {
             return new ComponentManager($componizer);
+        };
+
+        $this->container[ContentParser::class] = function () use ($componizer) {
+            return new ContentParser($componizer);
         };
     }
 

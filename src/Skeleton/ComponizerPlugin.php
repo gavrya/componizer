@@ -18,7 +18,7 @@ abstract class ComponizerPlugin
 
     public function components()
     {
-        return array_merge($this->widgets()); // array_merge($this->widgets(), $this->layouts(), ...);
+        return array_merge($this->widgets());
     }
 
     public function countComponents()

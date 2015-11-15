@@ -26,17 +26,17 @@ class ContentProcessor
     // Editor related assets section
     //-----------------------------------------------------
 
-    public function editorCss()
+    public function editorCss($baseUrl = null)
     {
 
     }
 
-    public function editorJs()
+    public function editorJs($baseUrl = null)
     {
 
     }
 
-    public function editorJsModules()
+    public function editorJsModules($baseUrl = null)
     {
 
     }
@@ -45,12 +45,12 @@ class ContentProcessor
     // Display related assets section
     //-----------------------------------------------------
 
-    public function displayCss()
+    public function displayCss($baseUrl = null)
     {
 
     }
 
-    public function displayJs()
+    public function displayJs($baseUrl = null)
     {
 
     }
