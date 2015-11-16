@@ -337,6 +337,8 @@ class PluginManager implements ComponizerPluginManager
 
     private function initPlugin(ComponizerPlugin $plugin)
     {
+        // migrate plugin init to the ComponizerPlugin class ???
+
         // component manager
         $componentManager = $this->componizer->resolve(ComponentManager::class);
 

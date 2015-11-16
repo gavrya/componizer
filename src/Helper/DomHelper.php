@@ -6,7 +6,7 @@
  * Time: 7:55 PM
  */
 
-namespace Helper;
+namespace Gavrya\Componizer\Helper;
 
 
 use DOMDocument;
@@ -32,10 +32,9 @@ class DomHelper
         $disableEntityLoader = libxml_disable_entity_loader(true);
 
         $dom = new DOMDocument('1.0', $charset);
-        //$dom->validateOnParse = true;
-        //$dom->preserveWhiteSpace = false;
-        //$dom->formatOutput = true;
-        $dom->loadHTML($string);
+        $dom->preserveWhiteSpace = false;
+        $dom->formatOutput = true;
+        $dom->loadHTML($string, LIBXML_COMPACT);
 
         libxml_use_internal_errors($useInternalErrors);
         libxml_disable_entity_loader($disableEntityLoader);
@@ -62,8 +61,8 @@ class DomHelper
 
         $bodyElement = $dom->getElementsByTagName('body')->item(0);
 
-        while ($node = $bodyElement->childNodes->item(0)) {
-            $fragment->appendChild($node);
+        foreach($bodyElement->childNodes as $childNode) {
+            $fragment->appendChild($childNode);
         }
 
         $newNode = $domElement->ownerDocument->importNode($fragment, true);

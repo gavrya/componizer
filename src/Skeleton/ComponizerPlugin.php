@@ -16,28 +16,28 @@ abstract class ComponizerPlugin
     // Components section
     //-----------------------------------------------------
 
-    public function components()
+    final public function components()
     {
         return array_merge($this->widgets());
     }
 
-    public function countComponents()
+    final public function countComponents()
     {
         return count($this->components());
     }
 
-    public function hasComponents()
+    final public function hasComponents()
     {
         return !empty($this->components());
     }
 
-    public function findComponent($component, array $components = null)
+    final public function findComponent($component, array $components = null)
     {
         $componentId = null;
 
-        if(is_string($component)){
+        if (is_string($component)) {
             $componentId = $component;
-        } elseif($component instanceof ComponizerComponent) {
+        } elseif ($component instanceof ComponizerComponent) {
             $componentId = $component->id();
         } else {
             return null;
@@ -45,12 +45,12 @@ abstract class ComponizerPlugin
 
         $components = $components !== null ? $components : $this->components();
 
-        foreach($components as $item) {
-            if($component instanceof ComponizerComponent && $item === $component) {
+        foreach ($components as $item) {
+            if ($component instanceof ComponizerComponent && $item === $component) {
                 return $item;
             }
 
-            if($item instanceof ComponizerComponent && $item->id() === $componentId) {
+            if ($item instanceof ComponizerComponent && $item->id() === $componentId) {
                 return $item;
             }
         }
@@ -58,7 +58,7 @@ abstract class ComponizerPlugin
         return null;
     }
 
-    public function hasComponent($component)
+    final public function hasComponent($component)
     {
         return $this->findComponent($component) !== null;
     }
@@ -72,23 +72,28 @@ abstract class ComponizerPlugin
         return [];
     }
 
-    public function countWidgets()
+    final public function countWidgets()
     {
-        return count($this->widgets());
+        $widgets = $this->widgets();
+
+        return is_array($widgets) ? count($widgets) : 0;
     }
 
-    public function hasWidgets()
+    final public function hasWidgets()
     {
-        return !empty($this->widgets());
+        return $this->countWidgets() > 0;
     }
 
-    public function hasWidget($widget)
+    final public function hasWidget($widget)
     {
-        return $this->findComponent($widget, $this->widgets()) instanceof ComponizerWidget;
+        $widgets = $this->widgets();
+
+        return is_array($widgets) && $this->findComponent($widget, $widgets) instanceof ComponizerWidget;
     }
 
     //-----------------------------------------------------
     // Other component section
     //-----------------------------------------------------
+
 
 }

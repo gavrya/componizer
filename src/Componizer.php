@@ -10,11 +10,12 @@ namespace Gavrya\Componizer;
 
 
 use Closure;
+use Gavrya\Componizer\Helper\DomHelper;
 use Gavrya\Componizer\Helper\FsHelper;
 use Gavrya\Componizer\Helper\StorageHelper;
 use Gavrya\Componizer\Skeleton\ComponizerInstance;
 use Gavrya\Componizer\Skeleton\ComponizerException;
-use Helper\DomHelper;
+
 
 class Componizer implements ComponizerInstance
 {

@@ -38,7 +38,7 @@ class ComponentManager
             return false;
         }
 
-        // check component id
+        // component id
         $componentId = $component->id();
 
         // check component id

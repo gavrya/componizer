@@ -11,7 +11,8 @@ namespace Gavrya\Componizer;
 
 use DOMElement;
 use DOMXpath;
-use Helper\DomHelper;
+use Gavrya\Componizer\Helper\DomHelper;
+
 
 class ContentParser
 {
@@ -48,44 +49,53 @@ class ContentParser
 
         $xpath = new DOMXpath($dom);
 
-        // find first widget
+        // find first widget element
         $widgetElement = $xpath->query('(//*[@data-widget])[1]', $bodyElement)->item(0);
 
         if ($widgetElement === null || !($widgetElement instanceof DOMElement)) {
             return $editorContent;
         }
 
-        // widget json attr
-        $widgetJsonAttr = $widgetElement->getAttribute('data-widget-json');
-        $widgetJsonData = json_decode($widgetJsonAttr, true);
+        // widget json
+        $widgetProperties = trim($widgetElement->getAttribute('data-widget-json'));
+        $widgetProperties = json_decode($widgetProperties, true);
 
-        // widget content type attr
-        $widgetContentTypeAttr = $widgetElement->getAttribute('data-widget-content-type');
+        if (!is_array($widgetProperties)) {
+            $widgetProperties = [];
+        }
 
-        // widget content dom element
+        // widget content type
+        $widgetContentType = trim($widgetElement->getAttribute('data-widget-content-type'));
+
+        if (!in_array($widgetContentType, ['empty', 'plain_text', 'rich_text', 'mixed'])) {
+            $widgetContentType = 'empty';
+        }
+
+        // widget content
         $widgetContentElement = $xpath->query('(//*[@data-widget-content])[1]', $widgetElement)->item(0);
         $widgetContent = $domHelper->getInnerHtml($widgetContentElement);
 
-        // parse widget to display content
+        if ($widgetContentType === 'empty') {
+            $widgetContent = '';
+        }
+
+        // parse widget display content
         $displayContent = $this->parseWidget(
             [$this, __FUNCTION__],
-            $widgetJsonData,
-            $widgetContentTypeAttr,
+            $widgetProperties,
+            $widgetContentType,
             $widgetContent
         );
 
-        if(is_string($displayContent) && !empty(trim($displayContent))) {
+        if (is_string($displayContent) && !empty(trim($displayContent))) {
             $domHelper->replaceWith($widgetElement, $displayContent);
         }
 
         return $this->parseNative($domHelper->getInnerHtml($bodyElement));
     }
 
-    public function parseWidget(callable $parser, $jsonParams, $contentType, $content = null)
+    public function parseWidget(callable $parser, $properties, $contentType, $content = null)
     {
-        //var_dump($content);
-        //exit;
-
         return empty($content) ? "<div>empty</div>" : "<div>{$parser($content)}</div>";
     }
 

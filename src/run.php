@@ -9,9 +9,11 @@ require('/Users/gavrya/Projects/componizer/vendor/autoload.php');
 
 use Gavrya\Componizer\Componizer;
 use Gavrya\Componizer\ContentParser;
+use Gavrya\Componizer\Helper\DomHelper;
 use Gavrya\Componizer\Helper\FsHelper;
 use Gavrya\Componizer\Helper\StorageHelper;
 use Gavrya\Componizer\PluginManager;
+
 
 $ts = microtime(true);
 
@@ -31,29 +33,76 @@ $pm->enable($pm->disabled());
 
 //var_dump($pm->all());
 
-$contentParser = new ContentParser();
-
 $str = <<<EOD
-<div data-widget data-widget-id="1111" data-widget-name="spinner" data-widget-json='{"key": "value"}' data-widget-content-type="mixed">
-    <div data-widget-content>
+<div data-widget data-widget-id="2222" data-widget-name="lister" data-widget-json='{"key": "value"}' data-widget-content-type="mixed">
+            <div data-widget-content>
+            <div data-widget data-widget-id="2222" data-widget-name="lister" data-widget-json='{"key": "value"}' data-widget-content-type="mixed">
+            <div data-widget-content>
+	        </div>
+        </div>
         <div data-widget data-widget-id="2222" data-widget-name="lister" data-widget-json='{"key": "value"}' data-widget-content-type="mixed">
             <div data-widget-content>
-            <div data-widget data-widget-id="1111" data-widget-name="spinner" data-widget-json='{"key": "value"}' data-widget-content-type="mixed">
-    <div data-widget-content>
+            <div data-widget data-widget-id="2222" data-widget-name="lister" data-widget-json='{"key": "value"}' data-widget-content-type="mixed">
+            <div data-widget-content>
+            <div data-widget data-widget-id="2222" data-widget-name="lister" data-widget-json='{"key": "value"}' data-widget-content-type="mixed">
+            <div data-widget-content>
+            <div data-widget data-widget-id="2222" data-widget-name="lister" data-widget-json='{"key": "value"}' data-widget-content-type="mixed">
+            <div data-widget-content>
+	        </div>
+        </div>
+        <div data-widget data-widget-id="2222" data-widget-name="lister" data-widget-json='{"key": "value"}' data-widget-content-type="mixed">
+            <div data-widget-content>
+
+	        </div>
+        </div>
         <div data-widget data-widget-id="2222" data-widget-name="lister" data-widget-json='{"key": "value"}' data-widget-content-type="mixed">
             <div data-widget-content>
 	        </div>
         </div>
-	</div>
-</div>
 	        </div>
         </div>
-	</div>
-</div>
+        <div data-widget data-widget-id="2222" data-widget-name="lister" data-widget-json='{"key": "value"}' data-widget-content-type="mixed">
+            <div data-widget-content>
+
+	        </div>
+        </div>
+        <div data-widget data-widget-id="2222" data-widget-name="lister" data-widget-json='{"key": "value"}' data-widget-content-type="mixed">
+            <div data-widget-content>
+	        </div>
+        </div>
+	        </div>
+        </div>
+        <div data-widget data-widget-id="2222" data-widget-name="lister" data-widget-json='{"key": "value"}' data-widget-content-type="mixed">
+            <div data-widget-content>
+
+	        </div>
+        </div>
+        <div data-widget data-widget-id="2222" data-widget-name="lister" data-widget-json='{"key": "value"}' data-widget-content-type="mixed">
+            <div data-widget-content>
+	        </div>
+        </div>
+
+	        </div>
+        </div>
+        <div data-widget data-widget-id="2222" data-widget-name="lister" data-widget-json='{"key": "value"}' data-widget-content-type="mixed">
+            <div data-widget-content>
+	        </div>
+        </div>
+	        </div>
+        </div>
+        <div data-widget data-widget-id="2222" data-widget-name="lister" data-widget-json='{"key": "value"}' data-widget-content-type="mixed">
+            <div data-widget-content>
+
+	        </div>
+        </div>
+        <div data-widget data-widget-id="2222" data-widget-name="lister" data-widget-json='{"key": "value"}' data-widget-content-type="mixed">
+            <div data-widget-content>
+	        </div>
+        </div>
 EOD;
 
-//echo $contentParser->parseDisplayContent($str) . PHP_EOL;
+$cp = $gr->resolve(ContentParser::class);
 
-echo $contentParser->parseNative($str) . PHP_EOL;
+echo $cp->parseNative($str) . PHP_EOL;
 
 echo round(microtime(true) - $ts, 3) . PHP_EOL;
