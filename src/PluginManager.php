@@ -300,18 +300,7 @@ class PluginManager implements ComponizerPluginManager
         // plugin widgets
         $widgets = $plugin->widgets();
 
-        // plugin widgets count
-        $countWidgets = $plugin->countWidgets();
-
         if (!is_array($widgets)) {
-            return false;
-        }
-
-        if (count($widgets) !== $countWidgets) {
-            return false;
-        }
-
-        if ($plugin->hasWidgets() !== (bool) $countWidgets) {
             return false;
         }
 
@@ -337,8 +326,6 @@ class PluginManager implements ComponizerPluginManager
 
     private function initPlugin(ComponizerPlugin $plugin)
     {
-        // migrate plugin init to the ComponizerPlugin class ???
-
         // component manager
         $componentManager = $this->componizer->resolve(ComponentManager::class);
 

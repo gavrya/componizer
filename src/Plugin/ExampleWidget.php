@@ -2,38 +2,27 @@
 /**
  * Created by PhpStorm.
  * User: gavrya
- * Date: 10/29/15
- * Time: 11:03 AM
+ * Date: 11/17/15
+ * Time: 8:59 PM
  */
 
 namespace Gavrya\Componizer\Plugin;
 
 
 use Gavrya\Componizer\Skeleton\ComponizerComponent;
-use Gavrya\Componizer\Skeleton\ComponizerPlugin;
+use Gavrya\Componizer\Skeleton\ComponizerWidget;
 
-class ExamplePlugin extends ComponizerPlugin implements ComponizerComponent
+class ExampleWidget extends ComponizerWidget implements ComponizerComponent
 {
-
-    private $widgets = null;
-
-    public function __construct()
-    {
-        $this->widgets = [new ExampleWidget()];
-    }
-
-    //-----------------------------------------------------
-    // ComponizerComponent section
-    //-----------------------------------------------------
 
     public function id()
     {
-        return '55963a8fb5cc4d6e61cc27ede968fcd0';
+        return 'c770076f713a31250680e6810dceb6aa';
     }
 
     public function name()
     {
-        return 'Example plugin';
+        return 'Example widget';
     }
 
     public function version()
@@ -48,7 +37,7 @@ class ExamplePlugin extends ComponizerPlugin implements ComponizerComponent
 
     public function hasAssets()
     {
-        return true;
+        return false;
     }
 
     public function assetsDir()
@@ -58,27 +47,25 @@ class ExamplePlugin extends ComponizerPlugin implements ComponizerComponent
 
     public function init($lang, $cacheDir)
     {
-        echo 'example plugin init' . PHP_EOL;
+        echo 'example widget init' . PHP_EOL;
     }
 
     public function up()
     {
-        echo 'example plugin up' . PHP_EOL;
+        echo 'example widget up' . PHP_EOL;
     }
 
     public function down()
     {
-        echo 'example plugin down' . PHP_EOL;
+        echo 'example widget down' . PHP_EOL;
     }
 
     //-----------------------------------------------------
-    // ComponizerPlugin section
+    // Widget section
     //-----------------------------------------------------
 
-    public function widgets()
+    public function makeDisplayContent(callable $parser, array $properties, $contentType, $content = null)
     {
-        return $this->widgets;
+        return empty($content) ? "<div>{$this->id()}</div>" : "<div>{$parser($content)}</div>";
     }
-
-
 }

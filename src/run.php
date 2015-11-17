@@ -34,68 +34,32 @@ $pm->enable($pm->disabled());
 //var_dump($pm->all());
 
 $str = <<<EOD
-<div data-widget data-widget-id="2222" data-widget-name="lister" data-widget-json='{"key": "value"}' data-widget-content-type="mixed">
-            <div data-widget-content>
-            <div data-widget data-widget-id="2222" data-widget-name="lister" data-widget-json='{"key": "value"}' data-widget-content-type="mixed">
-            <div data-widget-content>
-	        </div>
-        </div>
-        <div data-widget data-widget-id="2222" data-widget-name="lister" data-widget-json='{"key": "value"}' data-widget-content-type="mixed">
-            <div data-widget-content>
-            <div data-widget data-widget-id="2222" data-widget-name="lister" data-widget-json='{"key": "value"}' data-widget-content-type="mixed">
-            <div data-widget-content>
-            <div data-widget data-widget-id="2222" data-widget-name="lister" data-widget-json='{"key": "value"}' data-widget-content-type="mixed">
-            <div data-widget-content>
-            <div data-widget data-widget-id="2222" data-widget-name="lister" data-widget-json='{"key": "value"}' data-widget-content-type="mixed">
-            <div data-widget-content>
-	        </div>
-        </div>
-        <div data-widget data-widget-id="2222" data-widget-name="lister" data-widget-json='{"key": "value"}' data-widget-content-type="mixed">
-            <div data-widget-content>
-
-	        </div>
-        </div>
-        <div data-widget data-widget-id="2222" data-widget-name="lister" data-widget-json='{"key": "value"}' data-widget-content-type="mixed">
-            <div data-widget-content>
-	        </div>
-        </div>
-	        </div>
-        </div>
-        <div data-widget data-widget-id="2222" data-widget-name="lister" data-widget-json='{"key": "value"}' data-widget-content-type="mixed">
-            <div data-widget-content>
-
-	        </div>
-        </div>
-        <div data-widget data-widget-id="2222" data-widget-name="lister" data-widget-json='{"key": "value"}' data-widget-content-type="mixed">
-            <div data-widget-content>
-	        </div>
-        </div>
-	        </div>
-        </div>
-        <div data-widget data-widget-id="2222" data-widget-name="lister" data-widget-json='{"key": "value"}' data-widget-content-type="mixed">
-            <div data-widget-content>
-
-	        </div>
-        </div>
-        <div data-widget data-widget-id="2222" data-widget-name="lister" data-widget-json='{"key": "value"}' data-widget-content-type="mixed">
+        <div
+         data-widget
+         data-widget-id="c770076f713a31250680e6810dceb6aa"
+         data-widget-name="lister"
+         data-widget-properties='{"key": "value"}'
+         data-widget-content-type="mixed">
             <div data-widget-content>
 	        </div>
         </div>
 
-	        </div>
-        </div>
-        <div data-widget data-widget-id="2222" data-widget-name="lister" data-widget-json='{"key": "value"}' data-widget-content-type="mixed">
+        <div
+         data-widget
+         data-widget-id="c770076f713a31250680e6810dceb6aa"
+         data-widget-name="lister"
+         data-widget-properties='{"key": "value"}'
+         data-widget-content-type="mixed">
             <div data-widget-content>
 	        </div>
         </div>
-	        </div>
-        </div>
-        <div data-widget data-widget-id="2222" data-widget-name="lister" data-widget-json='{"key": "value"}' data-widget-content-type="mixed">
-            <div data-widget-content>
 
-	        </div>
-        </div>
-        <div data-widget data-widget-id="2222" data-widget-name="lister" data-widget-json='{"key": "value"}' data-widget-content-type="mixed">
+        <div
+         data-widget
+         data-widget-id="c770076f713a31250680e6810dceb6aa"
+         data-widget-name="lister"
+         data-widget-properties='{"key": "value"}'
+         data-widget-content-type="mixed">
             <div data-widget-content>
 	        </div>
         </div>

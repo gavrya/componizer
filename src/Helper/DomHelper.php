@@ -69,4 +69,9 @@ class DomHelper
 
         $domElement->parentNode->replaceChild($newNode, $domElement);
     }
+
+    function remove(DOMNode $domElement)
+    {
+        $domElement->parentNode->removeChild($domElement);
+    }
 }

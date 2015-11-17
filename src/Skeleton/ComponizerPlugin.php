@@ -31,6 +31,11 @@ abstract class ComponizerPlugin
         return !empty($this->components());
     }
 
+    final public function hasComponent($component)
+    {
+        return $this->findComponent($component) !== null;
+    }
+
     final public function findComponent($component, array $components = null)
     {
         $componentId = null;
@@ -58,11 +63,6 @@ abstract class ComponizerPlugin
         return null;
     }
 
-    final public function hasComponent($component)
-    {
-        return $this->findComponent($component) !== null;
-    }
-
     //-----------------------------------------------------
     // Widgets section
     //-----------------------------------------------------
@@ -74,21 +74,24 @@ abstract class ComponizerPlugin
 
     final public function countWidgets()
     {
-        $widgets = $this->widgets();
-
-        return is_array($widgets) ? count($widgets) : 0;
+        return count($this->widgets());
     }
 
     final public function hasWidgets()
     {
-        return $this->countWidgets() > 0;
+        return !empty($this->widgets());
     }
 
     final public function hasWidget($widget)
     {
-        $widgets = $this->widgets();
+        return $this->getWidget($widget) !== null;
+    }
 
-        return is_array($widgets) && $this->findComponent($widget, $widgets) instanceof ComponizerWidget;
+    final public function getWidget($widget)
+    {
+        $widget = $this->findComponent($widget, $this->widgets());
+
+        return $widget instanceof ComponizerWidget ? $widget : null;
     }
 
     //-----------------------------------------------------

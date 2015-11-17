@@ -12,6 +12,7 @@ namespace Gavrya\Componizer;
 use DOMElement;
 use DOMXpath;
 use Gavrya\Componizer\Helper\DomHelper;
+use Gavrya\Componizer\Skeleton\ComponizerPlugin;
 
 
 class ContentParser
@@ -56,6 +57,9 @@ class ContentParser
             return $editorContent;
         }
 
+        // widget id
+        $widgetId = trim($widgetElement->getAttribute('data-widget-id'));
+
         // widget json
         $widgetProperties = trim($widgetElement->getAttribute('data-widget-json'));
         $widgetProperties = json_decode($widgetProperties, true);
@@ -67,36 +71,55 @@ class ContentParser
         // widget content type
         $widgetContentType = trim($widgetElement->getAttribute('data-widget-content-type'));
 
-        if (!in_array($widgetContentType, ['empty', 'plain_text', 'rich_text', 'mixed'])) {
-            $widgetContentType = 'empty';
+        if (!in_array($widgetContentType, ['none', 'plain_text', 'rich_text', 'mixed'])) {
+            $widgetContentType = 'none';
         }
 
         // widget content
         $widgetContentElement = $xpath->query('(//*[@data-widget-content])[1]', $widgetElement)->item(0);
         $widgetContent = $domHelper->getInnerHtml($widgetContentElement);
 
-        if ($widgetContentType === 'empty') {
-            $widgetContent = '';
+        if ($widgetContentType === 'none') {
+            $widgetContent = null;
         }
 
-        // parse widget display content
-        $displayContent = $this->parseWidget(
-            [$this, __FUNCTION__],
-            $widgetProperties,
-            $widgetContentType,
-            $widgetContent
-        );
+        // find widget by id
+        $widget = !empty($widgetId) ? $this->findWidget($widgetId) : null;
 
-        if (is_string($displayContent) && !empty(trim($displayContent))) {
+        // display content
+        $displayContent = null;
+
+        if ($widget !== null) {
+            $displayContent = $widget->makeDisplayContent(
+                [$this, __FUNCTION__],
+                $widgetProperties,
+                $widgetContentType,
+                $widgetContent
+            );
+        }
+
+        if ($displayContent !== null && is_string($displayContent)) {
+            // replace dom element with html display content
             $domHelper->replaceWith($widgetElement, $displayContent);
+        } else {
+            // remove node with invalid widget id
+            $domHelper->remove($widgetElement);
         }
 
         return $this->parseNative($domHelper->getInnerHtml($bodyElement));
     }
 
-    public function parseWidget(callable $parser, $properties, $contentType, $content = null)
+    private function findWidget($widgetId)
     {
-        return empty($content) ? "<div>empty</div>" : "<div>{$parser($content)}</div>";
+        $pluginManager = $this->componizer->resolve(PluginManager::class);
+
+        foreach ($pluginManager->enabled() as $plugin) {
+            if ($widget = $plugin->getWidget($widgetId)) {
+                return $widget;
+            }
+        }
+
+        return null;
     }
 
 }
