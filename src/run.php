@@ -23,9 +23,9 @@ $config = [
 Componizer::setup($config);
 $componizer = Componizer::instance();
 
-//$pluginManager = $componizer->pluginManager();
+$pluginManager = $componizer->pluginManager();
 
-//$pluginManager->enable($pluginManager->disabled());
+$pluginManager->enable($pluginManager->disabled());
 //$pluginManager->disable($pluginManager->enabled());
 
 //var_dump($pluginManager->enabled());

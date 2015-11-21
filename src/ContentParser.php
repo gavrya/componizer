@@ -97,11 +97,11 @@ class ContentParser
             );
         }
 
-        if (!empty($widgetDisplayContent)) {
+        if (is_string($widgetDisplayContent) && !empty($widgetDisplayContent)) {
             // replace dom element with widget display content
             $domHelper->replaceWith($widgetElement, $widgetDisplayContent);
         } else {
-            // remove node with empty widget display content
+            // remove node with invalid widget
             $domHelper->remove($widgetElement);
         }
 

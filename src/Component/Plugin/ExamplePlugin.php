@@ -18,6 +18,10 @@ class ExamplePlugin extends ComponizerPlugin implements ComponizerComponent
 
     private $widgets = null;
 
+    //-----------------------------------------------------
+    // Create/init section
+    //-----------------------------------------------------
+
     public function __construct()
     {
         $this->widgets = [new ExampleWidget()];

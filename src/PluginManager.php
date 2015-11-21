@@ -51,6 +51,7 @@ class PluginManager
         }
 
         $plugins = [];
+
         $fsHelper = $this->componizer->resolve(FsHelper::class);
 
         // prepare plugins data
@@ -72,8 +73,6 @@ class PluginManager
 
             // create plugin instance from class name (may throw FatalException if not loadable)
             $plugin = new $data['plugin']['class'];
-
-            var_dump($this->validPlugin($plugin));
 
             // validate plugin and its components
             if (!$this->validPlugin($plugin)) {
@@ -142,8 +141,8 @@ class PluginManager
     }
 
     /**
-     * Enable plugin by plugin insatnce or plugin id.
-     * Enable plugins by array of plugin insatnces or plugin ids.
+     * Enable plugin by plugin instance or plugin id.
+     * Enable plugins by array of plugin instances or plugin ids.
      *
      * @param $plugin
      * @return bool
@@ -152,13 +151,9 @@ class PluginManager
     public function enable($plugin)
     {
         // enable plugins using array
-        if (is_array($plugin) && !empty($plugin)) {
+        if (is_array($plugin)) {
             foreach ($plugin as $item) {
-                // check instance
-                if ($item instanceof ComponizerComponent && $item instanceof ComponizerPlugin) {
-                    // enable plugin
-                    $this->enable($item);
-                }
+                $this->enable($item);
             }
 
             return true;
@@ -221,13 +216,9 @@ class PluginManager
     public function disable($plugin)
     {
         // disable plugins using array
-        if (is_array($plugin) && !empty($plugin)) {
+        if (is_array($plugin)) {
             foreach ($plugin as $item) {
-                // check instance
-                if ($item instanceof ComponizerComponent && $item instanceof ComponizerPlugin) {
-                    // disable plugin
-                    $this->disable($item);
-                }
+                $this->disable($item);
             }
 
             return true;
@@ -264,7 +255,7 @@ class PluginManager
                 }
             }
 
-            // update enabled plugins
+            // unset enabled plugin
             unset($plugins[$plugin->id()]);
 
             // update storage
