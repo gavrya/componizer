@@ -8,32 +8,29 @@
 require('/Users/gavrya/Projects/componizer/vendor/autoload.php');
 
 use Gavrya\Componizer\Componizer;
-use Gavrya\Componizer\ContentParser;
-use Gavrya\Componizer\Helper\DomHelper;
-use Gavrya\Componizer\Helper\FsHelper;
-use Gavrya\Componizer\Helper\StorageHelper;
-use Gavrya\Componizer\PluginManager;
 
+error_reporting(E_ALL);
 
-$ts = microtime(true);
+$timerStart = microtime(true);
 
 $config = [
     Componizer::CONFIG_LANG => 'en',
     Componizer::CONFIG_CACHE_DIR => '/Users/gavrya/Projects/componizer/vendor/test_cache',
     Componizer::CONFIG_PUBLIC_DIR => '/Users/gavrya/Projects/componizer/vendor/test_public',
-    Componizer::CONFIG_ASSETS_HANDLER => Componizer::ASSETS_HANDLER_SYMLINK_BY_PHP,
     Componizer::CONFIG_PREVIEW_URL => '/preview.php',
 ];
 
 Componizer::setup($config);
-$gr = Componizer::instance();
-$pm = $gr->pluginManager();
+$componizer = Componizer::instance();
 
-$pm->enable($pm->disabled());
+//$pluginManager = $componizer->pluginManager();
 
-//var_dump($pm->all());
+//$pluginManager->enable($pluginManager->disabled());
+//$pluginManager->disable($pluginManager->enabled());
 
-$str = <<<EOD
+//var_dump($pluginManager->enabled());
+
+$editorContent = <<<EOD
         <div
          data-widget
          data-widget-id="c770076f713a31250680e6810dceb6aa"
@@ -46,7 +43,7 @@ $str = <<<EOD
 
         <div
          data-widget
-         data-widget-id="c770076f713a31250680e6810dceb6aa"
+         data-widget-id="invalid-widget-id"
          data-widget-name="lister"
          data-widget-properties='{"key": "value"}'
          data-widget-content-type="mixed">
@@ -65,8 +62,14 @@ $str = <<<EOD
         </div>
 EOD;
 
-$cp = $gr->resolve(ContentParser::class);
+$contentProcessor = $componizer->contentProcessor();
 
-echo $cp->parseNative($str) . PHP_EOL;
+echo PHP_EOL;
+echo $contentProcessor->makeDisplayContent($editorContent);
+echo PHP_EOL;
 
-echo round(microtime(true) - $ts, 3) . PHP_EOL;
+$timerStop = microtime(true);
+
+echo PHP_EOL;
+echo round($timerStop - $timerStart, 3);
+echo PHP_EOL;

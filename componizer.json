@@ -3,6 +3,6 @@
     "version" : "0.0.1"
   },
   "plugin": {
-    "class" : "Gavrya\\Componizer\\Plugin\\ExamplePlugin"
+    "class" : "Gavrya\\Componizer\\Component\\Plugin\\ExamplePlugin"
   }
 }

@@ -6,7 +6,7 @@
  * Time: 8:59 PM
  */
 
-namespace Gavrya\Componizer\Plugin;
+namespace Gavrya\Componizer\Component\Widget;
 
 
 use Gavrya\Componizer\Skeleton\ComponizerComponent;
@@ -42,7 +42,7 @@ class ExampleWidget extends ComponizerWidget implements ComponizerComponent
 
     public function assetsDir()
     {
-        return dirname(__DIR__) . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR . $this->id();
+        return dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR . $this->id();
     }
 
     public function init($lang, $cacheDir)
@@ -66,6 +66,6 @@ class ExampleWidget extends ComponizerWidget implements ComponizerComponent
 
     public function makeDisplayContent(callable $parser, array $properties, $contentType, $content = null)
     {
-        return empty($content) ? "<div>{$this->id()}</div>" : "<div>{$parser($content)}</div>";
+        return empty($content) ? "<div>{$this->name()}</div>" : "<div>{$parser($content)}</div>";
     }
 }

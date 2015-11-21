@@ -9,8 +9,6 @@
 namespace Gavrya\Componizer\Skeleton;
 
 
-use Closure;
-
 abstract class ComponizerWidget
 {
 

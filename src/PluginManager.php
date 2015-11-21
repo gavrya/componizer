@@ -15,10 +15,9 @@ use Gavrya\Componizer\Helper\StorageHelper;
 use Gavrya\Componizer\Skeleton\ComponizerComponent;
 use Gavrya\Componizer\Skeleton\ComponizerException;
 use Gavrya\Componizer\Skeleton\ComponizerPlugin;
-use Gavrya\Componizer\Skeleton\ComponizerPluginManager;
 use Gavrya\Componizer\Skeleton\ComponizerWidget;
 
-class PluginManager implements ComponizerPluginManager
+class PluginManager
 {
 
     // Componizer
@@ -34,40 +33,17 @@ class PluginManager implements ComponizerPluginManager
     public function __construct(Componizer $componizer)
     {
         $this->componizer = $componizer;
-        $this->init();
-    }
-
-    private function init()
-    {
-        // componizer config
-        $config = $this->componizer->config();
-
-        // cache dir
-        $cacheDir = $config[Componizer::CONFIG_CACHE_DIR];
-
-        // public dir
-        $publicDir = $config[Componizer::CONFIG_PUBLIC_DIR];
-
-        // FsHelper
-        $fsHelper = $this->componizer->resolve(FsHelper::class);
-
-        // remove broken symlinks
-        $fsHelper->removeBrokenSymlinks($publicDir);
-
-        // storage helper
-        $storageHelper = $this->componizer->resolve(StorageHelper::class);
-
-        // enabled plugins by config
-        $plugins = $storageHelper->get('enabled_plugins', []);
-
-        // remove broken cache dirs
-        $fsHelper->removeDirs($cacheDir, array_keys($plugins));
     }
 
     //-----------------------------------------------------
-    // ComponizerPluginManager implementation section
+    // Get section
     //-----------------------------------------------------
 
+    /**
+     * Return array of all available plugins as $pluginId => $plugin.
+     *
+     * @return array|null
+     */
     public function all()
     {
         if ($this->plugins !== null) {
@@ -97,6 +73,8 @@ class PluginManager implements ComponizerPluginManager
             // create plugin instance from class name (may throw FatalException if not loadable)
             $plugin = new $data['plugin']['class'];
 
+            var_dump($this->validPlugin($plugin));
+
             // validate plugin and its components
             if (!$this->validPlugin($plugin)) {
                 continue;
@@ -112,6 +90,12 @@ class PluginManager implements ComponizerPluginManager
         return $this->plugins = $plugins;
     }
 
+    /**
+     * Find plugin by plugin id or plugin instance.
+     *
+     * @param $plugin
+     * @return null
+     */
     public function find($plugin)
     {
         $pluginId = null;
@@ -129,6 +113,15 @@ class PluginManager implements ComponizerPluginManager
         return isset($plugins[$pluginId]) ? $plugins[$pluginId] : null;
     }
 
+    //-----------------------------------------------------
+    // Enable/Disable section
+    //-----------------------------------------------------
+
+    /**
+     * Return all enabled plugins as array of $pluginId => $plugin.
+     *
+     * @return array
+     */
     public function enabled()
     {
         $storageHelper = $this->componizer->resolve(StorageHelper::class);
@@ -138,11 +131,24 @@ class PluginManager implements ComponizerPluginManager
         return array_intersect_key($this->all(), $plugins);
     }
 
+    /**
+     * Return all disabled plugins as array of $pluginId => $plugin.
+     *
+     * @return array
+     */
     public function disabled()
     {
         return array_diff_key($this->all(), $this->enabled());
     }
 
+    /**
+     * Enable plugin by plugin insatnce or plugin id.
+     * Enable plugins by array of plugin insatnces or plugin ids.
+     *
+     * @param $plugin
+     * @return bool
+     * @throws ComponizerException
+     */
     public function enable($plugin)
     {
         // enable plugins using array
@@ -204,6 +210,14 @@ class PluginManager implements ComponizerPluginManager
         return false;
     }
 
+    /**
+     * Disable plugin by plugin instance or plugin id.
+     * Disable plugins by array of plugin instances or plugin ids.
+     *
+     * @param $plugin
+     * @return bool
+     * @throws ComponizerException
+     */
     public function disable($plugin)
     {
         // disable plugins using array
@@ -265,11 +279,17 @@ class PluginManager implements ComponizerPluginManager
         return false;
     }
 
-    public function isEnabled($plugin, $checkConfig = false)
+    /**
+     * Check if the plugin is enabled by plugin inatance or plugin id.
+     *
+     * @param $plugin
+     * @return bool
+     */
+    public function isEnabled($plugin)
     {
         $plugin = $this->find($plugin);
 
-        if($plugin === null) {
+        if ($plugin === null) {
             return false;
         }
 
@@ -279,9 +299,25 @@ class PluginManager implements ComponizerPluginManager
     }
 
     //-----------------------------------------------------
-    // Helpers section
+    // Allow/Deny section
     //-----------------------------------------------------
 
+    // based on current scope
+
+    //public function allowed();
+    //public function denied();
+    //public function isAllowed($plugin);
+
+    //-----------------------------------------------------
+    // Internal methods section
+    //-----------------------------------------------------
+
+    /**
+     * Check if the plugin and all of its components is valid
+     *
+     * @param $plugin
+     * @return bool
+     */
     private function validPlugin($plugin)
     {
         // check plugin instance
@@ -311,7 +347,7 @@ class PluginManager implements ComponizerPluginManager
             }
 
             // validate component
-            if(!$componentManager->valid($widget)) {
+            if (!$componentManager->valid($widget)) {
                 return false;
             }
 
@@ -324,6 +360,11 @@ class PluginManager implements ComponizerPluginManager
         return true;
     }
 
+    /**
+     * Init plugin and all of its components
+     *
+     * @param ComponizerPlugin $plugin
+     */
     private function initPlugin(ComponizerPlugin $plugin)
     {
         // component manager

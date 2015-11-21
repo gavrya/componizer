@@ -47,7 +47,7 @@ class DomHelper
         $innerHtml = '';
 
         foreach ($domElement->childNodes as $child) {
-            $innerHtml .= $child->ownerDocument->saveHtml($child);
+            $innerHtml .= trim($child->ownerDocument->saveHTML($child));
         }
 
         return trim(str_replace('[nbsp]', '&nbsp;', $innerHtml));

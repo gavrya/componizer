@@ -7,9 +7,9 @@
  * Time: 8:46 PM
  */
 
-namespace Gavrya\Componizer;
+namespace Gavrya\Componizer\Skeleton;
 
-class Assets
+class ComponizerAssets
 {
 
     //-----------------------------------------------------

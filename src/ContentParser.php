@@ -10,9 +10,8 @@ namespace Gavrya\Componizer;
 
 
 use DOMElement;
-use DOMXpath;
+use DOMXPath;
 use Gavrya\Componizer\Helper\DomHelper;
-use Gavrya\Componizer\Skeleton\ComponizerPlugin;
 
 
 class ContentParser
@@ -34,11 +33,11 @@ class ContentParser
     // Content parsing section
     //-----------------------------------------------------
 
-    public function parseNative($editorContent)
+    public function parseDisplayContent($editorContent)
     {
         $editorContent = is_string($editorContent) ? trim($editorContent) : null;
 
-        if ($editorContent === null) {
+        if ($editorContent === null || empty($editorContent)) {
             return '';
         }
 
@@ -60,8 +59,8 @@ class ContentParser
         // widget id
         $widgetId = trim($widgetElement->getAttribute('data-widget-id'));
 
-        // widget json
-        $widgetProperties = trim($widgetElement->getAttribute('data-widget-json'));
+        // widget properties
+        $widgetProperties = trim($widgetElement->getAttribute('data-widget-properties'));
         $widgetProperties = json_decode($widgetProperties, true);
 
         if (!is_array($widgetProperties)) {
@@ -84,13 +83,13 @@ class ContentParser
         }
 
         // find widget by id
-        $widget = !empty($widgetId) ? $this->findWidget($widgetId) : null;
+        $widget = !empty($widgetId) ? $this->findAllowedWidget($widgetId) : null;
 
         // display content
-        $displayContent = null;
+        $widgetDisplayContent = null;
 
         if ($widget !== null) {
-            $displayContent = $widget->makeDisplayContent(
+            $widgetDisplayContent = $widget->makeDisplayContent(
                 [$this, __FUNCTION__],
                 $widgetProperties,
                 $widgetContentType,
@@ -98,19 +97,21 @@ class ContentParser
             );
         }
 
-        if ($displayContent !== null && is_string($displayContent)) {
-            // replace dom element with html display content
-            $domHelper->replaceWith($widgetElement, $displayContent);
+        if (!empty($widgetDisplayContent)) {
+            // replace dom element with widget display content
+            $domHelper->replaceWith($widgetElement, $widgetDisplayContent);
         } else {
-            // remove node with invalid widget id
+            // remove node with empty widget display content
             $domHelper->remove($widgetElement);
         }
 
-        return $this->parseNative($domHelper->getInnerHtml($bodyElement));
+        return $this->parseDisplayContent($domHelper->getInnerHtml($bodyElement));
     }
 
-    private function findWidget($widgetId)
+    private function findAllowedWidget($widgetId)
     {
+        // TODO: reimplement based on scopes in future
+
         $pluginManager = $this->componizer->resolve(PluginManager::class);
 
         foreach ($pluginManager->enabled() as $plugin) {

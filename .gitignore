@@ -1,4 +1,27 @@
 # gitignore
-vendor
-composer.lock
+
+# phpstorm project specific settings dir
 .idea
+
+# composer vendor dir
+vendor
+
+# composer lock file
+composer.lock
+
+# composer php archive file
+composer.phar
+
+# folder view configuration files
+.DS_Store
+.AppleDouble
+.LSOverride
+Desktop.ini
+
+# thumbnail cache files
+._*
+Thumbs.db
+
+# files that might appear on external disks
+.Spotlight-V100
+.Trashes
