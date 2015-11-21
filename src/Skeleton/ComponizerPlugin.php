@@ -48,7 +48,9 @@ abstract class ComponizerPlugin
             return null;
         }
 
-        $components = $components !== null ? $components : $this->components();
+        if($components === null) {
+            $components = $this->components();
+        }
 
         foreach ($components as $item) {
             if ($component instanceof ComponizerComponent && $item === $component) {

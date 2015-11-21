@@ -72,6 +72,10 @@ class DomHelper
 
     function remove(DOMNode $domElement)
     {
-        $domElement->parentNode->removeChild($domElement);
+        $parentNode = $domElement->parentNode;
+
+        if($parentNode !== null) {
+            $parentNode->removeChild($domElement);
+        }
     }
 }

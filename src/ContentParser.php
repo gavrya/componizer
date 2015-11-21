@@ -17,6 +17,8 @@ use Gavrya\Componizer\Helper\DomHelper;
 class ContentParser
 {
 
+    // TODO: add widget properties names and content types constants
+
     // Componizer
     private $componizer = null;
 
@@ -98,10 +100,10 @@ class ContentParser
         }
 
         if (is_string($widgetDisplayContent) && !empty($widgetDisplayContent)) {
-            // replace dom element with widget display content
+            // replace dom widget element with widget display content
             $domHelper->replaceWith($widgetElement, $widgetDisplayContent);
         } else {
-            // remove node with invalid widget
+            // remove dom widget element
             $domHelper->remove($widgetElement);
         }
 
