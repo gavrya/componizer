@@ -17,6 +17,8 @@ class DomHelper
 
     public function create($string)
     {
+        // TODO: reimplement using <_root> container element
+
         $charset = 'UTF-8';
 
         $string = '<!DOCTYPE html>

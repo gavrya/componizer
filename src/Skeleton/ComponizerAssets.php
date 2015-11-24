@@ -16,17 +16,27 @@ class ComponizerAssets
     // Editor related assets section
     //-----------------------------------------------------
 
-    public function editorCss($baseUrl = null)
+    public function editorExternalCss($baseUrl = null)
     {
 
     }
 
-    public function editorJs($baseUrl = null)
+    public function editorInternalCss($baseUrl = null)
     {
 
     }
 
-    public function editorJsModule($baseUrl = null)
+    public function editorExternalJs($baseUrl = null)
+    {
+
+    }
+
+    public function editorInternalJs($baseUrl = null)
+    {
+
+    }
+
+    public function editorExternalJsModules($baseUrl = null)
     {
 
     }
@@ -35,14 +45,23 @@ class ComponizerAssets
     // Display related assets section
     //-----------------------------------------------------
 
-    public function displayCss($baseUrl = null)
+    public function displayExternalCss($baseUrl = null)
     {
 
     }
 
-    public function displayJs($baseUrl = null)
+    public function displayInternalCss($baseUrl = null)
     {
 
     }
 
+    public function displayExternalJs($baseUrl = null)
+    {
+
+    }
+
+    public function displayInternalJs($baseUrl = null)
+    {
+
+    }
 }

@@ -321,7 +321,6 @@ class Componizer
         $this->container[ContentProcessor::class] = function () use ($componizer) {
             return new ContentProcessor($componizer);
         };
-
     }
 
     public function resolve($class)

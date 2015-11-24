@@ -16,9 +16,6 @@ use Gavrya\Componizer\Helper\DomHelper;
 
 class ContentParser
 {
-
-    // TODO: add widget properties names and content types constants
-
     // Componizer
     private $componizer = null;
 
@@ -97,6 +94,8 @@ class ContentParser
                 $widgetContentType,
                 $widgetContent
             );
+
+            // TODO: check for widget element in generated $widgetDisplayContent for avoid infinite loop
         }
 
         if (is_string($widgetDisplayContent) && !empty($widgetDisplayContent)) {
