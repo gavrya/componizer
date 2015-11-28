@@ -13,7 +13,7 @@ abstract class ComponizerWidget
 {
 
     //-----------------------------------------------------
-    // Widget section
+    // Make display content section
     //-----------------------------------------------------
 
     public function makeDisplayContent(callable $parser, array $properties, $contentType, $content = null)

@@ -53,20 +53,19 @@ class ContentProcessor
     }
 
     //-----------------------------------------------------
+    // Componizer general assets section
+    //-----------------------------------------------------
+
+    public function generalAssets()
+    {
+
+    }
+
+    //-----------------------------------------------------
     // Editor related assets section
     //-----------------------------------------------------
 
-    public function editorCss($baseUrl = null)
-    {
-
-    }
-
-    public function editorJs($baseUrl = null)
-    {
-
-    }
-
-    public function editorJsModules($baseUrl = null)
+    public function editorAssets()
     {
 
     }
@@ -75,12 +74,7 @@ class ContentProcessor
     // Display related assets section
     //-----------------------------------------------------
 
-    public function displayCss($baseUrl = null)
-    {
-
-    }
-
-    public function displayJs($baseUrl = null)
+    public function displayAssets()
     {
 
     }

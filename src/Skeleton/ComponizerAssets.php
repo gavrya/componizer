@@ -1,67 +1,74 @@
 <?php
-
 /**
  * Created by PhpStorm.
  * User: gavrya
- * Date: 11/9/15
- * Time: 8:46 PM
+ * Date: 11/28/15
+ * Time: 1:29 PM
  */
 
 namespace Gavrya\Componizer\Skeleton;
 
+
 class ComponizerAssets
 {
 
-    //-----------------------------------------------------
-    // Editor related assets section
-    //-----------------------------------------------------
+    // js assets
+    private $externalJs = [];
+    private $internalJs = [];
 
-    public function editorExternalCss($baseUrl = null)
-    {
-
-    }
-
-    public function editorInternalCss($baseUrl = null)
-    {
-
-    }
-
-    public function editorExternalJs($baseUrl = null)
-    {
-
-    }
-
-    public function editorInternalJs($baseUrl = null)
-    {
-
-    }
-
-    public function editorExternalJsModules($baseUrl = null)
-    {
-
-    }
+    // css assets
+    private $externalCss = [];
+    private $internalCss = [];
 
     //-----------------------------------------------------
-    // Display related assets section
+    // Create/init section
     //-----------------------------------------------------
 
-    public function displayExternalCss($baseUrl = null)
+    public function __construct(array $assets)
     {
-
+        foreach ($assets as $asset) {
+            if ($asset instanceof ComponizerExternalJs) {
+                // add external js asset
+                $this->externalJs[] = $asset;
+            } elseif ($asset instanceof ComponizerInternalJs) {
+                // add internal js asset
+                $this->internalJs[] = $asset;
+            } elseif ($asset instanceof ComponizerExternalCss) {
+                // add external css asset
+                $this->externalCss[] = $asset;
+            } elseif ($asset instanceof ComponizerInternalCss) {
+                // add internal css asset
+                $this->internalCss[] = $asset;
+            }
+        }
     }
 
-    public function displayInternalCss($baseUrl = null)
-    {
+    //-----------------------------------------------------
+    // Display js section
+    //-----------------------------------------------------
 
+    public function externalJs()
+    {
+        return $this->externalJs;
     }
 
-    public function displayExternalJs($baseUrl = null)
+    public function internalJs()
     {
-
+        return $this->internalJs;
     }
 
-    public function displayInternalJs($baseUrl = null)
-    {
+    //-----------------------------------------------------
+    // Display css section
+    //-----------------------------------------------------
 
+    public function externalCss()
+    {
+        return $this->externalCss;
     }
+
+    public function internalCss()
+    {
+        return $this->internalCss;
+    }
+
 }
