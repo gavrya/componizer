@@ -12,7 +12,56 @@ namespace Gavrya\Componizer\Skeleton;
 class ComponizerExternalCss
 {
 
-    // TODO: ComponizerCssAsset     __toString() = <link href="/componizer/component-id/css/file.css" rel="stylesheet" type="text/css" media="screen">
+    // internal vars
+    private $url = null;
+    private $media = null;
 
+    //-----------------------------------------------------
+    // Create/init section
+    //-----------------------------------------------------
+
+    public function __construct($url, $media = null)
+    {
+        // check css url
+        if ($url === null || !is_string($url) || strtolower(substr($url, -strlen('.css'))) !== '.css') {
+            throw new InvalidArgumentException('Invalid url');
+        }
+
+        $this->url = $url;
+
+        // check css media
+        if ($media !== null || !is_string($media)) {
+            throw new InvalidArgumentException('Invalid media');
+        }
+
+        $this->media = $media;
+    }
+
+    //-----------------------------------------------------
+    // General methods section
+    //-----------------------------------------------------
+
+    public function url()
+    {
+        return $this->url;
+    }
+
+    public function media()
+    {
+        return $this->media;
+    }
+
+    //-----------------------------------------------------
+    //  Magic methods section
+    //-----------------------------------------------------
+
+    public function __toString()
+    {
+        if ($this->media === null) {
+            return '<link rel="stylesheet" type="text/css" href="' . $this->url . '">';
+        } else {
+            return '<link rel="stylesheet" type="text/css" href="' . $this->url . '" media="' . $this->media . '">';
+        }
+    }
 
 }

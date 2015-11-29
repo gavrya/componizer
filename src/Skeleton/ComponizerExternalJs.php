@@ -19,12 +19,11 @@ class ComponizerExternalJs
     const POSITION_BOTTOM = 'bottom';
 
     // execution modes
-    const MODE_DEFAULT = 'default';
     const MODE_ASYNC = 'async';
     const MODE_DEFER = 'defer';
 
     // internal vars
-    private $path = null;
+    private $url = null;
     private $position = null;
     private $mode = null;
 
@@ -32,14 +31,14 @@ class ComponizerExternalJs
     // Create/init section
     //-----------------------------------------------------
 
-    public function __construct($path, $position = self::POSITION_BOTTOM, $mode = self::MODE_DEFAULT)
+    public function __construct($url, $position = self::POSITION_TOP, $mode = null)
     {
-        // check js src path
-        if ($path === null || !is_string($path) || strtolower(substr($path, -strlen('.js'))) !== '.js') {
-            throw new InvalidArgumentException('Invalid path');
+        // check js url
+        if ($url === null || !is_string($url) || strtolower(substr($url, -strlen('.js'))) !== '.js') {
+            throw new InvalidArgumentException('Invalid url');
         }
 
-        $this->path = $path;
+        $this->url = $url;
 
         // check js include position
         if (!in_array($position, [self::POSITION_TOP, self::POSITION_BOTTOM])) {
@@ -49,7 +48,7 @@ class ComponizerExternalJs
         $this->position = $position;
 
         // check js execution mode
-        if (!in_array($mode, [self::MODE_DEFAULT, self::MODE_ASYNC, self::MODE_DEFER])) {
+        if ($mode !== null && !in_array($mode, [self::MODE_ASYNC, self::MODE_DEFER])) {
             throw new InvalidArgumentException('Invalid mode');
         }
 
@@ -60,9 +59,9 @@ class ComponizerExternalJs
     // General methods section
     //-----------------------------------------------------
 
-    public function path()
+    public function url()
     {
-        return $this->path;
+        return $this->url;
     }
 
     public function position()
@@ -81,10 +80,10 @@ class ComponizerExternalJs
 
     public function __toString()
     {
-        if ($this->mode === self::MODE_DEFAULT) {
-            return '<script type="text/javascript" src="' . $this->path . '"></script>';
+        if ($this->mode === null) {
+            return '<script type="text/javascript" src="' . $this->url . '"></script>';
         } else {
-            return '<script type="text/javascript" src="' . $this->path . '" ' . $this->mode . '></script>';
+            return '<script type="text/javascript" src="' . $this->url . '" ' . $this->mode . '></script>';
         }
     }
 }

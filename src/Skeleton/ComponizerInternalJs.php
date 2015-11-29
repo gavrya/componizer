@@ -25,7 +25,7 @@ class ComponizerInternalJs
 
     public function __construct($script, $position = self::POSITION_BOTTOM)
     {
-        // check js src path
+        // check script
         if (
             $script === null ||
             !is_string($script) ||
