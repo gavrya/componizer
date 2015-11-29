@@ -319,7 +319,7 @@ class PluginManager
         // component manager
         $componentManager = $this->componizer->resolve(ComponentManager::class);
 
-        // check component
+        // check plugin
         if (!$componentManager->valid($plugin)) {
             return false;
         }
@@ -361,7 +361,7 @@ class PluginManager
         // component manager
         $componentManager = $this->componizer->resolve(ComponentManager::class);
 
-        // init component
+        // init plugin
         $componentManager->init($plugin);
 
         // init plugin components
