@@ -49,7 +49,7 @@ class ContentParser
         $xpath = new DOMXpath($dom);
 
         // find first widget element
-        $widgetElement = $xpath->query('(//*[@data-widget])[1]', $bodyElement)->item(0);
+        $widgetElement = $xpath->query('(//*[@data-componizer-widget])[1]', $bodyElement)->item(0);
 
         if ($widgetElement === null || !($widgetElement instanceof DOMElement)) {
             return $editorContent;

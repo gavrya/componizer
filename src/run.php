@@ -32,7 +32,7 @@ $pluginManager->enable($pluginManager->disabled());
 
 $editorContent = <<<EOD
         <div
-         data-widget
+         data-componizer-widget
          data-widget-id="c770076f713a31250680e6810dceb6aa"
          data-widget-name="lister"
          data-widget-properties='{"key": "value"}'
@@ -42,7 +42,7 @@ $editorContent = <<<EOD
         </div>
 
         <div
-         data-widget
+         data-componizer-widget
          data-widget-id="invalid-widget-id"
          data-widget-name="lister"
          data-widget-properties='{"key": "value"}'
@@ -52,7 +52,7 @@ $editorContent = <<<EOD
         </div>
 
         <div
-         data-widget
+         data-componizer-widget
          data-widget-id="c770076f713a31250680e6810dceb6aa"
          data-widget-name="lister"
          data-widget-properties='{"key": "value"}'
@@ -73,3 +73,7 @@ $timerStop = microtime(true);
 echo PHP_EOL;
 echo round($timerStop - $timerStart, 3);
 echo PHP_EOL;
+
+$sr = new \Gavrya\Componizer\Skeleton\ComponizerInternalJs('<script>hello</script>');
+
+echo $sr;
