@@ -1,4 +1,4 @@
-1) Improve DomHelper using <_root> element
+1) Improve DomHelper using <_root> element. This will save memory usage.
 
 2) Add editorAssets() and displayAssets() abstract methods to ComponizerWidget class
 
@@ -19,4 +19,6 @@ By passing parent plugin object as argument to the widget constructor?
 
 10) Implement ContentProcessor
 
-11) Add type of preferred color theme: "dark" or "light"  ? 
+11) Add type of preferred color theme: "dark" or "light"  ?
+
+12) Add ComponizerMeta asset class for key=value passing to components js: <meta name="key" content="value">?

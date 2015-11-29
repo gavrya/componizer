@@ -29,7 +29,7 @@ class ComponizerInternalJs
         if (
             $script === null ||
             !is_string($script) ||
-            strtolower(substr(trim($script), 0, strlen('<script>'))) !== '<script>' ||
+            strtolower(substr(trim($script), 0, strlen('<script'))) !== '<script' ||
             strtolower(substr(trim($script), -strlen('</script>'))) !== '</script>'
         ) {
             throw new InvalidArgumentException('Invalid script');

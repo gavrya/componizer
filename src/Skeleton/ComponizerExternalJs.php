@@ -81,9 +81,9 @@ class ComponizerExternalJs
     public function __toString()
     {
         if ($this->mode === null) {
-            return '<script type="text/javascript" src="' . $this->url . '"></script>';
+            return '<script src="' . $this->url . '"></script>';
         } else {
-            return '<script type="text/javascript" src="' . $this->url . '" ' . $this->mode . '></script>';
+            return '<script src="' . $this->url . '" ' . $this->mode . '></script>';
         }
     }
 }

@@ -58,9 +58,9 @@ class ComponizerExternalCss
     public function __toString()
     {
         if ($this->media === null) {
-            return '<link rel="stylesheet" type="text/css" href="' . $this->url . '">';
+            return '<link href="' . $this->url . '" rel="stylesheet">';
         } else {
-            return '<link rel="stylesheet" type="text/css" href="' . $this->url . '" media="' . $this->media . '">';
+            return '<link href="' . $this->url . '" rel="stylesheet" media="' . $this->media . '">';
         }
     }
 
