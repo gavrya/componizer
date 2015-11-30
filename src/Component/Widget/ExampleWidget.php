@@ -9,11 +9,30 @@
 namespace Gavrya\Componizer\Component\Widget;
 
 
+use Gavrya\Componizer\Skeleton\ComponizerAssets;
 use Gavrya\Componizer\Skeleton\ComponizerComponent;
 use Gavrya\Componizer\Skeleton\ComponizerWidget;
 
 class ExampleWidget extends ComponizerWidget implements ComponizerComponent
 {
+
+    // internal vars
+    private $editorAssets = null;
+    private $displayAssets = null;
+
+    //-----------------------------------------------------
+    // Create/init section
+    //-----------------------------------------------------
+
+    public function __construct()
+    {
+        $this->editorAssets = new ComponizerAssets([]);
+        $this->displayAssets = new ComponizerAssets([]);
+    }
+
+    //-----------------------------------------------------
+    // ComponizerComponent section
+    //-----------------------------------------------------
 
     public function id()
     {
@@ -61,11 +80,21 @@ class ExampleWidget extends ComponizerWidget implements ComponizerComponent
     }
 
     //-----------------------------------------------------
-    // Widget section
+    // ComponizerWidget section
     //-----------------------------------------------------
 
     public function makeDisplayContent(callable $parser, array $properties, $contentType, $content = null)
     {
         return empty($content) ? "<div>{$this->name()}</div>" : "<div>{$parser($content)}</div>";
+    }
+
+    public function editorAssets()
+    {
+        return $this->editorAssets;
+    }
+
+    public function displayAssets()
+    {
+        return $this->displayAssets;
     }
 }

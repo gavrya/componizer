@@ -13,6 +13,14 @@ abstract class ComponizerWidget
 {
 
     //-----------------------------------------------------
+    // Assets section
+    //-----------------------------------------------------
+
+    abstract public function editorAssets();
+
+    abstract public function displayAssets();
+
+    //-----------------------------------------------------
     // Make display content section
     //-----------------------------------------------------
 

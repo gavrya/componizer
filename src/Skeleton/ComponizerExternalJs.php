@@ -31,7 +31,7 @@ class ComponizerExternalJs
     // Create/init section
     //-----------------------------------------------------
 
-    public function __construct($url, $position = self::POSITION_TOP, $mode = null)
+    public function __construct($url, $position = self::POSITION_TOP, $mode = '')
     {
         // check js url
         if ($url === null || !is_string($url) || strtolower(substr($url, -strlen('.js'))) !== '.js') {
@@ -48,7 +48,7 @@ class ComponizerExternalJs
         $this->position = $position;
 
         // check js execution mode
-        if ($mode !== null && !in_array($mode, [self::MODE_ASYNC, self::MODE_DEFER])) {
+        if ($mode !== '' && !in_array($mode, [self::MODE_ASYNC, self::MODE_DEFER])) {
             throw new InvalidArgumentException('Invalid mode');
         }
 
@@ -80,7 +80,7 @@ class ComponizerExternalJs
 
     public function __toString()
     {
-        if ($this->mode === null) {
+        if ($this->mode === '') {
             return '<script src="' . $this->url . '"></script>';
         } else {
             return '<script src="' . $this->url . '" ' . $this->mode . '></script>';

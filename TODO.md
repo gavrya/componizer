@@ -1,24 +1,35 @@
-1) Improve DomHelper using <_root> element. This will save memory usage.
+Important:
 
-2) Add editorAssets() and displayAssets() abstract methods to ComponizerWidget class
+-- Rename ContentProcessor to ContentManager?
 
-3) Prevent infinite loop in ContentParser
+-- Implement ContentProcessor
 
-4) Add WidgetManager
+-- Get unique widgets id's by content or array of content
 
-5) Get unique widgets id's by content or array of content
+-- Add WidgetManager
 
-6) ScopeManager or SettingsManager
+Unimportant:
 
-7) How to return general componizer assets and symlink componizer assets?
+-- Improve DomHelper using <_root> element. This will reduce memory usage.
 
-8) How to link widgets with related plugin to group inside hwysiwyg editor? 
-By passing parent plugin object as argument to the widget constructor?
+-- Prevent infinite loop in ContentParser
 
-9) Rename ContentProcessor to ContentManager?
+-- Move DomHelper to the ContentParser?
 
-10) Implement ContentProcessor
+-- Add ScopeManager/SettingsManager
 
-11) Add type of preferred color theme: "dark" or "light"  ?
+-- How to return general componizer assets and symlink componizer assets?
 
-12) Add ComponizerMeta asset class for key=value passing to components js: <meta name="key" content="value">?
+-- How to link widgets with related plugin to group inside hwysiwyg editor? By passing parent plugin object as argument to the widget constructor?
+
+-- Add type of preferred color theme: "dark" or "light"  ?
+
+-- Add ComponizerMeta asset class for key=value passing to components js: <meta name="key" content="value">?
+
+
+
+Apigen:
+site: http://www.apigen.org/
+theme: https://github.com/ApiGen/ThemeBootstrap
+command: php apigen.phar generate --template-theme="Twitter Bootstrap" --template-config="./apigen-theme-bootstrap/src/config.neon" -s src -d phpdoc
+

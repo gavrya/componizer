@@ -12,6 +12,11 @@ composer.lock
 # composer php archive file
 composer.phar
 
+# phpdoc
+phpdoc
+apigen.phar
+apigen-theme-bootstrap
+
 # folder view configuration files
 .DS_Store
 .AppleDouble

@@ -20,7 +20,7 @@ class ComponizerExternalCss
     // Create/init section
     //-----------------------------------------------------
 
-    public function __construct($url, $media = null)
+    public function __construct($url, $media = '')
     {
         // check css url
         if ($url === null || !is_string($url) || strtolower(substr($url, -strlen('.css'))) !== '.css') {
@@ -30,7 +30,7 @@ class ComponizerExternalCss
         $this->url = $url;
 
         // check css media
-        if ($media !== null || !is_string($media)) {
+        if ($media !== '' || !is_string($media)) {
             throw new InvalidArgumentException('Invalid media');
         }
 
@@ -57,7 +57,7 @@ class ComponizerExternalCss
 
     public function __toString()
     {
-        if ($this->media === null) {
+        if ($this->media === '') {
             return '<link href="' . $this->url . '" rel="stylesheet">';
         } else {
             return '<link href="' . $this->url . '" rel="stylesheet" media="' . $this->media . '">';

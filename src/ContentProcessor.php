@@ -53,26 +53,18 @@ class ContentProcessor
     }
 
     //-----------------------------------------------------
-    // Componizer general assets section
+    // Assets section
     //-----------------------------------------------------
 
-    public function generalAssets()
+    public function componizerAssets()
     {
 
     }
-
-    //-----------------------------------------------------
-    // Editor related assets section
-    //-----------------------------------------------------
 
     public function editorAssets()
     {
 
     }
-
-    //-----------------------------------------------------
-    // Display related assets section
-    //-----------------------------------------------------
 
     public function displayAssets()
     {

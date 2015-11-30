@@ -103,7 +103,7 @@ class ContentParser
             $domHelper->replaceWith($widgetElement, $widgetDisplayContent);
         } else {
             // remove dom widget element
-            // replace by html comment: "<!-- Componizer component not found or disabled: id:43nbvnjm43, name:Spinner -->" ???
+            // replace with html comment: "<!-- Componizer component not found or disabled: id:43nbvnjm43, name:Spinner -->" ???
             $domHelper->remove($widgetElement);
         }
 
