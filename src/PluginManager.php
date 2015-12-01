@@ -12,6 +12,7 @@ namespace Gavrya\Componizer;
 use Exception;
 use Gavrya\Componizer\Helper\FsHelper;
 use Gavrya\Componizer\Helper\StorageHelper;
+use Gavrya\Componizer\Skeleton\ComponizerAssets;
 use Gavrya\Componizer\Skeleton\ComponizerComponent;
 use Gavrya\Componizer\Skeleton\ComponizerException;
 use Gavrya\Componizer\Skeleton\ComponizerPlugin;
@@ -342,8 +343,15 @@ class PluginManager
                 return false;
             }
 
-            // check contains existed widget
-            if (!$plugin->hasWidget($widget)) {
+            // check widget editor assets
+            if(!($widget->editorAssets() instanceof ComponizerAssets)) {
+                // todo: check if empty
+                return false;
+            }
+
+            // check widget display assets
+            if(!($widget->displayAssets() instanceof ComponizerAssets)) {
+                // todo: check if empty
                 return false;
             }
         }

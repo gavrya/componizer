@@ -33,31 +33,31 @@ $pluginManager->enable($pluginManager->disabled());
 $editorContent = <<<EOD
         <div
          data-componizer-widget
-         data-widget-id="c770076f713a31250680e6810dceb6aa"
-         data-widget-name="lister"
-         data-widget-properties='{"key": "value"}'
-         data-widget-content-type="mixed">
-            <div data-widget-content>
+         data-componizer-widget-id="c770076f713a31250680e6810dceb6aa"
+         data-componizer-widget-name="lister"
+         data-componizer-widget-properties='{"key": "value"}'
+         data-componizer-widget-content-type="mixed">
+            <div data-componizer-widget-content>
 	        </div>
         </div>
 
         <div
          data-componizer-widget
-         data-widget-id="invalid-widget-id"
-         data-widget-name="lister"
-         data-widget-properties='{"key": "value"}'
-         data-widget-content-type="mixed">
-            <div data-widget-content>
+         data-componizer-widget-id="fake-id"
+         data-componizer-widget-name="lister"
+         data-componizer-widget-properties='{"key": "value"}'
+         data-componizer-widget-content-type="mixed">
+            <div data-componizer-widget-content>
 	        </div>
         </div>
 
         <div
          data-componizer-widget
-         data-widget-id="c770076f713a31250680e6810dceb6aa"
-         data-widget-name="lister"
-         data-widget-properties='{"key": "value"}'
-         data-widget-content-type="mixed">
-            <div data-widget-content>
+         data-componizer-widget-id="c770076f713a31250680e6810dceb6aa"
+         data-componizer-widget-name="lister"
+         data-componizer-widget-properties='{"key": "value"}'
+         data-componizer-widget-content-type="mixed">
+            <div data-componizer-widget-content>
 	        </div>
         </div>
 EOD;

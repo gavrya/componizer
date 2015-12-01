@@ -25,7 +25,7 @@ class ComponizerInternalCss
         if (
             $style === null ||
             !is_string($style) ||
-            strtolower(substr(trim($style), 0, strlen('<style'))) !== '<style' ||
+            strtolower(substr(trim($style), 0, strlen('<style>'))) !== '<style>' ||
             strtolower(substr(trim($style), -strlen('</style>'))) !== '</style>'
         ) {
             throw new InvalidArgumentException('Invalid style');

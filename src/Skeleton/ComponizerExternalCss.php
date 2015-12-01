@@ -30,7 +30,7 @@ class ComponizerExternalCss
         $this->url = $url;
 
         // check css media
-        if ($media !== '' || !is_string($media)) {
+        if ($media !== '' && !is_string($media)) {
             throw new InvalidArgumentException('Invalid media');
         }
 

@@ -1,14 +1,14 @@
 Important:
 
--- Rename ContentProcessor to ContentManager?
-
 -- Implement ContentProcessor
 
--- Get unique widgets id's by content or array of content
+-- Get unique components/widgets id's by content or array of content
 
 -- Add WidgetManager
 
 Unimportant:
+
+-- Check resolve instance for better ide integrity.
 
 -- Improve DomHelper using <_root> element. This will reduce memory usage.
 
@@ -20,13 +20,13 @@ Unimportant:
 
 -- How to return general componizer assets and symlink componizer assets?
 
--- How to link widgets with related plugin to group inside hwysiwyg editor? By passing parent plugin object as argument to the widget constructor?
+-- How to link widgets with related plugin to group inside hwysiwyg editor?
 
 -- Add type of preferred color theme: "dark" or "light"  ?
 
 -- Add ComponizerMeta asset class for key=value passing to components js: <meta name="key" content="value">?
 
-
+-- Rename ContentProcessor to ContentManager?
 
 Apigen:
 site: http://www.apigen.org/
