@@ -1,10 +1,10 @@
 Important:
 
--- Implement ContentProcessor
+-- Add WidgetManager
+
+-- Implement ContentProcessor with assets section working
 
 -- Get unique components/widgets id's by content or array of content
-
--- Add WidgetManager
 
 Unimportant:
 

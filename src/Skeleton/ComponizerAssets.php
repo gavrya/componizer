@@ -24,7 +24,7 @@ class ComponizerAssets
     // Create/init section
     //-----------------------------------------------------
 
-    public function __construct(array $assets)
+    public function __construct(array $assets = [])
     {
         foreach ($assets as $asset) {
             if ($asset instanceof ComponizerExternalJs) {

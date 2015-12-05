@@ -125,7 +125,7 @@ class ComponentManager
         // component cache dir
         $componentCacheDir = $cacheDir . DIRECTORY_SEPARATOR . $component->id();
 
-        // FsHelper
+        /** @var FsHelper $fsHelper */
         $fsHelper = $this->componizer->resolve(FsHelper::class);
 
         // make dir
@@ -145,7 +145,7 @@ class ComponentManager
         // component cache dir
         $componentCacheDir = $cacheDir . DIRECTORY_SEPARATOR . $component->id();
 
-        // FsHelper
+        /** @var FsHelper $fsHelper */
         $fsHelper = $this->componizer->resolve(FsHelper::class);
 
         // remove dir
@@ -167,7 +167,7 @@ class ComponentManager
         // component public dir symlink
         $targetLink = $publicDir . DIRECTORY_SEPARATOR . $component->id();
 
-        // FsHelper
+        /** @var FsHelper $fsHelper */
         $fsHelper = $this->componizer->resolve(FsHelper::class);
 
         // create symlink
@@ -191,7 +191,7 @@ class ComponentManager
         // component public dir symlink
         $targetLink = $publicDir . DIRECTORY_SEPARATOR . $component->id();
 
-        // FsHelper
+        /** @var FsHelper $fsHelper */
         $fsHelper = $this->componizer->resolve(FsHelper::class);
 
         // remove symlink

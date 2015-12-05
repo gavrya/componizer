@@ -53,6 +53,7 @@ class PluginManager
 
         $plugins = [];
 
+        /** @var FsHelper $fsHelper */
         $fsHelper = $this->componizer->resolve(FsHelper::class);
 
         // prepare plugins data
@@ -124,6 +125,7 @@ class PluginManager
      */
     public function enabled()
     {
+        /** @var StorageHelper $storageHelper */
         $storageHelper = $this->componizer->resolve(StorageHelper::class);
 
         $plugins = $storageHelper->get('enabled_plugins', []);
@@ -169,6 +171,7 @@ class PluginManager
 
         // save to storage
         try {
+            /** @var StorageHelper $storageHelper */
             $storageHelper = $this->componizer->resolve(StorageHelper::class);
 
             $plugins = $storageHelper->get('enabled_plugins', []);
@@ -178,7 +181,7 @@ class PluginManager
                 return true;
             }
 
-            // component manager
+            /** @var ComponentManager $componentManager */
             $componentManager = $this->componizer->resolve(ComponentManager::class);
 
             // enable component
@@ -234,6 +237,7 @@ class PluginManager
 
         // delete from storage
         try {
+            /** @var StorageHelper $storageHelper */
             $storageHelper = $this->componizer->resolve(StorageHelper::class);
 
             $plugins = $storageHelper->get('enabled_plugins', []);
@@ -243,7 +247,7 @@ class PluginManager
                 return true;
             }
 
-            // component manager
+            /** @var ComponentManager $componentManager */
             $componentManager = $this->componizer->resolve(ComponentManager::class);
 
             // disable component
@@ -317,7 +321,7 @@ class PluginManager
             return false;
         }
 
-        // component manager
+        /** @var ComponentManager $componentManager */
         $componentManager = $this->componizer->resolve(ComponentManager::class);
 
         // check plugin
@@ -366,7 +370,7 @@ class PluginManager
      */
     private function initPlugin(ComponizerPlugin $plugin)
     {
-        // component manager
+        /** @var ComponentManager $componentManager */
         $componentManager = $this->componizer->resolve(ComponentManager::class);
 
         // init plugin

@@ -332,16 +332,31 @@ class Componizer
     // General methods section
     //-----------------------------------------------------
 
+    /**
+     * Return componizer config.
+     *
+     * @return array
+     */
     public function config()
     {
         return self::$config;
     }
 
+    /**
+     * Return plugin manager.
+     *
+     * @return PluginManager Plugin manager
+     */
     public function pluginManager()
     {
         return $this->resolve(PluginManager::class);
     }
 
+    /**
+     * Return content processor.
+     *
+     * @return ContentProcessor content processor
+     */
     public function contentProcessor()
     {
         return $this->resolve(ContentProcessor::class);

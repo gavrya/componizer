@@ -34,6 +34,9 @@ class ContentProcessor
     public function initEditorContent($editorContent)
     {
         $this->editorContent = $editorContent;
+
+
+
     }
 
     public function makeDisplayContent($editorContent = null)
@@ -43,7 +46,7 @@ class ContentProcessor
             $editorContent = $this->editorContent;
         }
 
-        // content parser
+        /** @var ContentParser $contentParser */
         $contentParser = $this->componizer->resolve(ContentParser::class);
 
         // display content

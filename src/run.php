@@ -8,6 +8,7 @@
 require('/Users/gavrya/Projects/componizer/vendor/autoload.php');
 
 use Gavrya\Componizer\Componizer;
+use Gavrya\Componizer\ContentParser;
 
 error_reporting(E_ALL);
 
@@ -68,12 +69,15 @@ echo PHP_EOL;
 echo $contentProcessor->makeDisplayContent($editorContent);
 echo PHP_EOL;
 
+/** @var  ContentParser $contentParser */
+$contentParser = $componizer->resolve(ContentParser::class);
+
+echo PHP_EOL;
+echo var_dump($contentParser->parseWidgetIds($editorContent));
+echo PHP_EOL;
+
 $timerStop = microtime(true);
 
 echo PHP_EOL;
 echo round($timerStop - $timerStart, 3);
 echo PHP_EOL;
-
-$sr = new \Gavrya\Componizer\Skeleton\ComponizerInternalJs('<script>hello</script>');
-
-echo $sr;

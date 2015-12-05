@@ -31,12 +31,15 @@ class FsHelper
 
         for ($i = 0; $i < 10; $i++) {
             $path = dirname($path);
-            if (basename($path) == 'vendor') { // check if this working on windows?
+
+            if (basename($path) === 'vendor') {
                 // case: when installed as composer package
                 // example: /vendor/gavrya/componizer/src/Helper/FsHelper.php
                 return $path;
             }
+
             $alternativePath = rtrim($path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . 'vendor';
+
             if (file_exists($alternativePath) && is_dir($alternativePath)) {
                 // case: when installed from github as project
                 // example: |- /componizer/src/Helper/FsHelper.php
@@ -55,29 +58,32 @@ class FsHelper
     public function pluginsJsonFiles($path, $fileName)
     {
         $jsonFiles = [];
+
         $dirIterator = new RecursiveDirectoryIterator($path, FilesystemIterator::SKIP_DOTS);
 
-        // filter for directory iterator
         $filteredIterator = new RecursiveCallbackFilterIterator($dirIterator,
             function ($current, $key, $iterator) use ($fileName) {
                 if ($current instanceof SplFileInfo) {
                     $realPath = $current->getRealPath();
-                    // last position index
+
+                    // last index of
                     $index = strrpos($realPath, DIRECTORY_SEPARATOR . 'vendor');
+
                     if ($index === false) {
                         return false;
                     }
+
                     // path elements
                     $elements = array_filter(explode(DIRECTORY_SEPARATOR, substr($realPath, $index)));
                     $elementsCount = count($elements);
-                    // check path elements
-                    if ($current->isDir() && $elementsCount == 2 && $current->getFilename() == 'composer') {
+
+                    if ($current->isDir() && $elementsCount === 2 && $current->getFilename() === 'composer') {
                         // case: /vendor/composer
                         return false;
                     } elseif ($current->isDir() && $elementsCount <= 3) {
                         // case: /vendor or /vendor/* or /vendor/*/*
                         return true;
-                    } elseif ($current->isFile() && $elementsCount == 4 && $current->getFilename() == $fileName) {
+                    } elseif ($current->isFile() && $elementsCount === 4 && $current->getFilename() === $fileName) {
                         // case: /vendor/*/*/$fileName
                         return true;
                     }
@@ -88,8 +94,9 @@ class FsHelper
         );
 
         $iterator = new RecursiveIteratorIterator($filteredIterator);
+
         foreach ($iterator as $fileInfo) {
-            if ($fileInfo instanceof SplFileInfo && $fileInfo->isFile() && $fileInfo->getFilename() == $fileName) {
+            if ($fileInfo instanceof SplFileInfo && $fileInfo->isFile() && $fileInfo->getFilename() === $fileName) {
                 $jsonFiles[] = $fileInfo;
             }
         }
@@ -100,16 +107,17 @@ class FsHelper
     public function pluginsJsonData(array $jsonFiles)
     {
         $jsonData = [];
+
         foreach ($jsonFiles as $jsonFile) {
             if ($jsonFile instanceof SplFileInfo && $jsonFile->isReadable()) {
                 try {
                     $jsonString = $jsonFile->openFile()->fread($jsonFile->getSize());
                     $data = json_decode($jsonString, true);
+
                     if (is_array($data) && !empty($data)) {
                         $jsonData[] = $data;
                     }
                 } catch (Exception $ex) {
-                    // ignoring
                 }
             }
         }
@@ -127,7 +135,7 @@ class FsHelper
             return false;
         }
 
-        // remove invalid symlink
+        // remove broken symlink
         if (is_link($targetDir) && $sourceDir !== realpath($targetDir)) {
             $this->removeSymlink($targetDir);
         }
@@ -160,6 +168,7 @@ class FsHelper
             if ($fileInfo instanceof SplFileInfo) {
                 $linkPath = $fileInfo->getPathname();
                 $targetPath = $fileInfo->getRealPath();
+
                 if ($fileInfo->isLink() && (!file_exists($targetPath) || !is_dir($targetPath))) {
                     $this->removeSymlink($linkPath);
                 }
