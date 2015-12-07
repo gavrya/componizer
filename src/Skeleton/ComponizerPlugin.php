@@ -91,9 +91,9 @@ abstract class ComponizerPlugin
 
     final public function getWidget($widget)
     {
-        $widget = $this->findComponent($widget, $this->widgets());
+        $component = $this->findComponent($widget, $this->widgets());
 
-        return $widget instanceof ComponizerWidget ? $widget : null;
+        return $component instanceof ComponizerWidget ? $component : null;
     }
 
     //-----------------------------------------------------

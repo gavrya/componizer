@@ -16,7 +16,11 @@ class ContentProcessor
     private $componizer = null;
 
     // Internal variables
-    private $editorContent = null;
+    private $requiredWidgets = [];
+
+    private $componizerAssets = [];
+    private $editorAssets = [];
+    private $displayAssets = [];
 
     //-----------------------------------------------------
     // Instance creation/init section
@@ -33,17 +37,20 @@ class ContentProcessor
 
     public function initEditorContent($editorContent)
     {
-        $this->editorContent = $editorContent;
+        $this->requiredWidgets = [];
 
+        if(!is_string($editorContent) || empty($editorContent)) {
+            return;
+        }
 
-
+        // todo: detect required components needed in order to render "display content"
     }
 
-    public function makeDisplayContent($editorContent = null)
+    public function makeDisplayContent($editorContent)
     {
         // check editor content
         if ($editorContent === null) {
-            $editorContent = $this->editorContent;
+            return '';
         }
 
         /** @var ContentParser $contentParser */
@@ -56,22 +63,31 @@ class ContentProcessor
     }
 
     //-----------------------------------------------------
+    // Required components section
+    //-----------------------------------------------------
+
+    public function requiredWidgets()
+    {
+
+    }
+
+    //-----------------------------------------------------
     // Assets section
     //-----------------------------------------------------
 
     public function componizerAssets()
     {
-
+        // todo: return componizer related assets needed in order to editor gets worked
     }
 
     public function editorAssets()
     {
-
+        // todo: return editor related assets based on required components
     }
 
     public function displayAssets()
     {
-
+        // todo: return display related assets based on required components
     }
 
 }

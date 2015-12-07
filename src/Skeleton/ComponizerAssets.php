@@ -41,6 +41,8 @@ class ComponizerAssets
                 $this->internalCss[] = $asset;
             }
         }
+        // todo: add unique check
+        // todo: add ability to push/remove assets on fly
     }
 
     //-----------------------------------------------------

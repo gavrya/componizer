@@ -75,6 +75,8 @@ class FsHelper
 
                     // path elements
                     $elements = array_filter(explode(DIRECTORY_SEPARATOR, substr($realPath, $index)));
+
+                    // path elements count
                     $elementsCount = count($elements);
 
                     if ($current->isDir() && $elementsCount === 2 && $current->getFilename() === 'composer') {

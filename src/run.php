@@ -70,7 +70,7 @@ echo $contentProcessor->makeDisplayContent($editorContent);
 echo PHP_EOL;
 
 /** @var  ContentParser $contentParser */
-$contentParser = $componizer->resolve(ContentParser::class);
+$contentParser = $componizer->resolve('Gavrya\Componizer\ContentParser\ContentParser');
 
 echo PHP_EOL;
 echo var_dump($contentParser->parseWidgetIds($editorContent));

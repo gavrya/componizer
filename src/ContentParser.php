@@ -33,7 +33,7 @@ class ContentParser
     //-----------------------------------------------------
 
     /**
-     * Parse provided "editor content" to the "display content".
+     * Parse provided "editor content" to "display content" representation.
      *
      * Parsing is processed based on allowed/disabled plugins/components and other settings from SettingsManager.
      *
@@ -87,13 +87,37 @@ class ContentParser
     }
 
     /**
-     * Parse widget element.
+     * Check if widget is valid based on html parameters.
+     *
+     * @param DOMElement $widgetElement
+     * @return bool
+     */
+    private function isValidWidgetElement(DOMElement $widgetElement)
+    {
+        return (
+            !$widgetElement->hasAttribute('data-componizer-widget-id') ||
+            !$widgetElement->hasAttribute('data-componizer-widget-name') ||
+            !$widgetElement->hasAttribute('data-componizer-widget-properties') ||
+            !$widgetElement->hasAttribute('data-componizer-widget-content-type') ||
+            $widgetElement->firstChild === null ||
+            !$widgetElement->firstChild->hasAttribute('data-componizer-widget-content')
+        );
+        // todo: add additional check: length, format, value
+    }
+
+    /**
+     * Parse widget element and replace its "editor content" to "diplay content" representation.
      *
      * @param DOMElement $widgetElement
      * @param DomHelper $domHelper
      */
     private function parseWidgetElement(DOMElement $widgetElement, DomHelper $domHelper)
     {
+        if (!$this->isValidWidgetElement($widgetElement)) {
+            // remove invalid widget representation from "editor content"
+            $domHelper->remove($widgetElement);
+        }
+
         // widget id
         $widgetId = trim($widgetElement->getAttribute('data-componizer-widget-id'));
 
@@ -111,21 +135,15 @@ class ContentParser
         // widget content type
         $widgetContentType = trim($widgetElement->getAttribute('data-componizer-widget-content-type'));
 
-        if (!in_array($widgetContentType, ['none', 'plain_text', 'rich_text', 'mixed'])) {
+        if (!in_array($widgetContentType, ['none', 'code', 'plain_text', 'rich_text', 'mixed'])) {
             $widgetContentType = 'none';
         }
 
         // widget content
-        $widgetContent = null;
-
-        $widgetContentElement = $widgetElement->firstChild;
-
-        if ($widgetContentElement !== null && $widgetContentType !== 'none') {
-            $widgetContent = $domHelper->getInnerHtml($widgetContentElement);
-        }
+        $widgetContent = $widgetContentType !== 'none' ? $domHelper->getInnerHtml($widgetElement->firstChild) : null;
 
         // find widget by id
-        $widget = !empty($widgetId) ? $this->findAllowedWidget($widgetId) : null;
+        $widget = $this->findAllowedWidget($widgetId);
 
         // display content
         $widgetDisplayContent = null;
@@ -140,24 +158,22 @@ class ContentParser
         }
 
         if (is_string($widgetDisplayContent) && !empty($widgetDisplayContent)) {
+            // replace widget "editor content" to "display content" representation
             $domHelper->replaceWith($widgetElement, $widgetDisplayContent);
         } else {
             $id = htmlentities($widgetId);
             $name = htmlentities($widgetName);
             $comment = '<!-- Componizer widget not found or disabled: id: "' . $id . '", name: "' . $name . '" -->';
 
+            // replace widget "editor content" representation to componizer html warning comment
             $domHelper->replaceWith($widgetElement, $comment);
         }
     }
 
-    //-----------------------------------------------------
-    // Parse component id's section
-    //-----------------------------------------------------
-
     /**
-     * Return all parsed widget ids.
+     * Return all widget ids found in provided "editor content".
      *
-     * Returned array may contain multiple identical ids, id per every found widget.
+     * Returned array may contain multiple identical ids, id per every found widget in the order of parsing.
      * See helpfull links for array filtering.
      *
      * @link http://php.net/manual/en/function.array-unique.php
@@ -189,7 +205,12 @@ class ContentParser
         $widgetElements = $docXpath->query('(//*[@data-componizer-widget])', $docRoot);
 
         if ($widgetElements !== false) {
+            /** @var DOMElement $widgetElement */
             foreach ($widgetElements as $widgetElement) {
+                if(!$this->isValidWidgetElement($widgetElement)) {
+                    continue;
+                }
+
                 $widgetId = trim($widgetElement->getAttribute('data-componizer-widget-id'));
 
                 if (!empty($widgetId)) {
@@ -213,7 +234,7 @@ class ContentParser
      */
     private function findAllowedWidget($widgetId)
     {
-        // TODO: reimplement based on scopes/settings in future
+        // todo: reimplement based on scopes/settings in future
 
         // todo: move method to the WidgetManager
 
