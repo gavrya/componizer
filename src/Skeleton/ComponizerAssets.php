@@ -42,7 +42,7 @@ class ComponizerAssets
             }
         }
         // todo: add unique check
-        // todo: add ability to push/remove assets on fly
+        // todo: add ability to push/remove assets on the fly
     }
 
     //-----------------------------------------------------

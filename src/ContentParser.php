@@ -19,6 +19,8 @@ class ContentParser
     // Componizer
     private $componizer = null;
 
+    // todo: add widgets attributes as constants
+
     //-----------------------------------------------------
     // Instance creation/init section
     //-----------------------------------------------------
@@ -58,6 +60,8 @@ class ContentParser
         $docXpath = new DOMXpath($doc);
 
         $widgetElement = $this->findWidgetElement($docXpath, $docRoot);
+
+        // todo: find generic componizer component at first, then determine its type, then find that element
 
         if ($widgetElement === null) {
             return $editorContent;

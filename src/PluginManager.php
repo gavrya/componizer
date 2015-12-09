@@ -77,12 +77,12 @@ class PluginManager
             $plugin = new $data['plugin']['class'];
 
             // validate plugin and its components
-            if (!$this->validPlugin($plugin)) {
+            if (!$this->isValid($plugin)) {
                 continue;
             }
 
             // init plugin
-            $this->initPlugin($plugin);
+            $this->init($plugin);
 
             // add plugin to available plugins
             $plugins[$plugin->id()] = $plugin;
@@ -295,16 +295,6 @@ class PluginManager
     }
 
     //-----------------------------------------------------
-    // Allow/Deny section
-    //-----------------------------------------------------
-
-    // based on current scope
-
-    //public function allowed();
-    //public function denied();
-    //public function isAllowed($plugin);
-
-    //-----------------------------------------------------
     // Internal methods section
     //-----------------------------------------------------
 
@@ -314,7 +304,7 @@ class PluginManager
      * @param $plugin
      * @return bool
      */
-    private function validPlugin($plugin)
+    private function isValid($plugin)
     {
         // check plugin instance
         if (!($plugin instanceof ComponizerComponent && $plugin instanceof ComponizerPlugin)) {
@@ -325,7 +315,7 @@ class PluginManager
         $componentManager = $this->componizer->resolve(ComponentManager::class);
 
         // check plugin
-        if (!$componentManager->valid($plugin)) {
+        if (!$componentManager->isValid($plugin)) {
             return false;
         }
 
@@ -336,6 +326,7 @@ class PluginManager
             return false;
         }
 
+        // todo: move to the WidgetManager->isValid($widget)
         foreach ($widgets as $widget) {
             // check instance
             if (!($widget instanceof ComponizerComponent && $widget instanceof ComponizerWidget)) {
@@ -343,7 +334,7 @@ class PluginManager
             }
 
             // validate component
-            if (!$componentManager->valid($widget)) {
+            if (!$componentManager->isValid($widget)) {
                 return false;
             }
 
@@ -368,7 +359,7 @@ class PluginManager
      *
      * @param ComponizerPlugin $plugin
      */
-    private function initPlugin(ComponizerPlugin $plugin)
+    private function init(ComponizerPlugin $plugin)
     {
         /** @var ComponentManager $componentManager */
         $componentManager = $this->componizer->resolve(ComponentManager::class);

@@ -31,7 +31,7 @@ class ComponentManager
     // Methods implementation section
     //-----------------------------------------------------
 
-    public function valid($component)
+    public function isValid($component)
     {
         // check instance
         if (!($component instanceof ComponizerComponent)) {
@@ -49,6 +49,7 @@ class ComponentManager
         // check component id format (lowercase md5)
         if (!preg_match('/^[a-f0-9]{32}$/', $componentId)) {
             return false;
+            // todo: limit id hash to 8 chars from md5/sha1 hash, for example: e46f374a4
         }
 
         // assets dir
