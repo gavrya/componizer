@@ -32,6 +32,14 @@ class ContentParser
     const WIDGET_CT_RICH_TEXT = 'rich_text';
     const WIDGET_CT_MIXED = 'mixed';
 
+    private $widgetContentTypes = [
+        self::WIDGET_CT_NONE,
+        self::WIDGET_CT_CODE,
+        self::WIDGET_CT_PLAIN_TEXT,
+        self::WIDGET_CT_RICH_TEXT,
+        self::WIDGET_CT_MIXED,
+    ];
+
     // Componizer
     private $componizer = null;
 
@@ -182,22 +190,14 @@ class ContentParser
         // widget content type
         $widgetContentType = trim($widgetElement->getAttribute(self::WIDGET_ATTR_CONTENT_TYPE));
 
-        $widgetContentTypes = [
-            self::WIDGET_CT_NONE,
-            self::WIDGET_CT_CODE,
-            self::WIDGET_CT_PLAIN_TEXT,
-            self::WIDGET_CT_RICH_TEXT,
-            self::WIDGET_CT_MIXED,
-        ];
-
-        if (!in_array($widgetContentType, $widgetContentTypes)) {
+        if (!in_array($widgetContentType, $this->widgetContentTypes)) {
             $widgetContentType = self::WIDGET_CT_NONE;
         }
 
         $widgetContentElement = $this->findWidgetContentElement($widgetElement);
 
         // widget content
-        $widgetContent = $widgetContentType !== 'none' ? $domHelper->getInnerHtml($widgetContentElement) : null;
+        $widgetContent = $widgetContentType !== self::WIDGET_CT_NONE ? $domHelper->getInnerHtml($widgetContentElement) : null;
 
         /** @var WidgetManager $widgetManager */
         $widgetManager = $this->componizer->resolve(WidgetManager::class);
