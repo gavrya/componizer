@@ -33,8 +33,8 @@ class ContentProcessor
 
     public function initEditorContent($editorContent)
     {
-        // todo: add ability to passing array of content with target keys ($editorContent, $targetKeys = null)
-        // for parsing results from database row with multiple "editor content" in each row
+        // todo: add ability to pass array of content with target keys ($editorContent, $targetKeys = null)
+        // for parsing results from database rows with multiple "editor content" fields in each row
 
         // reset previously required widgets
         $this->requiredWidgets = [];
@@ -48,7 +48,7 @@ class ContentProcessor
 
         $widgetIds = array_unique($contentParser->parseWidgetIds($editorContent));
 
-        // return if no widget ids detected inside "editor content"
+        // return passed "editor content" back if no widget ids detected inside
         if (empty($widgetIds)) {
             return $editorContent;
         }
@@ -104,7 +104,6 @@ class ContentProcessor
 
         /** @var \Gavrya\Componizer\Skeleton\ComponizerWidget $requiredWidget */
         foreach ($this->requiredWidgets as $requiredWidget) {
-            // todo: check for uniqueness
             $assets[] = $requiredWidget->editorAssets();
         }
 
@@ -117,7 +116,6 @@ class ContentProcessor
 
         /** @var \Gavrya\Componizer\Skeleton\ComponizerWidget $requiredWidget */
         foreach ($this->requiredWidgets as $requiredWidget) {
-            // todo: check for uniqueness
             $assets[] = $requiredWidget->displayAssets();
         }
 

@@ -18,6 +18,8 @@ use Gavrya\Componizer\Skeleton\ComponizerWidget;
 class ExampleWidget extends ComponizerWidget implements ComponizerComponent
 {
 
+    const ID = 'c770076f';
+
     // internal vars
     private $editorAssets = null;
     private $displayAssets = null;
@@ -40,8 +42,8 @@ class ExampleWidget extends ComponizerWidget implements ComponizerComponent
     private function initDisplayAssets()
     {
         $assets = [
-            new ComponizerExternalJs('/componizer/' . $this->id() . '/js/example.js'),
-            new ComponizerExternalCss('/componizer/' . $this->id() . '/css/example.css'),
+            new ComponizerExternalJs('/componizer/' . self::ID . '/js/example.js'),
+            new ComponizerExternalCss('/componizer/' . self::ID . '/css/example.css'),
         ];
 
         $this->displayAssets = new ComponizerAssets($assets);
@@ -53,7 +55,7 @@ class ExampleWidget extends ComponizerWidget implements ComponizerComponent
 
     public function id()
     {
-        return 'c770076f';
+        return self::ID;
     }
 
     public function name()
@@ -78,7 +80,7 @@ class ExampleWidget extends ComponizerWidget implements ComponizerComponent
 
     public function assetsDir()
     {
-        return dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR . $this->id();
+        return dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR . self::ID;
     }
 
     public function init($lang, $cacheDir)

@@ -16,6 +16,8 @@ use Gavrya\Componizer\Skeleton\ComponizerPlugin;
 class ExamplePlugin extends ComponizerPlugin implements ComponizerComponent
 {
 
+    const ID = '55963a8f';
+
     private $widgets = null;
 
     //-----------------------------------------------------
@@ -33,7 +35,7 @@ class ExamplePlugin extends ComponizerPlugin implements ComponizerComponent
 
     public function id()
     {
-        return '55963a8f';
+        return self::ID;
     }
 
     public function name()
@@ -58,7 +60,7 @@ class ExamplePlugin extends ComponizerPlugin implements ComponizerComponent
 
     public function assetsDir()
     {
-        return dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR . $this->id();
+        return dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR . self::ID;
     }
 
     public function init($lang, $cacheDir)

@@ -62,6 +62,7 @@ class PluginManager
         // check plugin data
         foreach ($jsonData as $data) {
             // check version
+            // todo: compare using version_compare() in future (http://php.net/manual/ru/function.version-compare.php)
             if (!isset($data['componizer']['version']) || $data['componizer']['version'] !== Componizer::VERSION) {
                 continue;
             }

@@ -16,10 +16,24 @@ use Gavrya\Componizer\Helper\DomHelper;
 
 class ContentParser
 {
+
+    // Widget attributes
+    const WIDGET_ATTR = 'data-componizer-widget';
+    const WIDGET_ATTR_ID = 'data-componizer-widget-id';
+    const WIDGET_ATTR_NAME = 'data-componizer-widget-name';
+    const WIDGET_ATTR_PROPERTIES = 'data-componizer-widget-properties';
+    const WIDGET_ATTR_CONTENT_TYPE = 'data-componizer-widget-content-type';
+    const WIDGET_ATTR_CONTENT = 'data-componizer-widget-content';
+
+    // Widget content types
+    const WIDGET_CT_NONE = 'none';
+    const WIDGET_CT_CODE = 'code';
+    const WIDGET_CT_PLAIN_TEXT = 'plain_text';
+    const WIDGET_CT_RICH_TEXT = 'rich_text';
+    const WIDGET_CT_MIXED = 'mixed';
+
     // Componizer
     private $componizer = null;
-
-    // todo: add widgets attributes as constants
 
     //-----------------------------------------------------
     // Instance creation/init section
@@ -87,7 +101,7 @@ class ContentParser
      */
     private function findWidgetElement(DOMXpath $docXpath, DOMElement $docRoot)
     {
-        return $docXpath->query('(//*[@data-componizer-widget])[1]', $docRoot)->item(0);
+        return $docXpath->query('(//*[@' . self::WIDGET_ATTR . '])[1]', $docRoot)->item(0);
     }
 
     /**
@@ -99,24 +113,41 @@ class ContentParser
     private function isValidWidgetElement(DOMElement $widgetElement)
     {
         if (
-            !$widgetElement->hasAttribute('data-componizer-widget-id') ||
-            !$widgetElement->hasAttribute('data-componizer-widget-name') ||
-            !$widgetElement->hasAttribute('data-componizer-widget-properties') ||
-            !$widgetElement->hasAttribute('data-componizer-widget-content-type')
+            !$widgetElement->hasAttribute(self::WIDGET_ATTR_ID) ||
+            !$widgetElement->hasAttribute(self::WIDGET_ATTR_NAME) ||
+            !$widgetElement->hasAttribute(self::WIDGET_ATTR_PROPERTIES) ||
+            !$widgetElement->hasAttribute(self::WIDGET_ATTR_CONTENT_TYPE)
         ) {
             return false;
         }
 
+        // todo: add additional check: length, format, value
+
+        if($this->findWidgetContentElement($widgetElement) !== null) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Find widget content element for provided widget element.
+     *
+     * Returns first found nested element with attribute 'data-componizer-widget-content'.
+     *
+     * @param DOMElement $widgetElement
+     * @return DOMElement|null
+     */
+    private function findWidgetContentElement(DOMElement $widgetElement)
+    {
         // find first nested element with target attribute
         foreach ($widgetElement->childNodes as $childNode) {
-            if ($childNode instanceof DOMElement && $childNode->hasAttribute('data-componizer-widget-content')) {
-                return true;
+            if ($childNode instanceof DOMElement && $childNode->hasAttribute(self::WIDGET_ATTR_CONTENT)) {
+                return $childNode;
             }
         }
 
-        // todo: add additional check: length, format, value
-
-        return false;
+        return null;
     }
 
     /**
@@ -135,13 +166,13 @@ class ContentParser
         }
 
         // widget id
-        $widgetId = trim($widgetElement->getAttribute('data-componizer-widget-id'));
+        $widgetId = trim($widgetElement->getAttribute(self::WIDGET_ATTR_ID));
 
         // widget name
-        $widgetName = trim($widgetElement->getAttribute('data-componizer-widget-name'));
+        $widgetName = trim($widgetElement->getAttribute(self::WIDGET_ATTR_NAME));
 
         // widget properties
-        $widgetProperties = trim($widgetElement->getAttribute('data-componizer-widget-properties'));
+        $widgetProperties = trim($widgetElement->getAttribute(self::WIDGET_ATTR_PROPERTIES));
         $widgetProperties = json_decode($widgetProperties, true);
 
         if (!is_array($widgetProperties)) {
@@ -149,14 +180,24 @@ class ContentParser
         }
 
         // widget content type
-        $widgetContentType = trim($widgetElement->getAttribute('data-componizer-widget-content-type'));
+        $widgetContentType = trim($widgetElement->getAttribute(self::WIDGET_ATTR_CONTENT_TYPE));
 
-        if (!in_array($widgetContentType, ['none', 'code', 'plain_text', 'rich_text', 'mixed'])) {
-            $widgetContentType = 'none';
+        $widgetContentTypes = [
+            self::WIDGET_CT_NONE,
+            self::WIDGET_CT_CODE,
+            self::WIDGET_CT_PLAIN_TEXT,
+            self::WIDGET_CT_RICH_TEXT,
+            self::WIDGET_CT_MIXED,
+        ];
+
+        if (!in_array($widgetContentType, $widgetContentTypes)) {
+            $widgetContentType = self::WIDGET_CT_NONE;
         }
 
+        $widgetContentElement = $this->findWidgetContentElement($widgetElement);
+
         // widget content
-        $widgetContent = $widgetContentType !== 'none' ? $domHelper->getInnerHtml($widgetElement->firstChild) : null;
+        $widgetContent = $widgetContentType !== 'none' ? $domHelper->getInnerHtml($widgetContentElement) : null;
 
         /** @var WidgetManager $widgetManager */
         $widgetManager = $this->componizer->resolve(WidgetManager::class);
@@ -222,7 +263,7 @@ class ContentParser
         $docXpath = new DOMXpath($doc);
 
         /** @var DOMNodeList $widgetElements */
-        $widgetElements = $docXpath->query('(//*[@data-componizer-widget])', $docRoot);
+        $widgetElements = $docXpath->query('(//*[@' . self::WIDGET_ATTR . '])', $docRoot);
 
         if ($widgetElements !== false) {
             /** @var DOMElement $widgetElement */
@@ -231,7 +272,7 @@ class ContentParser
                     continue;
                 }
 
-                $widgetId = trim($widgetElement->getAttribute('data-componizer-widget-id'));
+                $widgetId = trim($widgetElement->getAttribute(self::WIDGET_ATTR_ID));
 
                 if (!empty($widgetId)) {
                     $widgetIds[] = $widgetId;
