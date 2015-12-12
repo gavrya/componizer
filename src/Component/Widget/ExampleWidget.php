@@ -11,6 +11,8 @@ namespace Gavrya\Componizer\Component\Widget;
 
 use Gavrya\Componizer\Skeleton\ComponizerAssets;
 use Gavrya\Componizer\Skeleton\ComponizerComponent;
+use Gavrya\Componizer\Skeleton\ComponizerExternalCss;
+use Gavrya\Componizer\Skeleton\ComponizerExternalJs;
 use Gavrya\Componizer\Skeleton\ComponizerWidget;
 
 class ExampleWidget extends ComponizerWidget implements ComponizerComponent
@@ -26,8 +28,23 @@ class ExampleWidget extends ComponizerWidget implements ComponizerComponent
 
     public function __construct()
     {
+        $this->initEditorAssets();
+        $this->initDisplayAssets();
+    }
+
+    private function initEditorAssets()
+    {
         $this->editorAssets = new ComponizerAssets([]);
-        $this->displayAssets = new ComponizerAssets([]);
+    }
+
+    private function initDisplayAssets()
+    {
+        $assets = [
+            new ComponizerExternalJs('/componizer/' . $this->id() . '/js/example.js'),
+            new ComponizerExternalCss('/componizer/' . $this->id() . '/css/example.css'),
+        ];
+
+        $this->displayAssets = new ComponizerAssets($assets);
     }
 
     //-----------------------------------------------------
@@ -56,7 +73,7 @@ class ExampleWidget extends ComponizerWidget implements ComponizerComponent
 
     public function hasAssets()
     {
-        return false;
+        return true;
     }
 
     public function assetsDir()

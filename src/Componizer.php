@@ -66,7 +66,11 @@ class Componizer
 
         if (self::$config === null) {
             self::$config = $config;
+
+            return true;
         }
+
+        return false;
     }
 
     private static function validateConfig($config)
@@ -337,7 +341,7 @@ class Componizer
     //-----------------------------------------------------
 
     /**
-     * Return componizer config.
+     * Get componizer config.
      *
      * @return array
      */
@@ -347,7 +351,7 @@ class Componizer
     }
 
     /**
-     * Return plugin manager.
+     * Get plugin manager.
      *
      * @return PluginManager Plugin manager
      */
@@ -357,7 +361,17 @@ class Componizer
     }
 
     /**
-     * Return content processor.
+     * Get widget manager.
+     *
+     * @return WidgetManager widget manager
+     */
+    public function widgetManager()
+    {
+        return $this->resolve(WidgetManager::class);
+    }
+
+    /**
+     * Get content processor.
      *
      * @return ContentProcessor content processor
      */

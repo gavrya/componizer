@@ -66,15 +66,24 @@ EOD;
 $contentProcessor = $componizer->contentProcessor();
 
 echo PHP_EOL;
-echo $contentProcessor->makeDisplayContent($editorContent);
+echo $contentProcessor->initEditorContent($editorContent);
 echo PHP_EOL;
 
-///** @var  ContentParser $contentParser */
-//$contentParser = $componizer->resolve('Gavrya\Componizer\ContentParser\ContentParser');
-//
-//echo PHP_EOL;
-//echo var_dump($contentParser->parseWidgetIds($editorContent));
-//echo PHP_EOL;*/
+echo PHP_EOL;
+echo 'Required widgets: ' . count($contentProcessor->requiredWidgets());
+echo PHP_EOL;
+
+echo PHP_EOL;
+echo 'Required editor assets: ' . count($contentProcessor->editorAssets());
+echo PHP_EOL;
+
+echo PHP_EOL;
+echo 'Required display assets: ' . count($contentProcessor->displayAssets());
+echo PHP_EOL;
+
+echo PHP_EOL;
+echo $contentProcessor->makeDisplayContent($editorContent);
+echo PHP_EOL;
 
 $timerStop = microtime(true);
 

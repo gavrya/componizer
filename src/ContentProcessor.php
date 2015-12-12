@@ -33,6 +33,9 @@ class ContentProcessor
 
     public function initEditorContent($editorContent)
     {
+        // todo: add ability to passing array of content with target keys ($editorContent, $targetKeys = null)
+        // for parsing results from database row with multiple "editor content" in each row
+
         // reset previously required widgets
         $this->requiredWidgets = [];
 

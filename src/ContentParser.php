@@ -114,8 +114,9 @@ class ContentParser
             }
         }
 
-        return false;
         // todo: add additional check: length, format, value
+
+        return false;
     }
 
     /**
