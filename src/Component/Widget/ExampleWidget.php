@@ -36,7 +36,7 @@ class ExampleWidget extends ComponizerWidget implements ComponizerComponent
 
     public function id()
     {
-        return 'c770076f713a31250680e6810dceb6aa';
+        return 'c770076f';
     }
 
     public function name()

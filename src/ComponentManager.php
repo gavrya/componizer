@@ -46,10 +46,9 @@ class ComponentManager
             return false;
         }
 
-        // check component id format (lowercase md5)
-        if (!preg_match('/^[a-f0-9]{32}$/', $componentId)) {
+        // check component id format (first 8 chars from random lowercased sha1 hash)
+        if (!preg_match('/^[a-f0-9]{8}$/', $componentId)) {
             return false;
-            // todo: limit id hash to 8 chars from md5/sha1 hash, for example: e46f374a4
         }
 
         // assets dir

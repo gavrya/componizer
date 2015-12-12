@@ -17,8 +17,6 @@ class DomHelper
 
     public function create($string)
     {
-        // TODO: reimplement using <_root> container element
-
         $charset = 'UTF-8';
 
         $string = '<!DOCTYPE html>
@@ -36,6 +34,7 @@ class DomHelper
         $dom = new DOMDocument('1.0', $charset);
         $dom->preserveWhiteSpace = false;
         $dom->formatOutput = true;
+        $dom->encoding = $charset;
         $dom->loadHTML($string, LIBXML_COMPACT);
 
         libxml_use_internal_errors($useInternalErrors);
@@ -63,7 +62,7 @@ class DomHelper
 
         $bodyElement = $dom->getElementsByTagName('body')->item(0);
 
-        foreach($bodyElement->childNodes as $childNode) {
+        foreach ($bodyElement->childNodes as $childNode) {
             $fragment->appendChild($childNode);
         }
 
@@ -76,7 +75,7 @@ class DomHelper
     {
         $parentNode = $domElement->parentNode;
 
-        if($parentNode !== null) {
+        if ($parentNode !== null) {
             $parentNode->removeChild($domElement);
         }
     }

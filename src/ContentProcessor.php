@@ -18,10 +18,6 @@ class ContentProcessor
     // Internal variables
     private $requiredWidgets = [];
 
-    private $componizerAssets = [];
-    private $editorAssets = [];
-    private $displayAssets = [];
-
     //-----------------------------------------------------
     // Instance creation/init section
     //-----------------------------------------------------
@@ -37,13 +33,33 @@ class ContentProcessor
 
     public function initEditorContent($editorContent)
     {
+        // reset previously required widgets
         $this->requiredWidgets = [];
 
-        if(!is_string($editorContent) || empty($editorContent)) {
+        if (!is_string($editorContent) || empty($editorContent)) {
             return;
         }
 
-        // todo: detect required components needed in order to render "display content"
+        /** @var ContentParser $contentParser */
+        $contentParser = $this->componizer->resolve(ContentParser::class);
+
+        $widgetIds = array_unique($contentParser->parseWidgetIds($editorContent));
+
+        // return if no widget ids detected inside "editor content"
+        if (empty($widgetIds)) {
+            return $editorContent;
+        }
+
+        /** @var WidgetManager $widgetManager */
+        $widgetManager = $this->componizer->resolve(WidgetManager::class);
+
+        $allowedWidgets = $widgetManager->allowed();
+
+        foreach ($widgetIds as $widgetId) {
+            if (isset($allowedWidgets[$widgetId])) {
+                $this->requiredWidgets[$widgetId] = $allowedWidgets[$widgetId];
+            }
+        }
     }
 
     public function makeDisplayContent($editorContent)
@@ -56,7 +72,6 @@ class ContentProcessor
         /** @var ContentParser $contentParser */
         $contentParser = $this->componizer->resolve(ContentParser::class);
 
-        // display content
         $displayContent = $contentParser->parseDisplayContent($editorContent);
 
         return $displayContent;
@@ -68,7 +83,7 @@ class ContentProcessor
 
     public function requiredWidgets()
     {
-
+        return $this->requiredWidgets;
     }
 
     //-----------------------------------------------------
@@ -82,12 +97,28 @@ class ContentProcessor
 
     public function editorAssets()
     {
-        // todo: return editor related assets based on required components
+        $assets = [];
+
+        /** @var \Gavrya\Componizer\Skeleton\ComponizerWidget $requiredWidget */
+        foreach ($this->requiredWidgets as $requiredWidget) {
+            // todo: check for uniqueness
+            $assets[] = $requiredWidget->editorAssets();
+        }
+
+        return $assets;
     }
 
     public function displayAssets()
     {
-        // todo: return display related assets based on required components
+        $assets = [];
+
+        /** @var \Gavrya\Componizer\Skeleton\ComponizerWidget $requiredWidget */
+        foreach ($this->requiredWidgets as $requiredWidget) {
+            // todo: check for uniqueness
+            $assets[] = $requiredWidget->displayAssets();
+        }
+
+        return $assets;
     }
 
 }

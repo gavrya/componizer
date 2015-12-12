@@ -100,5 +100,6 @@ abstract class ComponizerPlugin
     // Other component section
     //-----------------------------------------------------
 
+    // todo: change widget to universal "module" ?
 
 }

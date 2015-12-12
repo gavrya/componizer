@@ -34,7 +34,7 @@ $pluginManager->enable($pluginManager->disabled());
 $editorContent = <<<EOD
         <div
          data-componizer-widget
-         data-componizer-widget-id="c770076f713a31250680e6810dceb6aa"
+         data-componizer-widget-id="c770076f"
          data-componizer-widget-name="lister"
          data-componizer-widget-properties='{"key": "value"}'
          data-componizer-widget-content-type="mixed">
@@ -54,7 +54,7 @@ $editorContent = <<<EOD
 
         <div
          data-componizer-widget
-         data-componizer-widget-id="c770076f713a31250680e6810dceb6aa"
+         data-componizer-widget-id="c770076f"
          data-componizer-widget-name="lister"
          data-componizer-widget-properties='{"key": "value"}'
          data-componizer-widget-content-type="mixed">
@@ -69,12 +69,12 @@ echo PHP_EOL;
 echo $contentProcessor->makeDisplayContent($editorContent);
 echo PHP_EOL;
 
-/** @var  ContentParser $contentParser */
-$contentParser = $componizer->resolve('Gavrya\Componizer\ContentParser\ContentParser');
-
-echo PHP_EOL;
-echo var_dump($contentParser->parseWidgetIds($editorContent));
-echo PHP_EOL;
+///** @var  ContentParser $contentParser */
+//$contentParser = $componizer->resolve('Gavrya\Componizer\ContentParser\ContentParser');
+//
+//echo PHP_EOL;
+//echo var_dump($contentParser->parseWidgetIds($editorContent));
+//echo PHP_EOL;*/
 
 $timerStop = microtime(true);
 

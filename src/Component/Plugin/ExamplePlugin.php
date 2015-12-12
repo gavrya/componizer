@@ -33,7 +33,7 @@ class ExamplePlugin extends ComponizerPlugin implements ComponizerComponent
 
     public function id()
     {
-        return '55963a8fb5cc4d6e61cc27ede968fcd0';
+        return '55963a8f';
     }
 
     public function name()

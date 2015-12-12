@@ -12,11 +12,9 @@ namespace Gavrya\Componizer;
 use Exception;
 use Gavrya\Componizer\Helper\FsHelper;
 use Gavrya\Componizer\Helper\StorageHelper;
-use Gavrya\Componizer\Skeleton\ComponizerAssets;
 use Gavrya\Componizer\Skeleton\ComponizerComponent;
 use Gavrya\Componizer\Skeleton\ComponizerException;
 use Gavrya\Componizer\Skeleton\ComponizerPlugin;
-use Gavrya\Componizer\Skeleton\ComponizerWidget;
 
 class PluginManager
 {
@@ -326,27 +324,11 @@ class PluginManager
             return false;
         }
 
-        // todo: move to the WidgetManager->isValid($widget)
+        /** @var WidgetManager $widgetManager */
+        $widgetManager = $this->componizer->resolve(WidgetManager::class);
+
         foreach ($widgets as $widget) {
-            // check instance
-            if (!($widget instanceof ComponizerComponent && $widget instanceof ComponizerWidget)) {
-                return false;
-            }
-
-            // validate component
-            if (!$componentManager->isValid($widget)) {
-                return false;
-            }
-
-            // check widget editor assets
-            if(!($widget->editorAssets() instanceof ComponizerAssets)) {
-                // todo: check if empty
-                return false;
-            }
-
-            // check widget display assets
-            if(!($widget->displayAssets() instanceof ComponizerAssets)) {
-                // todo: check if empty
+            if (!$widgetManager->isValid($widget)) {
                 return false;
             }
         }

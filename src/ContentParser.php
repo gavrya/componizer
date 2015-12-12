@@ -98,14 +98,23 @@ class ContentParser
      */
     private function isValidWidgetElement(DOMElement $widgetElement)
     {
-        return (
+        if (
             !$widgetElement->hasAttribute('data-componizer-widget-id') ||
             !$widgetElement->hasAttribute('data-componizer-widget-name') ||
             !$widgetElement->hasAttribute('data-componizer-widget-properties') ||
-            !$widgetElement->hasAttribute('data-componizer-widget-content-type') ||
-            $widgetElement->firstChild === null ||
-            !$widgetElement->firstChild->hasAttribute('data-componizer-widget-content')
-        );
+            !$widgetElement->hasAttribute('data-componizer-widget-content-type')
+        ) {
+            return false;
+        }
+
+        // find first nested element with target attribute
+        foreach ($widgetElement->childNodes as $childNode) {
+            if ($childNode instanceof DOMElement && $childNode->hasAttribute('data-componizer-widget-content')) {
+                return true;
+            }
+        }
+
+        return false;
         // todo: add additional check: length, format, value
     }
 
@@ -120,6 +129,8 @@ class ContentParser
         if (!$this->isValidWidgetElement($widgetElement)) {
             // remove invalid widget representation from "editor content"
             $domHelper->remove($widgetElement);
+
+            return;
         }
 
         // widget id
@@ -146,12 +157,16 @@ class ContentParser
         // widget content
         $widgetContent = $widgetContentType !== 'none' ? $domHelper->getInnerHtml($widgetElement->firstChild) : null;
 
+        /** @var WidgetManager $widgetManager */
+        $widgetManager = $this->componizer->resolve(WidgetManager::class);
+
         // find widget by id
-        $widget = $this->findAllowedWidget($widgetId);
+        $widget = $widgetManager->findAllowed($widgetId);
 
         // display content
         $widgetDisplayContent = null;
 
+        // check if widget exists and allowed
         if ($widget !== null) {
             $widgetDisplayContent = $widget->makeDisplayContent(
                 [$this, 'parseDisplayContent'],
@@ -211,7 +226,7 @@ class ContentParser
         if ($widgetElements !== false) {
             /** @var DOMElement $widgetElement */
             foreach ($widgetElements as $widgetElement) {
-                if(!$this->isValidWidgetElement($widgetElement)) {
+                if (!$this->isValidWidgetElement($widgetElement)) {
                     continue;
                 }
 
@@ -224,34 +239,6 @@ class ContentParser
         }
 
         return $widgetIds;
-    }
-
-    //-----------------------------------------------------
-    // Temp section
-    //-----------------------------------------------------
-
-    /**
-     * Find allowed widget component by widget id.
-     *
-     * @param $widgetId
-     * @return Skeleton\ComponizerWidget|null
-     */
-    private function findAllowedWidget($widgetId)
-    {
-        // todo: reimplement based on scopes/settings in future
-
-        // todo: move method to the WidgetManager
-
-        /** @var PluginManager $pluginManager */
-        $pluginManager = $this->componizer->resolve(PluginManager::class);
-
-        foreach ($pluginManager->enabled() as $plugin) {
-            if ($widget = $plugin->getWidget($widgetId)) {
-                return $widget;
-            }
-        }
-
-        return null;
     }
 
 }

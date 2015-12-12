@@ -309,6 +309,10 @@ class Componizer
             return new ComponentManager($componizer);
         };
 
+        $this->container[WidgetManager::class] = function () use ($componizer) {
+            return new WidgetManager($componizer);
+        };
+
         $this->container[ContentParser::class] = function () use ($componizer) {
             return new ContentParser($componizer);
         };
