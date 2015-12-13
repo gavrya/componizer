@@ -39,27 +39,28 @@ $editorContent = <<<EOD
          data-componizer-widget-properties='{"key": "value"}'
          data-componizer-widget-content-type="mixed">
             <div data-componizer-widget-content>
+
+                <div
+                 data-componizer-widget
+                 data-componizer-widget-id="c770076f"
+                 data-componizer-widget-name="lister"
+                 data-componizer-widget-properties='{"key": "value"}'
+                 data-componizer-widget-content-type="mixed">
+                    <div data-componizer-widget-content>
+                    </div>
+                </div>
+
 	        </div>
         </div>
 
         <div
          data-componizer-widget
          data-componizer-widget-id="fake-id"
-         data-componizer-widget-name="lister"
+         data-componizer-widget-name="faker"
          data-componizer-widget-properties='{"key": "value"}'
          data-componizer-widget-content-type="mixed">
             <div data-componizer-widget-content>
-	        </div>
-        </div>
-
-        <div
-         data-componizer-widget
-         data-componizer-widget-id="c770076f"
-         data-componizer-widget-name="lister"
-         data-componizer-widget-properties='{"key": "value"}'
-         data-componizer-widget-content-type="mixed">
-            <div data-componizer-widget-content>
-	        </div>
+            </div>
         </div>
 EOD;
 

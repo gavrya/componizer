@@ -42,6 +42,9 @@ class ContentParser
     public function __construct(Componizer $componizer)
     {
         $this->componizer = $componizer;
+
+        // Avoid "Maximum function nesting level of '100' reached, aborting!".
+        ini_set('xdebug.max_nesting_level', 1000);
     }
 
     //-----------------------------------------------------

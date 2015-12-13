@@ -8,6 +8,9 @@ Important:
 
 Unimportant:
 
+-- Maximum function nesting level of '100' reached, aborting! 
+(http://stackoverflow.com/questions/17488505/php-error-maximum-function-nesting-level-of-100-reached-aborting)
+
 -- Check resolve instance for better ide integrity.
 
 -- Improve DomHelper using <_root> element. This will reduce memory usage.
