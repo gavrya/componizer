@@ -102,7 +102,7 @@ class ExampleWidget extends ComponizerWidget implements ComponizerComponent
 
     public function makeDisplayContent(callable $parser, array $properties, $contentType, $content = null)
     {
-        return empty($content) ? "<div>{$this->name()}</div>" : "<div>{$parser($content)}</div>";
+        return empty($content) ? "<div>{$this->name()}<p>{$this->name()}</p></div>" : "<div>{$parser($content)}</div>";
     }
 
     public function editorAssets()
