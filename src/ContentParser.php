@@ -32,14 +32,6 @@ class ContentParser
     const WIDGET_CT_RICH_TEXT = 'rich_text';
     const WIDGET_CT_MIXED = 'mixed';
 
-    private $widgetContentTypes = [
-        self::WIDGET_CT_NONE,
-        self::WIDGET_CT_CODE,
-        self::WIDGET_CT_PLAIN_TEXT,
-        self::WIDGET_CT_RICH_TEXT,
-        self::WIDGET_CT_MIXED,
-    ];
-
     // Componizer
     private $componizer = null;
 
@@ -131,7 +123,7 @@ class ContentParser
 
         // todo: add additional check: length, format, value
 
-        if($this->findWidgetContentElement($widgetElement) !== null) {
+        if ($this->findWidgetContentElement($widgetElement) !== null) {
             return true;
         }
 
@@ -190,7 +182,15 @@ class ContentParser
         // widget content type
         $widgetContentType = trim($widgetElement->getAttribute(self::WIDGET_ATTR_CONTENT_TYPE));
 
-        if (!in_array($widgetContentType, $this->widgetContentTypes)) {
+        $widgetContentTypes = [
+            self::WIDGET_CT_NONE,
+            self::WIDGET_CT_CODE,
+            self::WIDGET_CT_PLAIN_TEXT,
+            self::WIDGET_CT_RICH_TEXT,
+            self::WIDGET_CT_MIXED,
+        ];
+
+        if (!in_array($widgetContentType, $widgetContentTypes)) {
             $widgetContentType = self::WIDGET_CT_NONE;
         }
 
