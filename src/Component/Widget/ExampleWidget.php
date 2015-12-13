@@ -83,17 +83,17 @@ class ExampleWidget extends ComponizerWidget implements ComponizerComponent
 
     public function init($lang, $cacheDir)
     {
-        echo 'example widget init' . PHP_EOL;
+        // callback on widget init
     }
 
     public function up()
     {
-        echo 'example widget up' . PHP_EOL;
+        // callback on widget up
     }
 
     public function down()
     {
-        echo 'example widget down' . PHP_EOL;
+        // callback on widget down
     }
 
     //-----------------------------------------------------

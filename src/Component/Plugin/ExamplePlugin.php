@@ -64,17 +64,17 @@ class ExamplePlugin extends ComponizerPlugin implements ComponizerComponent
 
     public function init($lang, $cacheDir)
     {
-        echo 'example plugin init' . PHP_EOL;
+        // callback on plugin init
     }
 
     public function up()
     {
-        echo 'example plugin up' . PHP_EOL;
+        // callback on plugin up
     }
 
     public function down()
     {
-        echo 'example plugin down' . PHP_EOL;
+        // callback on plugin down
     }
 
     //-----------------------------------------------------
