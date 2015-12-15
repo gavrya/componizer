@@ -31,6 +31,15 @@ Unimportant:
 
 -- Rename ContentProcessor to ContentManager?
 
+Code formatting (http://symfony.com/doc/current/contributing/code/standards.html):
+
+-- Use just return; instead of return null; when a function must return void early;
+-- Exception message strings should be concatenated using sprintf;
+-- Prefix abstract classes with Abstract. Please note some early Symfony classes do not follow this convention and have not been renamed for backward compatibility reasons. However all new abstract classes must follow this naming convention;
+-- Suffix interfaces with Interface;
+-- Suffix traits with Trait;
+-- Suffix exceptions with Exception;
+
 Apigen:
 site: http://www.apigen.org/
 theme: https://github.com/ApiGen/ThemeBootstrap

@@ -12,9 +12,21 @@ namespace Gavrya\Componizer\Helper;
 use DOMDocument;
 use DOMNode;
 
+/**
+ * Contains helpfull methods for working with DOM document and its elements.
+ *
+ * Class DomHelper
+ * @package Gavrya\Componizer\Helper
+ */
 class DomHelper
 {
 
+    /**
+     * Creates a new DOM document from a UTF-8 encoded string.
+     *
+     * @param string $string String containing html
+     * @return \DOMDocument Newly created DOM document
+     */
     public function create($string)
     {
         $charset = 'UTF-8';
@@ -43,6 +55,12 @@ class DomHelper
         return $dom;
     }
 
+    /**
+     * Returns the inner HTML content of an element.
+     *
+     * @param \DOMNode $domElement DOM element
+     * @return string Inner HTML content of the DOM element
+     */
     function getInnerHtml(DOMNode $domElement)
     {
         $innerHtml = '';
@@ -54,6 +72,12 @@ class DomHelper
         return trim(str_replace('[nbsp]', '&nbsp;', $innerHtml));
     }
 
+    /**
+     * Replaces an element from the owned DOM document with the provided HTML string.
+     *
+     * @param \DOMNode $domElement DOM element to be replaced
+     * @param string $htmlFragment String containing HTML
+     */
     function replaceWith(DOMNode $domElement, $htmlFragment)
     {
         $dom = $this->create($htmlFragment);
@@ -71,6 +95,11 @@ class DomHelper
         $domElement->parentNode->replaceChild($newNode, $domElement);
     }
 
+    /**
+     * Removes an element from the owned DOM document.
+     *
+     * @param \DOMNode $domElement DOM element to remove
+     */
     function remove(DOMNode $domElement)
     {
         $parentNode = $domElement->parentNode;

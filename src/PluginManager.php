@@ -56,7 +56,13 @@ class PluginManager
 
         // prepare plugins data
         $vendorPath = $fsHelper->composerVendorDir();
+
+        if($vendorPath === null) {
+            return [];
+        }
+
         $jsonFiles = $fsHelper->pluginsJsonFiles($vendorPath, Componizer::PLUGIN_JSON_FILE_NAME);
+
         $jsonData = $fsHelper->pluginsJsonData($jsonFiles);
 
         // check plugin data

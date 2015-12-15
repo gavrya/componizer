@@ -21,13 +21,13 @@ class StorageHelper
     private $data = [];
 
     //-----------------------------------------------------
-    // Instance creation/init section
+    // Instance create/init section
     //-----------------------------------------------------
 
     public function __construct($cacheDir, $fileName = 'storage.json')
     {
         $this->cacheDir = $cacheDir;
-        $this->storageFile = $this->cacheDir . DIRECTORY_SEPARATOR . $fileName;
+        $this->storageFile = $cacheDir . DIRECTORY_SEPARATOR . $fileName;
         $this->init();
     }
 
@@ -64,7 +64,7 @@ class StorageHelper
     }
 
     //-----------------------------------------------------
-    // Methods section
+    // Basic methods section
     //-----------------------------------------------------
 
     public function all()
@@ -87,7 +87,7 @@ class StorageHelper
         return array_key_exists($key, $this->data);
     }
 
-    public function del($key = null)
+    public function delete($key = null)
     {
         if ($this->has($key)) {
             unset($this->data[$key]);
