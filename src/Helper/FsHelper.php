@@ -264,7 +264,7 @@ class FsHelper
     }
 
     /**
-     * Removes all directories inside target directory wich names are not in list.
+     * Removes all directories inside target directory which names are not in list.
      *
      * @param string $dir Target directory absolute path to search in
      * @param array $dirNames An array of directory names to leave

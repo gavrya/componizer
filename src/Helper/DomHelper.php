@@ -56,16 +56,16 @@ class DomHelper
     }
 
     /**
-     * Returns the inner HTML content of an element.
+     * Returns the HTML content of the DOM node (aka inner HTML).
      *
-     * @param \DOMNode $domElement DOM element
-     * @return string Inner HTML content of the DOM element
+     * @param \DOMNode $domNode DOM node
+     * @return string Inner HTML content of the DOM node
      */
-    function getInnerHtml(DOMNode $domElement)
+    function getInnerHtml(DOMNode $domNode)
     {
         $innerHtml = '';
 
-        foreach ($domElement->childNodes as $child) {
+        foreach ($domNode->childNodes as $child) {
             $innerHtml .= trim($child->ownerDocument->saveHTML($child));
         }
 
@@ -73,12 +73,12 @@ class DomHelper
     }
 
     /**
-     * Replaces an element from the owned DOM document with the provided HTML string.
+     * Replaces DOM node from the owned DOM document with the provided HTML string (aka outer HTML).
      *
-     * @param \DOMNode $domElement DOM element to be replaced
+     * @param \DOMNode $domNode DOM node to be replaced
      * @param string $htmlFragment String containing HTML
      */
-    function replaceWith(DOMNode $domElement, $htmlFragment)
+    function replaceNodeWith(DOMNode $domNode, $htmlFragment)
     {
         $dom = $this->create($htmlFragment);
 
@@ -90,22 +90,59 @@ class DomHelper
             $fragment->appendChild($childNode);
         }
 
-        $newNode = $domElement->ownerDocument->importNode($fragment, true);
+        $newNode = $domNode->ownerDocument->importNode($fragment, true);
 
-        $domElement->parentNode->replaceChild($newNode, $domElement);
+        $domNode->parentNode->replaceChild($newNode, $domNode);
     }
 
     /**
-     * Removes an element from the owned DOM document.
+     * Removes node from the owned DOM document.
      *
-     * @param \DOMNode $domElement DOM element to remove
+     * @param \DOMNode $domNode DOM node to remove
      */
-    function remove(DOMNode $domElement)
+    function removeNode(DOMNode $domNode)
     {
-        $parentNode = $domElement->parentNode;
+        $parentNode = $domNode->parentNode;
 
         if ($parentNode !== null) {
-            $parentNode->removeChild($domElement);
+            $parentNode->removeChild($domNode);
+        }
+    }
+
+    /**
+     * Clears DOM document from JavaScript.
+     *
+     * Removes all 'script' DOM elements.
+     * Removes all event based on* attributes on each DOM element.
+     * Replaces all bookmarklet links with the dummy anchor hash.
+     *
+     * @param \DOMDocument $doc DOM document to clear from JavaScript
+     */
+    function clearFromJavaScript(\DOMDocument $doc)
+    {
+        /** @var \DOMElement $domElement */
+        foreach ($doc->getElementsByTagName('script') as $domElement) {
+            $this->removeNode($domElement);
+        }
+
+        /** @var \DOMElement $domElement */
+        foreach ($doc->getElementsByTagName('*') as $domElement) {
+            /** @var \DOMAttr $domAttribute */
+            foreach ($domElement->attributes as $domAttribute) {
+                $attributeName = trim(strtolower($domAttribute->name));
+
+                if (strpos($attributeName, 'on') === 0) {
+                    $domElement->removeAttribute($domAttribute->name);
+                }
+
+                if (strtolower($domElement->tagName) === 'a' && $domElement->hasAttribute('href')) {
+                    $href = trim(strtolower($domElement->getAttribute('href')));
+
+                    if (strpos($href, 'javascript:') === 0) {
+                        $domElement->setAttribute('href', '#');
+                    }
+                }
+            }
         }
     }
 }
