@@ -74,7 +74,7 @@ class FsHelper
      *
      * @param string $path Directory absolute path to search in
      * @param string $fileName Target JSON file name including extension
-     * @return \SplFileInfo[]|array An array of found JSON files filled with \SplFileInfo or an empty array
+     * @return SplFileInfo[]|array An array of found JSON files filled with \SplFileInfo or an empty array
      */
     public function pluginsJsonFiles($path, $fileName)
     {
@@ -85,7 +85,7 @@ class FsHelper
         $filteredIterator = new RecursiveCallbackFilterIterator($dirIterator,
 
             function ($file, $key, $iterator) use ($fileName) {
-                /** @var \SplFileInfo $file */
+                /** @var SplFileInfo $file */
                 $filePath = $file->getRealPath();
 
                 $position = strrpos($filePath, DIRECTORY_SEPARATOR . self::COMPOSER_VENDOR_DIR);
@@ -119,7 +119,7 @@ class FsHelper
 
         $iterator = new RecursiveIteratorIterator($filteredIterator);
 
-        /** @var \SplFileInfo $file */
+        /** @var SplFileInfo $file */
         foreach ($iterator as $file) {
             if ($file->isFile() && $file->getFilename() === $fileName) {
                 $jsonFiles[] = $file;
@@ -173,7 +173,6 @@ class FsHelper
             return false;
         }
 
-        // remove broken symlink
         if (is_link($targetDir) && $sourceDir !== realpath($targetDir)) {
             $this->removeSymlink($targetDir);
         }
@@ -213,7 +212,7 @@ class FsHelper
 
         $dirIterator = new DirectoryIterator($dir);
 
-        /** @var \SplFileInfo $file */
+        /** @var SplFileInfo $file */
         foreach ($dirIterator as $file) {
             $symlinkPath = $file->getPathname();
             $realPath = $file->getRealPath();
@@ -256,7 +255,7 @@ class FsHelper
         $iterator = new RecursiveIteratorIterator($dirIterator, RecursiveIteratorIterator::CHILD_FIRST);
 
         foreach ($iterator as $file) {
-            /** @var \SplFileInfo $file */
+            /** @var SplFileInfo $file */
             $file->isDir() && !$file->isLink() ? rmdir($file->getPathname()) : unlink($file->getPathname());
         }
 
@@ -277,7 +276,7 @@ class FsHelper
 
         $dirIterator = new DirectoryIterator($dir);
 
-        /** @var \DirectoryIterator $file */
+        /** @var DirectoryIterator $file */
         foreach ($dirIterator as $file) {
             if ($file->isDir() && !$file->isDot() && !in_array($file->getFilename(), $dirNames)) {
                 $this->removeDir($file->getPathname());

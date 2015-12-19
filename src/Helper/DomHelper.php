@@ -9,8 +9,11 @@
 namespace Gavrya\Componizer\Helper;
 
 
+use DOMAttr;
 use DOMDocument;
+use DOMElement;
 use DOMNode;
+use DOMNodeList;
 
 /**
  * Contains helpfull methods for working with DOM document and its elements.
@@ -24,21 +27,21 @@ class DomHelper
     /**
      * Creates a new DOM document from a UTF-8 encoded string.
      *
-     * @param string $string String containing html
-     * @return \DOMDocument Newly created DOM document
+     * @param string $htmlFragment String containing HTML fragment
+     * @return DOMDocument Newly created DOM document
      */
-    public function create($string)
+    public function createDoc($htmlFragment)
     {
         $charset = 'UTF-8';
 
-        $string = '<!DOCTYPE html>
+        $htmlFragment = '<!DOCTYPE html>
                    <html>
                         <head><meta http-equiv="content-type" content="text/html; charset=' . $charset . '"></head>
-                        <body>' . $string . '</body>
+                        <body>' . $htmlFragment . '</body>
                    </html>';
 
-        $string = mb_convert_encoding($string, 'HTML-ENTITIES', $charset);
-        $string = str_replace('&nbsp;', '[nbsp]', $string);
+        $htmlFragment = mb_convert_encoding($htmlFragment, 'HTML-ENTITIES', $charset);
+        $htmlFragment = str_replace('&nbsp;', '[nbsp]', $htmlFragment);
 
         $useInternalErrors = libxml_use_internal_errors(true);
         $disableEntityLoader = libxml_disable_entity_loader(true);
@@ -47,7 +50,7 @@ class DomHelper
         $dom->preserveWhiteSpace = false;
         $dom->formatOutput = true;
         $dom->encoding = $charset;
-        $dom->loadHTML($string, LIBXML_COMPACT);
+        $dom->loadHTML($htmlFragment);
 
         libxml_use_internal_errors($useInternalErrors);
         libxml_disable_entity_loader($disableEntityLoader);
@@ -56,9 +59,22 @@ class DomHelper
     }
 
     /**
+     * Returns root element of a DOM document created by createDoc() method.
+     *
+     * @see createDoc
+     *
+     * @param DOMDocument $doc Document to search root element for
+     * @return DOMElement|null Document root element, null otherwise
+     */
+    public function getDocRoot(DOMDocument $doc)
+    {
+        return $doc->getElementsByTagName('body')->item(0);
+    }
+
+    /**
      * Returns the HTML content of the DOM node (aka inner HTML).
      *
-     * @param \DOMNode $domNode DOM node
+     * @param DOMNode $domNode DOM node
      * @return string Inner HTML content of the DOM node
      */
     function getInnerHtml(DOMNode $domNode)
@@ -75,12 +91,12 @@ class DomHelper
     /**
      * Replaces DOM node from the owned DOM document with the provided HTML string (aka outer HTML).
      *
-     * @param \DOMNode $domNode DOM node to be replaced
+     * @param DOMNode $domNode DOM node to be replaced
      * @param string $htmlFragment String containing HTML
      */
     function replaceNodeWith(DOMNode $domNode, $htmlFragment)
     {
-        $dom = $this->create($htmlFragment);
+        $dom = $this->createDoc($htmlFragment);
 
         $fragment = $dom->createDocumentFragment();
 
@@ -98,7 +114,7 @@ class DomHelper
     /**
      * Removes node from the owned DOM document.
      *
-     * @param \DOMNode $domNode DOM node to remove
+     * @param DOMNode $domNode DOM node to remove
      */
     function removeNode(DOMNode $domNode)
     {
@@ -110,39 +126,54 @@ class DomHelper
     }
 
     /**
-     * Clears DOM document from JavaScript.
+     * Clears HTML fragment from JavaScript.
      *
-     * Removes all 'script' DOM elements.
-     * Removes all event based on* attributes on each DOM element.
-     * Replaces all bookmarklet links with the dummy anchor hash.
+     * Removes all 'script' HTML elements.
+     * Removes all event based on* attributes from each HTML element.
+     * Replaces all bookmarklet links href values with the dummy anchor hash.
      *
-     * @param \DOMDocument $doc DOM document to clear from JavaScript
+     * @param string $htmlFragment HTML fragment that need to be cleared from JavaScript
+     * @return string HTML fragment cleared from JavaScript
      */
-    function clearFromJavaScript(\DOMDocument $doc)
+    function clearHtmlFromJavaScript($htmlFragment)
     {
-        /** @var \DOMElement $domElement */
-        foreach ($doc->getElementsByTagName('script') as $domElement) {
-            $this->removeNode($domElement);
+        if (empty($htmlFragment) || !is_string($htmlFragment)) {
+            return '';
         }
 
-        /** @var \DOMElement $domElement */
-        foreach ($doc->getElementsByTagName('*') as $domElement) {
-            /** @var \DOMAttr $domAttribute */
+        $doc = $this->createDoc($htmlFragment);
+
+        /** @var DOMNodeList $nodeList */
+        $nodeList = $doc->getElementsByTagName('*');
+
+        for ($i = $nodeList->length; --$i >= 0;) {
+            /** @var DOMElement $domElement */
+            $domElement = $nodeList->item($i);
+
+            $tagName = strtolower(trim($domElement->tagName));
+
+            if ($tagName === 'script') {
+                $this->removeNode($domElement);
+
+                continue;
+            }
+
+            /** @var DOMAttr $domAttribute */
             foreach ($domElement->attributes as $domAttribute) {
-                $attributeName = trim(strtolower($domAttribute->name));
+                $attributeName = strtolower(trim($domAttribute->name));
 
                 if (strpos($attributeName, 'on') === 0) {
                     $domElement->removeAttribute($domAttribute->name);
-                }
-
-                if (strtolower($domElement->tagName) === 'a' && $domElement->hasAttribute('href')) {
-                    $href = trim(strtolower($domElement->getAttribute('href')));
+                } elseif ($tagName === 'a' && $attributeName === 'href') {
+                    $href = strtolower(trim($domElement->getAttribute($domAttribute->name)));
 
                     if (strpos($href, 'javascript:') === 0) {
-                        $domElement->setAttribute('href', '#');
+                        $domElement->setAttribute($domAttribute->name, '#');
                     }
                 }
             }
         }
+
+        return $this->getInnerHtml($this->getDocRoot($doc));
     }
 }

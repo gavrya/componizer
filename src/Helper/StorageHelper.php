@@ -52,6 +52,11 @@ class StorageHelper
         $this->init();
     }
 
+    /**
+     * Initiates storage data from JSON file.
+     *
+     * @throws ComponizerException when unable to load storage data
+     */
     private function init()
     {
         if (
