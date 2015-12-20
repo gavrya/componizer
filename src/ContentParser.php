@@ -70,9 +70,9 @@ class ContentParser
         /** @var DomHelper $domHelper */
         $domHelper = $this->componizer->resolve(DomHelper::class);
 
-        $doc = $domHelper->create($editorContent);
+        $doc = $domHelper->createDoc($editorContent);
 
-        $docRoot = $doc->getElementsByTagName('body')->item(0);
+        $docRoot = $domHelper->getDocRoot($doc);
 
         $docXpath = new DOMXpath($doc);
 
@@ -163,7 +163,7 @@ class ContentParser
     {
         if (!$this->isValidWidgetElement($widgetElement)) {
             // remove invalid widget representation from "editor content"
-            $domHelper->remove($widgetElement);
+            $domHelper->removeNode($widgetElement);
 
             return;
         }
@@ -223,14 +223,14 @@ class ContentParser
 
         if (is_string($widgetDisplayContent) && !empty($widgetDisplayContent)) {
             // replace widget "editor content" to "display content" representation
-            $domHelper->replaceWith($widgetElement, $widgetDisplayContent);
+            $domHelper->replaceNodeWith($widgetElement, $widgetDisplayContent);
         } else {
             $id = htmlentities($widgetId);
             $name = htmlentities($widgetName);
             $comment = '<!-- Componizer widget not found or disabled: id: "' . $id . '", name: "' . $name . '" -->';
 
             // replace widget "editor content" representation to componizer html warning comment
-            $domHelper->replaceWith($widgetElement, $comment);
+            $domHelper->replaceNodeWith($widgetElement, $comment);
         }
     }
 
@@ -259,9 +259,9 @@ class ContentParser
         /** @var DomHelper $domHelper */
         $domHelper = $this->componizer->resolve(DomHelper::class);
 
-        $doc = $domHelper->create($editorContent);
+        $doc = $domHelper->createDoc($editorContent);
 
-        $docRoot = $doc->getElementsByTagName('body')->item(0);
+        $docRoot = $domHelper->getDocRoot($doc);
 
         $docXpath = new DOMXpath($doc);
 

@@ -31,22 +31,6 @@ class Componizer
     const CONFIG_PUBLIC_DIR = 'public_dir';
     const CONFIG_PREVIEW_URL = 'preview_url';
 
-    // Exception codes
-    const EX_ERROR = 0;
-    const EX_CONFIG_SETUP_ERROR = 100;
-    const EX_LANG_INVALID = 200;
-    const EX_CACHE_DIR_INVALID = 300;
-    const EX_CACHE_DIR_NOT_EXISTS = 301;
-    const EX_CACHE_DIR_NOT_DIRECTORY = 302;
-    const EX_CACHE_DIR_NOT_WRITABLE = 303;
-    const EX_CACHE_DIR_UNABLE_CREATE = 304;
-    const EX_PUBLIC_DIR_INVALID = 400;
-    const EX_PUBLIC_DIR_NOT_EXISTS = 401;
-    const EX_PUBLIC_DIR_NOT_DIRECTORY = 402;
-    const EX_PUBLIC_DIR_NOT_WRITABLE = 403;
-    const EX_PUBLIC_DIR_UNABLE_CREATE = 404;
-    const EX_PREVIEW_URL_INVALID = 500;
-
     // Internal variables
     private static $config = null;
     private static $instance = null;
@@ -59,7 +43,7 @@ class Componizer
     public static function setup($config)
     {
         if (self::$config !== null) {
-            throw new ComponizerException('Unable to setup config multiple times', self::EX_CONFIG_SETUP_ERROR);
+            throw new ComponizerException('Unable to setup config multiple times', ComponizerException::EX_CONFIG_SETUP_ERROR);
         }
 
         $config = self::validateConfig($config);
@@ -77,7 +61,7 @@ class Componizer
     {
         // check config type
         if (!is_array($config)) {
-            throw new ComponizerException('Invalid config', self::EX_CONFIG_SETUP_ERROR);
+            throw new ComponizerException('Invalid config', ComponizerException::EX_CONFIG_SETUP_ERROR);
         }
 
         // config keys
@@ -116,7 +100,7 @@ class Componizer
 
         // check/modify lang
         if (!in_array($config[self::CONFIG_LANG], ['en', 'ru'])) {
-            throw new ComponizerException('Invalid lang', self::EX_LANG_INVALID);
+            throw new ComponizerException('Invalid lang', ComponizerException::EX_LANG_INVALID);
         }
 
         return $config;
@@ -126,7 +110,7 @@ class Componizer
     {
         // check if param provided
         if (!isset($config[self::CONFIG_CACHE_DIR])) {
-            throw new ComponizerException('Invalid cache directory', self::EX_CACHE_DIR_INVALID);
+            throw new ComponizerException('Invalid cache directory', ComponizerException::EX_CACHE_DIR_INVALID);
         }
 
         // cache dir path (must be an absolute not relative)
@@ -134,19 +118,19 @@ class Componizer
 
         // check dir exists
         if (!file_exists($dirPath)) {
-            throw new ComponizerException('Cache directory is not exists: ' . $dirPath, self::EX_CACHE_DIR_NOT_EXISTS);
+            throw new ComponizerException('Cache directory is not exists: ' . $dirPath, ComponizerException::EX_CACHE_DIR_NOT_EXISTS);
         }
 
         // check dir
         if (is_link($dirPath) || !is_dir($dirPath)) {
             throw new ComponizerException('Cache directory is not a directory: ' . $dirPath,
-                self::EX_CACHE_DIR_NOT_DIRECTORY);
+                ComponizerException::EX_CACHE_DIR_NOT_DIRECTORY);
         }
 
         // check dir writable
         if (!is_writable($dirPath)) {
             throw new ComponizerException('Cache directory is not writable: ' . $dirPath,
-                self::EX_CACHE_DIR_NOT_WRITABLE);
+                ComponizerException::EX_CACHE_DIR_NOT_WRITABLE);
         }
 
         // cache dir real path without trailing separator
@@ -163,13 +147,13 @@ class Componizer
             // check dir exists and writable
             if (file_exists($dirPath) && is_dir($dirPath) && !is_writable($dirPath)) {
                 throw new ComponizerException('Cache directory is not writable: ' . $dirPath,
-                    self::EX_CACHE_DIR_NOT_WRITABLE);
+                    ComponizerException::EX_CACHE_DIR_NOT_WRITABLE);
             }
 
             // make dir
             if ((!file_exists($dirPath) || !is_dir($dirPath)) && !mkdir($dirPath)) {
                 throw new ComponizerException('Unable to create cache directory: ' . $dirPath,
-                    self::EX_CACHE_DIR_UNABLE_CREATE);
+                    ComponizerException::EX_CACHE_DIR_UNABLE_CREATE);
             }
 
             // update config cache dir
@@ -183,7 +167,7 @@ class Componizer
     {
         // check if param provided
         if (!isset($config[self::CONFIG_PUBLIC_DIR])) {
-            throw new ComponizerException('Invalid public directory', self::EX_PUBLIC_DIR_INVALID);
+            throw new ComponizerException('Invalid public directory', ComponizerException::EX_PUBLIC_DIR_INVALID);
         }
 
         // public dir path (must be an absolute not relative)
@@ -192,19 +176,19 @@ class Componizer
         // check dir exists
         if (!file_exists($dirPath)) {
             throw new ComponizerException('Public directory is not exists: ' . $dirPath,
-                self::EX_PUBLIC_DIR_NOT_EXISTS);
+                ComponizerException::EX_PUBLIC_DIR_NOT_EXISTS);
         }
 
         // check dir
         if (is_link($dirPath) || !is_dir($dirPath)) {
             throw new ComponizerException('Public directory is not a directory: ' . $dirPath,
-                self::EX_PUBLIC_DIR_NOT_DIRECTORY);
+                ComponizerException::EX_PUBLIC_DIR_NOT_DIRECTORY);
         }
 
         // check writable
         if (!is_writable($dirPath)) {
             throw new ComponizerException('Public directory is not writable: ' . $dirPath,
-                self::EX_PUBLIC_DIR_NOT_WRITABLE);
+                ComponizerException::EX_PUBLIC_DIR_NOT_WRITABLE);
         }
 
         // public dir real path without trailing separator
@@ -221,13 +205,13 @@ class Componizer
             // check dir exists and writable
             if (file_exists($dirPath) && is_dir($dirPath) && !is_writable($dirPath)) {
                 throw new ComponizerException('Public directory is not writable: ' . $dirPath,
-                    self::EX_PUBLIC_DIR_NOT_WRITABLE);
+                    ComponizerException::EX_PUBLIC_DIR_NOT_WRITABLE);
             }
 
             // make dir
             if ((!file_exists($dirPath) || !is_dir($dirPath)) && !mkdir($dirPath)) {
                 throw new ComponizerException('Unable to create public directory: ' . $dirPath,
-                    self::EX_PUBLIC_DIR_UNABLE_CREATE);
+                    ComponizerException::EX_PUBLIC_DIR_UNABLE_CREATE);
             }
 
             // update config public dir
@@ -241,7 +225,7 @@ class Componizer
     {
         // check if param provided
         if (!isset($config[self::CONFIG_PREVIEW_URL])) {
-            throw new ComponizerException('Invalid preview url', self::EX_PREVIEW_URL_INVALID);
+            throw new ComponizerException('Invalid preview url', ComponizerException::EX_PREVIEW_URL_INVALID);
         }
 
         return $config;

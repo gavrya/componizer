@@ -1,23 +1,21 @@
 Important:
 
--- Add WidgetManager
+-- Add base class ComponizerAsset. Positions: HEADER | BODY_TOP | BODY_BOTTOM. Methods: toHtml(), toJson(), toArray(). Asset type: EXT_JS, INT_JS ?
 
--- Implement ContentProcessor with assets section working
+-- Separate ComponizerConfig class !!!
 
--- Get unique components/widgets id's by content or array of content
+-- Add AssetsManager ?
+
+-- Omit Singleton usage for Componizer !!!
 
 Unimportant:
 
--- Maximum function nesting level of '100' reached, aborting! 
-(http://stackoverflow.com/questions/17488505/php-error-maximum-function-nesting-level-of-100-reached-aborting)
+-- ComponizerAssets: add ability to push/remove assets on the fly !!!
 
--- Check resolve instance for better ide integrity.
+-- Prevent infinite loop in ContentParser !!!
 
--- Improve DomHelper using <_root> element. This will reduce memory usage.
-
--- Prevent infinite loop in ContentParser
-
--- Move DomHelper to the ContentParser?
+-- ContentProcessor: add ability to pass array of content with target keys ($editorContent, $targetKeys = null).
+   Usefull for parsing results from database rows with multiple "editor content" fields in each row.
 
 -- Add ScopeManager/SettingsManager
 
@@ -29,7 +27,7 @@ Unimportant:
 
 -- Add ComponizerMeta asset class for key=value passing to components js: <meta name="key" content="value">?
 
--- Rename ContentProcessor to ContentManager?
+-- Create Laravel ServiceProvider ?
 
 Code formatting (http://symfony.com/doc/current/contributing/code/standards.html):
 

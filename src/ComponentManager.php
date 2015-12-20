@@ -33,26 +33,48 @@ class ComponentManager
 
     public function isValid($component)
     {
-        // check instance
         if (!($component instanceof ComponizerComponent)) {
             return false;
         }
 
-        // component id
-        $componentId = $component->id();
+        // check id
+        $id = $component->id();
 
-        // check component id
-        if (!is_string($componentId)) {
+        if (!is_string($id)) {
             return false;
         }
 
-        // check component id format (first 8 chars from random lowercased sha1 hash)
-        if (!preg_match('/^[a-f0-9]{8}$/', $componentId)) {
+        if (!preg_match('/^[a-f0-9]{8}$/', $id)) {
+            return false;
+        }
+
+        // check name
+        $name = $component->name();
+
+        if (!is_string($name) || empty(trim($name))) {
+            return false;
+        }
+
+        // check version
+        $version = $component->version();
+
+        if (!is_string($version) || empty(trim($version))) {
+            return false;
+        }
+
+        // check info
+        $info = $component->info();
+
+        if (!is_string($info) || empty(trim($info))) {
             return false;
         }
 
         // assets dir
         $assetsDir = $component->assetsDir();
+
+        if ($component->hasAssets() && !is_string($assetsDir)) {
+            return false;
+        }
 
         // check assets dir
         if ($component->hasAssets() && (!file_exists($assetsDir) || !is_dir($assetsDir))) {
@@ -65,7 +87,7 @@ class ComponentManager
         }
 
         // check assets dir name = component id
-        if ($component->hasAssets() && basename($assetsDir) !== $componentId) {
+        if ($component->hasAssets() && basename($assetsDir) !== $id) {
             return false;
         }
 

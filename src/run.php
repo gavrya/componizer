@@ -75,11 +75,11 @@ echo 'Required widgets: ' . count($contentProcessor->requiredWidgets());
 echo PHP_EOL;
 
 echo PHP_EOL;
-echo 'Required editor assets: ' . count($contentProcessor->editorAssets());
+echo 'Required editor assets: ' . count($contentProcessor->requiredEditorAssets());
 echo PHP_EOL;
 
 echo PHP_EOL;
-echo 'Required display assets: ' . count($contentProcessor->displayAssets());
+echo 'Required display assets: ' . count($contentProcessor->requiredDisplayAssets());
 echo PHP_EOL;
 
 echo PHP_EOL;

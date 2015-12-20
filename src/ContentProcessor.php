@@ -33,9 +33,6 @@ class ContentProcessor
 
     public function initEditorContent($editorContent)
     {
-        // todo: add ability to pass array of content with target keys ($editorContent, $targetKeys = null)
-        // for parsing results from database rows with multiple "editor content" fields in each row
-
         // reset previously required widgets
         $this->requiredWidgets = [];
 
@@ -84,21 +81,26 @@ class ContentProcessor
     // Required components section
     //-----------------------------------------------------
 
+    public function requiredComponents()
+    {
+        return [];
+    }
+
     public function requiredWidgets()
     {
         return $this->requiredWidgets;
     }
 
     //-----------------------------------------------------
-    // Assets section
+    // Assets section (move to AssetsManager?)
     //-----------------------------------------------------
 
-    public function componizerAssets()
+    public function requiredGeneralAssets()
     {
-        // todo: return componizer related assets needed in order to editor gets worked
+        // todo: return componizer general assets needed in order to editor gets worked
     }
 
-    public function editorAssets()
+    public function requiredEditorAssets()
     {
         $assets = [];
 
@@ -110,7 +112,7 @@ class ContentProcessor
         return $assets;
     }
 
-    public function displayAssets()
+    public function requiredDisplayAssets()
     {
         $assets = [];
 

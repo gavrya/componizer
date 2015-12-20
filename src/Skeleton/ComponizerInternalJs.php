@@ -9,6 +9,13 @@
 namespace Gavrya\Componizer\Skeleton;
 
 
+use InvalidArgumentException;
+
+/**
+ * Represents internally included JavaScript.
+ *
+ * @package Gavrya\Componizer\Skeleton
+ */
 class ComponizerInternalJs
 {
 
@@ -16,16 +23,17 @@ class ComponizerInternalJs
     const POSITION_TOP = 'top';
     const POSITION_BOTTOM = 'bottom';
 
-    // internal vars
+    /**
+     * @var string HTML 'script' element
+     */
     private $script = null;
 
     //-----------------------------------------------------
-    // Create/init section
+    // Instance create/init section
     //-----------------------------------------------------
 
     public function __construct($script, $position = self::POSITION_BOTTOM)
     {
-        // check script
         if (
             $script === null ||
             !is_string($script) ||
@@ -35,13 +43,11 @@ class ComponizerInternalJs
             throw new InvalidArgumentException('Invalid script');
         }
 
-        $this->script = $script;
-
-        // check js include position
         if (!in_array($position, [self::POSITION_TOP, self::POSITION_BOTTOM])) {
-            throw new InvalidArgumentException('Invalid position');
+            throw new InvalidArgumentException(sprintf('Invalid position: %s', $position));
         }
 
+        $this->script = $script;
         $this->position = $position;
     }
 
@@ -49,21 +55,34 @@ class ComponizerInternalJs
     // General methods section
     //-----------------------------------------------------
 
+    /**
+     * Returns 'script' element HTML.
+     *
+     * @return string HTML 'script' element
+     */
     public function script()
     {
         return $this->script;
     }
 
+    /**
+     * Returns asset include position.
+     *
+     * @see ComponizerInternalJs::POSITION_* constants
+     *
+     * @return string One of the position constants value
+     */
     public function position()
     {
         return $this->position;
     }
 
-    //-----------------------------------------------------
-    //  Magic methods section
-    //-----------------------------------------------------
-
-    public function __toString()
+    /**
+     * Returns HTML representation of the asset.
+     *
+     * @return string HTML 'script' element
+     */
+    public function toHtml()
     {
         return $this->script;
     }

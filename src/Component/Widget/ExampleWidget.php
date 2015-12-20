@@ -40,8 +40,8 @@ class ExampleWidget extends ComponizerWidget implements ComponizerComponent
     private function initDisplayAssets()
     {
         $assets = [
-            new ComponizerExternalJs('/componizer/' . $this->id . '/js/example.js'),
-            new ComponizerExternalCss('/componizer/' . $this->id . '/css/example.css'),
+            new ComponizerExternalJs(sprintf('/componizer/%s/js/example.js', $this->id)),
+            new ComponizerExternalCss(sprintf('/componizer/%s/css/example.css', $this->id)),
         ];
 
         $this->displayAssets = new ComponizerAssets($assets);

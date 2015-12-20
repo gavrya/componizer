@@ -9,19 +9,32 @@
 namespace Gavrya\Componizer\Skeleton;
 
 
+use InvalidArgumentException;
+
+/**
+ * Represents internally included CSS.
+ *
+ * @package Gavrya\Componizer\Skeleton
+ */
 class ComponizerInternalCss
 {
 
-    // internal vars
+    /**
+     * @var string HTML 'style' element
+     */
     private $style = null;
 
     //-----------------------------------------------------
-    // Create/init section
+    // Instance create/init section
     //-----------------------------------------------------
 
+    /**
+     * ComponizerInternalCss constructor.
+     *
+     * @param string $style HTML 'style' element
+     */
     public function __construct($style)
     {
-        // check css style
         if (
             $style === null ||
             !is_string($style) ||
@@ -38,16 +51,22 @@ class ComponizerInternalCss
     // General methods section
     //-----------------------------------------------------
 
+    /**
+     * Returns 'style' element HTML.
+     *
+     * @return string HTML 'style' element
+     */
     public function style()
     {
         return $this->style;
     }
 
-    //-----------------------------------------------------
-    //  Magic methods section
-    //-----------------------------------------------------
-
-    public function __toString()
+    /**
+     * Returns HTML representation of the asset.
+     *
+     * @return string HTML 'style' element
+     */
+    public function toHtml()
     {
         return $this->style;
     }

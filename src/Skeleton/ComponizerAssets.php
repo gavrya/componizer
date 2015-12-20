@@ -9,65 +9,100 @@
 namespace Gavrya\Componizer\Skeleton;
 
 
+/**
+ * Incapsulates all nessesary assets.
+ *
+ * @package Gavrya\Componizer\Skeleton
+ */
 class ComponizerAssets
 {
-
-    // js assets
+    /**
+     * @var ComponizerExternalJs[] External JavaScript assets
+     */
     private $externalJs = [];
+
+    /**
+     * @var ComponizerInternalJs[] Internal JavaScript assets
+     */
     private $internalJs = [];
 
-    // css assets
+    /**
+     * @var ComponizerExternalCss[] External CSS assets
+     */
     private $externalCss = [];
+
+    /**
+     * @var ComponizerInternalCss[] Internal CSS assets
+     */
     private $internalCss = [];
 
     //-----------------------------------------------------
-    // Create/init section
+    // Instance create/init section
     //-----------------------------------------------------
 
+    /**
+     * ComponizerAssets constructor.
+     *
+     * @param array $assets Array with componizer assets
+     */
     public function __construct(array $assets = [])
     {
         foreach ($assets as $asset) {
             if ($asset instanceof ComponizerExternalJs) {
-                // add external js asset
                 $this->externalJs[] = $asset;
             } elseif ($asset instanceof ComponizerInternalJs) {
-                // add internal js asset
                 $this->internalJs[] = $asset;
             } elseif ($asset instanceof ComponizerExternalCss) {
-                // add external css asset
                 $this->externalCss[] = $asset;
             } elseif ($asset instanceof ComponizerInternalCss) {
-                // add internal css asset
                 $this->internalCss[] = $asset;
             }
         }
-        // todo: add unique check
-        // todo: add ability to push/remove assets on the fly
     }
 
     //-----------------------------------------------------
-    // Display js section
+    // JavaScript assets methods section
     //-----------------------------------------------------
 
+    /**
+     * Returns array of external JavaScript assets.
+     *
+     * @return ComponizerExternalJs[] Array of assets
+     */
     public function externalJs()
     {
         return $this->externalJs;
     }
 
+    /**
+     * Returns array of internal JavaScript assets.
+     *
+     * @return ComponizerInternalJs[] Array of assets
+     */
     public function internalJs()
     {
         return $this->internalJs;
     }
 
     //-----------------------------------------------------
-    // Display css section
+    // CSS assets methods section
     //-----------------------------------------------------
 
+    /**
+     * Returns array of external CSS assets.
+     *
+     * @return ComponizerExternalCss[] Array of assets
+     */
     public function externalCss()
     {
         return $this->externalCss;
     }
 
+    /**
+     * Returns array of internal CSS assets.
+     *
+     * @return ComponizerInternalCss[] Array of assets
+     */
     public function internalCss()
     {
         return $this->internalCss;

@@ -168,7 +168,7 @@ class WidgetManager
         } elseif ($widget instanceof ComponizerWidget && $widget instanceof ComponizerComponent) {
             $widgetId = $widget->id();
         } else {
-            return false;
+            return null;
         }
 
         return isset($widgets[$widgetId]) ? $widgets[$widgetId] : null;

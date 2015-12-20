@@ -8,8 +8,8 @@
 
 namespace Gavrya\Componizer\Helper;
 
+use InvalidArgumentException;
 
-use Gavrya\Componizer\Skeleton\ComponizerException;
 
 /**
  * Provides helpfull methods for storing and retrieving data based on JSON file.
@@ -55,7 +55,7 @@ class StorageHelper
     /**
      * Initiates storage data from JSON file.
      *
-     * @throws ComponizerException when unable to load storage data
+     * @throws InvalidArgumentException When one of the arguments was invalid
      */
     private function init()
     {
@@ -65,14 +65,14 @@ class StorageHelper
             !is_readable($this->cacheDir) ||
             !is_writable($this->cacheDir)
         ) {
-            throw new ComponizerException(sprintf('Invalid storage cache dir: %s', $this->cacheDir));
+            throw new InvalidArgumentException(sprintf('Invalid storage cache dir: %s', $this->cacheDir));
         }
 
         if (
             (!file_exists($this->storageFile) || !is_file($this->storageFile)) &&
             (!touch($this->storageFile) || !chmod($this->storageFile, 0777))
         ) {
-            throw new ComponizerException(sprintf('Unable to create storage file: %s', $this->storageFile));
+            throw new InvalidArgumentException(sprintf('Unable to create storage file: %s', $this->storageFile));
         }
 
         if (
@@ -81,7 +81,7 @@ class StorageHelper
             !is_readable($this->storageFile) ||
             !is_writable($this->storageFile)
         ) {
-            throw new ComponizerException(sprintf('Unable to create storage file: %s', $this->storageFile));
+            throw new InvalidArgumentException(sprintf('Unable to create storage file: %s', $this->storageFile));
         }
 
         $jsonData = json_decode(file_get_contents($this->storageFile), true);
