@@ -31,12 +31,12 @@ class StorageHelper
     private $storageFile = null;
 
     /**
-     * @var array Storage data array.
+     * @var array Storage data array
      */
     private $data = [];
 
     //-----------------------------------------------------
-    // Instance create/init section
+    // Construct section
     //-----------------------------------------------------
 
     /**

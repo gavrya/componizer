@@ -16,7 +16,7 @@ use InvalidArgumentException;
  *
  * @package Gavrya\Componizer\Skeleton
  */
-class ComponizerExternalCss
+class ComponizerExternalCss implements ComponizerAsset
 {
 
     /**
@@ -30,7 +30,7 @@ class ComponizerExternalCss
     private $media = null;
 
     //-----------------------------------------------------
-    // Instance create/init section
+    // Construct section
     //-----------------------------------------------------
 
     /**
@@ -66,6 +66,22 @@ class ComponizerExternalCss
     public function url()
     {
         return $this->url;
+    }
+
+    //-----------------------------------------------------
+    // ComponizerAsset methods section
+    //-----------------------------------------------------
+
+    /**
+     * Returns asset include position.
+     *
+     * @see ComponizerAsset::POSITION_* constants
+     *
+     * @return string Include position value
+     */
+    public function position()
+    {
+        return ComponizerAsset::POSITION_TOP;
     }
 
     /**

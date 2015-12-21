@@ -16,12 +16,8 @@ use InvalidArgumentException;
  *
  * @package Gavrya\Componizer\Skeleton
  */
-class ComponizerInternalJs
+class ComponizerInternalJs implements ComponizerAsset
 {
-
-    // include positions
-    const POSITION_TOP = 'top';
-    const POSITION_BOTTOM = 'bottom';
 
     /**
      * @var string HTML 'script' element
@@ -29,10 +25,10 @@ class ComponizerInternalJs
     private $script = null;
 
     //-----------------------------------------------------
-    // Instance create/init section
+    // Construct section
     //-----------------------------------------------------
 
-    public function __construct($script, $position = self::POSITION_BOTTOM)
+    public function __construct($script)
     {
         if (
             $script === null ||
@@ -43,12 +39,7 @@ class ComponizerInternalJs
             throw new InvalidArgumentException('Invalid script');
         }
 
-        if (!in_array($position, [self::POSITION_TOP, self::POSITION_BOTTOM])) {
-            throw new InvalidArgumentException(sprintf('Invalid position: %s', $position));
-        }
-
         $this->script = $script;
-        $this->position = $position;
     }
 
     //-----------------------------------------------------
@@ -65,6 +56,10 @@ class ComponizerInternalJs
         return $this->script;
     }
 
+    //-----------------------------------------------------
+    // ComponizerAsset methods section
+    //-----------------------------------------------------
+
     /**
      * Returns asset include position.
      *
@@ -74,7 +69,7 @@ class ComponizerInternalJs
      */
     public function position()
     {
-        return $this->position;
+        return ComponizerAsset::POSITION_TOP;
     }
 
     /**

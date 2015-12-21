@@ -1,16 +1,20 @@
 Important:
 
--- Add base class ComponizerAsset. Positions: HEADER | BODY_TOP | BODY_BOTTOM. Methods: toHtml(), toJson(), toArray(). Asset type: EXT_JS, INT_JS ?
-
 -- Separate ComponizerConfig class !!!
 
 -- Add AssetsManager ?
 
 -- Omit Singleton usage for Componizer !!!
 
+-- Rename ComponizerAssets to the ComponizerAssetsCollection with additional methods: add(), inject(), reset().
+
+-- Add ComponizerParserTool interface for componizer parser and pass to widget to make display content.
+
 Unimportant:
 
 -- ComponizerAssets: add ability to push/remove assets on the fly !!!
+
+-- Add ComponizerMeta asset class for key=value passing to components js: <meta name="key" content="value">?
 
 -- Prevent infinite loop in ContentParser !!!
 
@@ -24,8 +28,6 @@ Unimportant:
 -- How to link widgets with related plugin to group inside hwysiwyg editor?
 
 -- Add type of preferred color theme: "dark" or "light"  ?
-
--- Add ComponizerMeta asset class for key=value passing to components js: <meta name="key" content="value">?
 
 -- Create Laravel ServiceProvider ?
 
@@ -41,5 +43,6 @@ Code formatting (http://symfony.com/doc/current/contributing/code/standards.html
 Apigen:
 site: http://www.apigen.org/
 theme: https://github.com/ApiGen/ThemeBootstrap
-command: php apigen.phar generate --template-theme="Twitter Bootstrap" --template-config="./apigen-theme-bootstrap/src/config.neon" -s src -d phpdoc
+
+php apigen.phar generate --template-theme="Twitter Bootstrap" --template-config="./apigen-theme-bootstrap/src/config.neon" -s src -d phpdoc
 

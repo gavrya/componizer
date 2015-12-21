@@ -16,12 +16,8 @@ use InvalidArgumentException;
  *
  * @package Gavrya\Componizer\Skeleton
  */
-class ComponizerExternalJs
+class ComponizerExternalJs implements ComponizerAsset
 {
-
-    // Asset include positions
-    const POSITION_TOP = 'top';
-    const POSITION_BOTTOM = 'bottom';
 
     // JavaScript execution modes
     const MODE_ASYNC = 'async';
@@ -38,12 +34,12 @@ class ComponizerExternalJs
     private $position = null;
 
     /**
-     * @var string JavaScript execution mode
+     * @var string|null JavaScript execution mode
      */
     private $mode = null;
 
     //-----------------------------------------------------
-    // Create/init section
+    // Construct section
     //-----------------------------------------------------
 
     /**
@@ -53,17 +49,17 @@ class ComponizerExternalJs
      * @param string $position Asset required include position
      * @param string $mode Required JavaScript execution mode
      */
-    public function __construct($url, $position = self::POSITION_TOP, $mode = '')
+    public function __construct($url, $position = ComponizerAsset::POSITION_TOP, $mode = null)
     {
         if ($url === null || !is_string($url) || strtolower(substr($url, -strlen('.js'))) !== '.js') {
             throw new InvalidArgumentException(sprintf('Invalid url: %s', $url));
         }
 
-        if (!in_array($position, [self::POSITION_TOP, self::POSITION_BOTTOM])) {
+        if (!in_array($position, [ComponizerAsset::POSITION_TOP, ComponizerAsset::POSITION_BOTTOM])) {
             throw new InvalidArgumentException(sprintf('Invalid position: %s', $position));
         }
 
-        if ($mode !== '' && !in_array($mode, [self::MODE_ASYNC, self::MODE_DEFER])) {
+        if ($mode !== null && !in_array($mode, [static::MODE_ASYNC, static::MODE_DEFER])) {
             throw new InvalidArgumentException(sprintf('Invalid mode: %s', $mode));
         }
 
@@ -85,6 +81,10 @@ class ComponizerExternalJs
     {
         return $this->url;
     }
+
+    //-----------------------------------------------------
+    // ComponizerAsset methods section
+    //-----------------------------------------------------
 
     /**
      * Returns asset include position.

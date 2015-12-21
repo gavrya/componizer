@@ -37,7 +37,7 @@ class ComponizerAssets
     private $internalCss = [];
 
     //-----------------------------------------------------
-    // Instance create/init section
+    // Construct section
     //-----------------------------------------------------
 
     /**

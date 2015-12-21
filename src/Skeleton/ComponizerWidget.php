@@ -18,24 +18,6 @@ abstract class ComponizerWidget
 {
 
     //-----------------------------------------------------
-    // Make display content section
-    //-----------------------------------------------------
-
-    /**
-     * Generates widget "display content" HTML.
-     *
-     * @param callable $parser Helper function for parsing "editor content" to the "display content"
-     * @param array $properties Widget related JSON data
-     * @param string $contentType Content type of the passed content
-     * @param string|null $content Widget content in format of "editor content"
-     * @return string Generated "display content" HTML
-     */
-    public function makeDisplayContent(callable $parser, array $properties, $contentType, $content = null)
-    {
-        return '';
-    }
-
-    //-----------------------------------------------------
     // Assets methods section
     //-----------------------------------------------------
 
@@ -56,5 +38,23 @@ abstract class ComponizerWidget
      * @return ComponizerAssets Assets
      */
     abstract public function displayAssets();
+
+    //-----------------------------------------------------
+    // Make display content section
+    //-----------------------------------------------------
+
+    /**
+     * Generates widget "display content" HTML.
+     *
+     * @param callable $parser Helper function for parsing "editor content" to the "display content"
+     * @param array $properties Widget related JSON data
+     * @param string $contentType Content type of the passed content
+     * @param string|null $content Widget content in format of "editor content"
+     * @return string Generated "display content" HTML
+     */
+    public function makeDisplayContent(callable $parser, array $properties, $contentType, $content = null)
+    {
+        return '';
+    }
 
 }
