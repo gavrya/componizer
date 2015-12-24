@@ -8,7 +8,7 @@
 require('/Users/gavrya/Projects/componizer/vendor/autoload.php');
 
 use Gavrya\Componizer\Componizer;
-use Gavrya\Componizer\ContentParser;
+use Gavrya\Componizer\ComponizerParser;
 
 error_reporting(E_ALL);
 

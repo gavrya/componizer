@@ -33,7 +33,7 @@ class ComponizerInternalJs implements ComponizerAsset
         if (
             $script === null ||
             !is_string($script) ||
-            strtolower(substr(trim($script), 0, strlen('<script>'))) !== '<script>' ||
+            strtolower(substr(trim($script), 0, strlen('<script'))) !== '<script' ||
             strtolower(substr(trim($script), -strlen('</script>'))) !== '</script>'
         ) {
             throw new InvalidArgumentException('Invalid script');
@@ -61,15 +61,27 @@ class ComponizerInternalJs implements ComponizerAsset
     //-----------------------------------------------------
 
     /**
+     * Returns type of the asset.
+     *
+     * @see ComponizerAsset::TYPE_* constants
+     *
+     * @return string Asset type
+     */
+    final public function getType()
+    {
+        return ComponizerAsset::TYPE_INTERNAL_JS;
+    }
+
+    /**
      * Returns asset include position.
      *
      * @see ComponizerInternalJs::POSITION_* constants
      *
      * @return string One of the position constants value
      */
-    public function position()
+    final public function getPosition()
     {
-        return ComponizerAsset::POSITION_TOP;
+        return ComponizerAsset::POSITION_HEAD;
     }
 
     /**

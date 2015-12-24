@@ -73,15 +73,27 @@ class ComponizerExternalCss implements ComponizerAsset
     //-----------------------------------------------------
 
     /**
+     * Returns type of the asset.
+     *
+     * @see ComponizerAsset::TYPE_* constants
+     *
+     * @return string Asset type
+     */
+    final public function getType()
+    {
+        return ComponizerAsset::TYPE_EXTERNAL_CSS;
+    }
+
+    /**
      * Returns asset include position.
      *
      * @see ComponizerAsset::POSITION_* constants
      *
      * @return string Include position value
      */
-    public function position()
+    final public function getPosition()
     {
-        return ComponizerAsset::POSITION_TOP;
+        return ComponizerAsset::POSITION_HEAD;
     }
 
     /**
@@ -94,7 +106,7 @@ class ComponizerExternalCss implements ComponizerAsset
     {
         $targetUrl = $this->url;
 
-        if ($baseUrl !== null && is_string($baseUrl) && strpos($this->url, '/') === 0) {
+        if (is_string($baseUrl) && strpos($this->url, '/') === 0 && strpos($this->url, '//') !== 0) {
             $targetUrl = rtrim($baseUrl, '/') . $this->url;
         }
 

@@ -46,13 +46,14 @@ abstract class ComponizerWidget
     /**
      * Generates widget "display content" HTML.
      *
-     * @param callable $parser Helper function for parsing "editor content" to the "display content"
+     * @param ComponizerParser $parser Parser util
      * @param array $properties Widget related JSON data
      * @param string $contentType Content type of the passed content
      * @param string|null $content Widget content in format of "editor content"
      * @return string Generated "display content" HTML
+     * @internal param callable $parser Helper function for parsing "editor content" to the "display content"
      */
-    public function makeDisplayContent(callable $parser, array $properties, $contentType, $content = null)
+    public function makeDisplayContent(ComponizerParser $parser, array $properties, $contentType, $content = null)
     {
         return '';
     }

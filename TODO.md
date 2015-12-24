@@ -1,14 +1,16 @@
 Important:
 
--- Separate ComponizerConfig class !!!
+-- implement ComponizerComponent by component abstracts !!!
+
+-- Rename ComponizerAssets to the ComponizerAssetsCollection ?
+
+-- Omit Singleton usage from Componizer !!!
+
+-- Separate ComponizerConfig class, isValid(), hasErrors(), getErrors() !!!
 
 -- Add AssetsManager ?
 
--- Omit Singleton usage for Componizer !!!
-
--- Rename ComponizerAssets to the ComponizerAssetsCollection with additional methods: add(), inject(), reset().
-
--- Add ComponizerParserTool interface for componizer parser and pass to widget to make display content.
+-- add namespaces: Assets, Components, Helpers, Managers, Content
 
 Unimportant:
 
@@ -16,7 +18,7 @@ Unimportant:
 
 -- Add ComponizerMeta asset class for key=value passing to components js: <meta name="key" content="value">?
 
--- Prevent infinite loop in ContentParser !!!
+-- Prevent infinite loop in ComponizerParser !!!
 
 -- ContentProcessor: add ability to pass array of content with target keys ($editorContent, $targetKeys = null).
    Usefull for parsing results from database rows with multiple "editor content" fields in each row.

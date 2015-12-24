@@ -12,25 +12,11 @@ namespace Gavrya\Componizer;
 use DOMElement;
 use DOMXPath;
 use Gavrya\Componizer\Helper\DomHelper;
+use Gavrya\Componizer\Skeleton\ComponizerParser;
 
 
-class ContentParser
+class ContentParser implements ComponizerParser
 {
-
-    // Widget attributes
-    const WIDGET_ATTR = 'data-componizer-widget';
-    const WIDGET_ATTR_ID = 'data-componizer-widget-id';
-    const WIDGET_ATTR_NAME = 'data-componizer-widget-name';
-    const WIDGET_ATTR_PROPERTIES = 'data-componizer-widget-properties';
-    const WIDGET_ATTR_CONTENT_TYPE = 'data-componizer-widget-content-type';
-    const WIDGET_ATTR_CONTENT = 'data-componizer-widget-content';
-
-    // Widget content types
-    const WIDGET_CT_NONE = 'none';
-    const WIDGET_CT_CODE = 'code';
-    const WIDGET_CT_PLAIN_TEXT = 'plain_text';
-    const WIDGET_CT_RICH_TEXT = 'rich_text';
-    const WIDGET_CT_MIXED = 'mixed';
 
     // Componizer
     private $componizer = null;
@@ -56,7 +42,7 @@ class ContentParser
      *
      * Parsing is processed based on allowed/disabled plugins/components and other settings from SettingsManager.
      *
-     * @param $editorContent
+     * @param string $editorContent Editor content to parse
      * @return string Parsed display content or empty string
      */
     public function parseDisplayContent($editorContent)
@@ -104,7 +90,7 @@ class ContentParser
      */
     private function findWidgetElement(DOMXpath $docXpath, DOMElement $docRoot)
     {
-        return $docXpath->query('(//*[@' . self::WIDGET_ATTR . '])[1]', $docRoot)->item(0);
+        return $docXpath->query('(//*[@' . ComponizerParser::WIDGET_ATTR . '])[1]', $docRoot)->item(0);
     }
 
     /**
@@ -116,10 +102,10 @@ class ContentParser
     private function isValidWidgetElement(DOMElement $widgetElement)
     {
         if (
-            !$widgetElement->hasAttribute(self::WIDGET_ATTR_ID) ||
-            !$widgetElement->hasAttribute(self::WIDGET_ATTR_NAME) ||
-            !$widgetElement->hasAttribute(self::WIDGET_ATTR_PROPERTIES) ||
-            !$widgetElement->hasAttribute(self::WIDGET_ATTR_CONTENT_TYPE)
+            !$widgetElement->hasAttribute(ComponizerParser::WIDGET_ATTR_ID) ||
+            !$widgetElement->hasAttribute(ComponizerParser::WIDGET_ATTR_NAME) ||
+            !$widgetElement->hasAttribute(ComponizerParser::WIDGET_ATTR_PROPERTIES) ||
+            !$widgetElement->hasAttribute(ComponizerParser::WIDGET_ATTR_CONTENT_TYPE)
         ) {
             return false;
         }
@@ -145,7 +131,7 @@ class ContentParser
     {
         // find first nested element with target attribute
         foreach ($widgetElement->childNodes as $childNode) {
-            if ($childNode instanceof DOMElement && $childNode->hasAttribute(self::WIDGET_ATTR_CONTENT)) {
+            if ($childNode instanceof DOMElement && $childNode->hasAttribute(ComponizerParser::WIDGET_ATTR_CONTENT)) {
                 return $childNode;
             }
         }
@@ -169,13 +155,13 @@ class ContentParser
         }
 
         // widget id
-        $widgetId = trim($widgetElement->getAttribute(self::WIDGET_ATTR_ID));
+        $widgetId = trim($widgetElement->getAttribute(ComponizerParser::WIDGET_ATTR_ID));
 
         // widget name
-        $widgetName = trim($widgetElement->getAttribute(self::WIDGET_ATTR_NAME));
+        $widgetName = trim($widgetElement->getAttribute(ComponizerParser::WIDGET_ATTR_NAME));
 
         // widget properties
-        $widgetProperties = trim($widgetElement->getAttribute(self::WIDGET_ATTR_PROPERTIES));
+        $widgetProperties = trim($widgetElement->getAttribute(ComponizerParser::WIDGET_ATTR_PROPERTIES));
         $widgetProperties = json_decode($widgetProperties, true);
 
         if (!is_array($widgetProperties)) {
@@ -183,24 +169,24 @@ class ContentParser
         }
 
         // widget content type
-        $widgetContentType = trim($widgetElement->getAttribute(self::WIDGET_ATTR_CONTENT_TYPE));
+        $widgetContentType = trim($widgetElement->getAttribute(ComponizerParser::WIDGET_ATTR_CONTENT_TYPE));
 
         $widgetContentTypes = [
-            self::WIDGET_CT_NONE,
-            self::WIDGET_CT_CODE,
-            self::WIDGET_CT_PLAIN_TEXT,
-            self::WIDGET_CT_RICH_TEXT,
-            self::WIDGET_CT_MIXED,
+            ComponizerParser::WIDGET_CT_NONE,
+            ComponizerParser::WIDGET_CT_CODE,
+            ComponizerParser::WIDGET_CT_PLAIN_TEXT,
+            ComponizerParser::WIDGET_CT_RICH_TEXT,
+            ComponizerParser::WIDGET_CT_MIXED,
         ];
 
         if (!in_array($widgetContentType, $widgetContentTypes)) {
-            $widgetContentType = self::WIDGET_CT_NONE;
+            $widgetContentType = ComponizerParser::WIDGET_CT_NONE;
         }
 
         $widgetContentElement = $this->findWidgetContentElement($widgetElement);
 
         // widget content
-        $widgetContent = $widgetContentType !== self::WIDGET_CT_NONE ? $domHelper->getInnerHtml($widgetContentElement) : null;
+        $widgetContent = $widgetContentType !== ComponizerParser::WIDGET_CT_NONE ? $domHelper->getInnerHtml($widgetContentElement) : null;
 
         /** @var WidgetManager $widgetManager */
         $widgetManager = $this->componizer->resolve(WidgetManager::class);
@@ -235,7 +221,7 @@ class ContentParser
     }
 
     /**
-     * Return all widget ids found in provided "editor content".
+     * Returns all widget ids found in provided "editor content".
      *
      * Returned array may contain multiple identical ids, id per every found widget in the order of parsing.
      * See helpfull links for array filtering.
@@ -266,7 +252,7 @@ class ContentParser
         $docXpath = new DOMXpath($doc);
 
         /** @var DOMNodeList $widgetElements */
-        $widgetElements = $docXpath->query('(//*[@' . self::WIDGET_ATTR . '])', $docRoot);
+        $widgetElements = $docXpath->query('(//*[@' . ComponizerParser::WIDGET_ATTR . '])', $docRoot);
 
         if ($widgetElements !== false) {
             /** @var DOMElement $widgetElement */
@@ -275,7 +261,7 @@ class ContentParser
                     continue;
                 }
 
-                $widgetId = trim($widgetElement->getAttribute(self::WIDGET_ATTR_ID));
+                $widgetId = trim($widgetElement->getAttribute(ComponizerParser::WIDGET_ATTR_ID));
 
                 if (!empty($widgetId)) {
                     $widgetIds[] = $widgetId;

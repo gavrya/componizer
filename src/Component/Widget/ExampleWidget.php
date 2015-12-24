@@ -14,6 +14,7 @@ use Gavrya\Componizer\Skeleton\ComponizerComponent;
 use Gavrya\Componizer\Skeleton\ComponizerExternalCss;
 use Gavrya\Componizer\Skeleton\ComponizerExternalJs;
 use Gavrya\Componizer\Skeleton\ComponizerWidget;
+use Gavrya\Componizer\Skeleton\ComponizerParser;
 
 class ExampleWidget extends ComponizerWidget implements ComponizerComponent
 {
@@ -100,9 +101,9 @@ class ExampleWidget extends ComponizerWidget implements ComponizerComponent
     // ComponizerWidget section
     //-----------------------------------------------------
 
-    public function makeDisplayContent(callable $parser, array $properties, $contentType, $content = null)
+    public function makeDisplayContent(ComponizerParser $parser, array $properties, $contentType, $content = null)
     {
-        return empty($content) ? "<div>{$this->name()}<p>{$this->name()}</p></div>" : "<div>{$parser($content)}</div>";
+        return empty($content) ? "<div>{$this->name()}<p>{$this->name()}</p></div>" : "<div>{$parser->parseDisplayContent($content)}</div>";
     }
 
     public function editorAssets()

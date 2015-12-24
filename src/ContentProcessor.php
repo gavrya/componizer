@@ -40,8 +40,8 @@ class ContentProcessor
             return;
         }
 
-        /** @var ContentParser $contentParser */
-        $contentParser = $this->componizer->resolve(ContentParser::class);
+        /** @var ComponizerParser $contentParser */
+        $contentParser = $this->componizer->resolve(ComponizerParser::class);
 
         $widgetIds = array_unique($contentParser->parseWidgetIds($editorContent));
 
@@ -69,8 +69,8 @@ class ContentProcessor
             return '';
         }
 
-        /** @var ContentParser $contentParser */
-        $contentParser = $this->componizer->resolve(ContentParser::class);
+        /** @var ComponizerParser $contentParser */
+        $contentParser = $this->componizer->resolve(ComponizerParser::class);
 
         $displayContent = $contentParser->parseDisplayContent($editorContent);
 

@@ -16,25 +16,19 @@ namespace Gavrya\Componizer\Skeleton;
  */
 class ComponizerAssets
 {
+
+    // Assets print options
+    const OPTION_BASE_URL = 'base_url';
+
     /**
      * @var ComponizerExternalJs[] External JavaScript assets
      */
-    private $externalJs = [];
+    private $addedAssets = [];
 
     /**
-     * @var ComponizerInternalJs[] Internal JavaScript assets
+     * @var ComponizerExternalJs[] External JavaScript assets
      */
-    private $internalJs = [];
-
-    /**
-     * @var ComponizerExternalCss[] External CSS assets
-     */
-    private $externalCss = [];
-
-    /**
-     * @var ComponizerInternalCss[] Internal CSS assets
-     */
-    private $internalCss = [];
+    private $injectedAssets = [];
 
     //-----------------------------------------------------
     // Construct section
@@ -42,70 +36,147 @@ class ComponizerAssets
 
     /**
      * ComponizerAssets constructor.
-     *
-     * @param array $assets Array with componizer assets
      */
-    public function __construct(array $assets = [])
+    public function __construct()
     {
-        foreach ($assets as $asset) {
-            if ($asset instanceof ComponizerExternalJs) {
-                $this->externalJs[] = $asset;
-            } elseif ($asset instanceof ComponizerInternalJs) {
-                $this->internalJs[] = $asset;
-            } elseif ($asset instanceof ComponizerExternalCss) {
-                $this->externalCss[] = $asset;
-            } elseif ($asset instanceof ComponizerInternalCss) {
-                $this->internalCss[] = $asset;
+        $this->resetAssets($this->addedAssets);
+        $this->resetAssets($this->injectedAssets);
+    }
+
+    //-----------------------------------------------------
+    // General public methods section
+    //-----------------------------------------------------
+
+    public function add(array $assets)
+    {
+        $this->collectAssets($assets, $this->addedAssets);
+    }
+
+    public function inject(array $assets)
+    {
+        $this->collectAssets($assets, $this->injectedAssets);
+    }
+
+    public function hasAssets()
+    {
+        return $this->hasAddedAssets() && $this->hasInjectedAssets();
+    }
+
+    public function hasAddedAssets()
+    {
+        return $this->containsAssets($this->addedAssets);
+    }
+
+    public function hasInjectedAssets()
+    {
+        return $this->containsAssets($this->injectedAssets);
+    }
+
+    public function getAssets()
+    {
+        return array_merge($this->getAddedAssets(), $this->getInjectedAssets());
+    }
+
+    public function getAddedAssets()
+    {
+        return $this->getCollectedAssets($this->addedAssets);
+    }
+
+    public function getInjectedAssets()
+    {
+        return $this->getCollectedAssets($this->injectedAssets);
+    }
+
+    public function clearAssets()
+    {
+        $this->clearAddedAssets();
+        $this->clearInjectedAssets();
+    }
+
+    public function clearAddedAssets()
+    {
+        $this->resetAssets($this->addedAssets);
+    }
+
+    public function clearInjectedAssets()
+    {
+        $this->resetAssets($this->injectedAssets);
+    }
+
+    public function printAssets($position, array $options = null)
+    {
+        $positions = [
+            ComponizerAsset::POSITION_HEAD,
+            ComponizerAsset::POSITION_BODY_TOP,
+            ComponizerAsset::POSITION_BODY_BOTTOM,
+        ];
+
+        if (!in_array($position, $positions)) {
+            return;
+        }
+
+        $baseUrl = $this->getOption(static::OPTION_BASE_URL);
+
+        /** @var ComponizerAsset $asset */
+        foreach ($this->getAssets() as $asset) {
+            if ($asset->getPosition() !== $position) {
+                continue;
             }
+
+            if ($asset instanceof ComponizerExternalCss || $asset instanceof ComponizerExternalJs) {
+                echo $asset->toHtml($baseUrl);
+            }
+
+            echo $asset->toHtml();
         }
     }
 
     //-----------------------------------------------------
-    // JavaScript assets methods section
+    // General private methods section
     //-----------------------------------------------------
 
-    /**
-     * Returns array of external JavaScript assets.
-     *
-     * @return ComponizerExternalJs[] Array of assets
-     */
-    public function externalJs()
+    private function resetAssets(array &$collection)
     {
-        return $this->externalJs;
+        $collection = [
+            ComponizerAsset::TYPE_EXTERNAL_JS => [],
+            ComponizerAsset::TYPE_INTERNAL_JS => [],
+            ComponizerAsset::TYPE_EXTERNAL_CSS => [],
+            ComponizerAsset::TYPE_INTERNAL_CSS => [],
+        ];
     }
 
-    /**
-     * Returns array of internal JavaScript assets.
-     *
-     * @return ComponizerInternalJs[] Array of assets
-     */
-    public function internalJs()
+    private function collectAssets(array $assets, array &$collection)
     {
-        return $this->internalJs;
+        foreach ($assets as $asset) {
+            if ($asset instanceof ComponizerAsset && array_key_exists($asset->getType(), $collection)) {
+                $collection[$asset->getType()][] = $asset;
+            }
+        }
     }
 
-    //-----------------------------------------------------
-    // CSS assets methods section
-    //-----------------------------------------------------
-
-    /**
-     * Returns array of external CSS assets.
-     *
-     * @return ComponizerExternalCss[] Array of assets
-     */
-    public function externalCss()
+    private function getCollectedAssets(array &$collection)
     {
-        return $this->externalCss;
+        return array_merge(
+            $this->$collection[ComponizerAsset::TYPE_EXTERNAL_JS],
+            $this->$collection[ComponizerAsset::TYPE_INTERNAL_JS],
+            $this->$collection[ComponizerAsset::TYPE_EXTERNAL_CSS],
+            $this->$collection[ComponizerAsset::TYPE_INTERNAL_CSS]
+        );
     }
 
-    /**
-     * Returns array of internal CSS assets.
-     *
-     * @return ComponizerInternalCss[] Array of assets
-     */
-    public function internalCss()
+    private function containsAssets(array &$collection)
     {
-        return $this->internalCss;
+        return (
+            !empty($this->$collection[ComponizerAsset::TYPE_EXTERNAL_JS]) ||
+            !empty($this->$collection[ComponizerAsset::TYPE_INTERNAL_JS]) ||
+            !empty($this->$collection[ComponizerAsset::TYPE_EXTERNAL_CSS]) ||
+            !empty($this->$collection[ComponizerAsset::TYPE_INTERNAL_CSS])
+        );
+    }
+
+    private function getOption(array $options, $option)
+    {
+        return isset($options[$option]) ? $options[$option] : null;
     }
 
 }

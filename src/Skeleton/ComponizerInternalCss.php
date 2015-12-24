@@ -66,15 +66,27 @@ class ComponizerInternalCss implements ComponizerAsset
     //-----------------------------------------------------
 
     /**
+     * Returns type of the asset.
+     *
+     * @see ComponizerAsset::TYPE_* constants
+     *
+     * @return string Asset type
+     */
+    final public function getType()
+    {
+        return ComponizerAsset::TYPE_INTERNAL_CSS;
+    }
+
+    /**
      * Returns asset include position.
      *
      * @see ComponizerAsset::POSITION_* constants
      *
      * @return string Include position value
      */
-    public function position()
+    final public function getPosition()
     {
-        return ComponizerAsset::POSITION_TOP;
+        return ComponizerAsset::POSITION_HEAD;
     }
 
     /**

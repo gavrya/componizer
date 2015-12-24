@@ -219,4 +219,5 @@ class ComponentManager
         // remove symlink
         $fsHelper->removeSymlink($targetLink);
     }
+
 }
