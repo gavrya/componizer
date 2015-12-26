@@ -6,13 +6,13 @@
  * Time: 1:29 PM
  */
 
-namespace Gavrya\Componizer\Skeleton;
+namespace Gavrya\Componizer\Asset;
 
 
 /**
  * Incapsulates all nessesary assets.
  *
- * @package Gavrya\Componizer\Skeleton
+ * @package Gavrya\Componizer\Asset
  */
 class ComponizerAssets
 {
@@ -21,12 +21,12 @@ class ComponizerAssets
     const OPTION_BASE_URL = 'base_url';
 
     /**
-     * @var ComponizerExternalJs[] External JavaScript assets
+     * @var array Added assets
      */
     private $addedAssets = [];
 
     /**
-     * @var ComponizerExternalJs[] External JavaScript assets
+     * @var array Injected assets
      */
     private $injectedAssets = [];
 
@@ -103,32 +103,19 @@ class ComponizerAssets
         $this->resetAssets($this->injectedAssets);
     }
 
-    public function printAssets($position, array $options = null)
+    public function getHeadAssetsHtml(array $options = null)
     {
-        $positions = [
-            ComponizerAsset::POSITION_HEAD,
-            ComponizerAsset::POSITION_BODY_TOP,
-            ComponizerAsset::POSITION_BODY_BOTTOM,
-        ];
+        $this->getAssetsHtml(ComponizerAsset::POSITION_HEAD, $options);
+    }
 
-        if (!in_array($position, $positions)) {
-            return;
-        }
+    public function getBodyTopAssetsHtml(array $options = null)
+    {
+        $this->getAssetsHtml(ComponizerAsset::POSITION_BODY_TOP, $options);
+    }
 
-        $baseUrl = $this->getOption(static::OPTION_BASE_URL);
-
-        /** @var ComponizerAsset $asset */
-        foreach ($this->getAssets() as $asset) {
-            if ($asset->getPosition() !== $position) {
-                continue;
-            }
-
-            if ($asset instanceof ComponizerExternalCss || $asset instanceof ComponizerExternalJs) {
-                echo $asset->toHtml($baseUrl);
-            }
-
-            echo $asset->toHtml();
-        }
+    public function getBodyBottomAssetsHtml(array $options = null)
+    {
+        $this->getAssetsHtml(ComponizerAsset::POSITION_BODY_BOTTOM, $options);
     }
 
     //-----------------------------------------------------
@@ -172,6 +159,40 @@ class ComponizerAssets
             !empty($this->$collection[ComponizerAsset::TYPE_EXTERNAL_CSS]) ||
             !empty($this->$collection[ComponizerAsset::TYPE_INTERNAL_CSS])
         );
+    }
+
+    private function getAssetsHtml($position, array $options = null)
+    {
+        $positions = [
+            ComponizerAsset::POSITION_HEAD,
+            ComponizerAsset::POSITION_BODY_TOP,
+            ComponizerAsset::POSITION_BODY_BOTTOM,
+        ];
+
+        if (!in_array($position, $positions)) {
+            return;
+        }
+
+        $baseUrl = $this->getOption($options, static::OPTION_BASE_URL);
+
+        $assetsHtml = '<!-- Componizer assets begin -->';
+
+        /** @var ComponizerAsset $asset */
+        foreach ($this->getAssets() as $asset) {
+            if ($asset->getPosition() !== $position) {
+                continue;
+            }
+
+            if ($asset instanceof ComponizerExternalCss || $asset instanceof ComponizerExternalJs) {
+                $assetsHtml .= $asset->toHtml($baseUrl);
+            }
+
+            $assetsHtml .= $asset->toHtml();
+        }
+
+        $assetsHtml .= '<!-- Componizer assets end -->';
+
+        return $assetsHtml;
     }
 
     private function getOption(array $options, $option)

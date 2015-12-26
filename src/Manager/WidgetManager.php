@@ -6,12 +6,13 @@
  * Time: 8:43 PM
  */
 
-namespace Gavrya\Componizer;
+namespace Gavrya\Componizer\Manager;
 
 
-use Gavrya\Componizer\Skeleton\ComponizerAssets;
-use Gavrya\Componizer\Skeleton\ComponizerComponent;
-use Gavrya\Componizer\Skeleton\ComponizerWidget;
+use Gavrya\Componizer\Asset\ComponizerAssets;
+use Gavrya\Componizer\Component\ComponizerComponent;
+use Gavrya\Componizer\Component\ComponizerWidget;
+use Gavrya\Componizer\Componizer;
 
 class WidgetManager
 {

@@ -6,13 +6,13 @@
  * Time: 10:41 PM
  */
 
-namespace Gavrya\Componizer\Skeleton;
+namespace Gavrya\Componizer\Asset;
 
 
 /**
  * Interface ComponizerAsset required in order to implement componizer asset.
  *
- * @package Gavrya\Componizer\Skeleton
+ * @package Gavrya\Componizer\Asset
  */
 interface ComponizerAsset
 {

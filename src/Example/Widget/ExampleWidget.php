@@ -79,7 +79,7 @@ class ExampleWidget extends ComponizerWidget implements ComponizerComponent
 
     public function assetsDir()
     {
-        return dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR . $this->id;
+        return dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR . $this->id;
     }
 
     public function init($lang, $cacheDir)

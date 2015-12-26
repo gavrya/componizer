@@ -6,11 +6,12 @@
  * Time: 8:06 PM
  */
 
-namespace Gavrya\Componizer;
+namespace Gavrya\Componizer\Manager;
 
 
+use Gavrya\Componizer\Componizer;
 use Gavrya\Componizer\Helper\FsHelper;
-use Gavrya\Componizer\Skeleton\ComponizerComponent;
+use Gavrya\Componizer\Component\ComponizerComponent;
 
 class ComponentManager
 {

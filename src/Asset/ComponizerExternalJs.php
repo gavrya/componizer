@@ -6,7 +6,7 @@
  * Time: 7:39 PM
  */
 
-namespace Gavrya\Componizer\Skeleton;
+namespace Gavrya\Componizer\Asset;
 
 
 use InvalidArgumentException;
@@ -14,7 +14,7 @@ use InvalidArgumentException;
 /**
  * Represents externally included JavaScript.
  *
- * @package Gavrya\Componizer\Skeleton
+ * @package Gavrya\Componizer\Asset
  */
 class ComponizerExternalJs implements ComponizerAsset
 {

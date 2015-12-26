@@ -6,12 +6,12 @@
  * Time: 3:08 PM
  */
 
-namespace Gavrya\Componizer\Skeleton;
+namespace Gavrya\Componizer\Component;
 
 /**
  * Required in order to implement componizer plugin.
  *
- * @package Gavrya\Componizer\Skeleton
+ * @package Gavrya\Componizer\Component
  */
 abstract class ComponizerPlugin
 {

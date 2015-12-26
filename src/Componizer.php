@@ -10,10 +10,15 @@ namespace Gavrya\Componizer;
 
 
 use Closure;
+use Gavrya\Componizer\Content\ContentParser;
+use Gavrya\Componizer\Content\ContentProcessor;
 use Gavrya\Componizer\Helper\DomHelper;
 use Gavrya\Componizer\Helper\FsHelper;
 use Gavrya\Componizer\Helper\StorageHelper;
-use Gavrya\Componizer\Skeleton\ComponizerException;
+use Gavrya\Componizer\Exception\ComponizerException;
+use Gavrya\Componizer\Manager\ComponentManager;
+use Gavrya\Componizer\Manager\PluginManager;
+use Gavrya\Componizer\Manager\WidgetManager;
 
 
 class Componizer

@@ -6,7 +6,7 @@
  * Time: 5:17 PM
  */
 
-namespace Gavrya\Componizer\Skeleton;
+namespace Gavrya\Componizer\Exception;
 
 
 use Exception;

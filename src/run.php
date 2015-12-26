@@ -5,10 +5,10 @@
  * Date: 10/23/15
  * Time: 5:50 PM
  */
+use Gavrya\Componizer\Componizer;
+
 require('/Users/gavrya/Projects/componizer/vendor/autoload.php');
 
-use Gavrya\Componizer\Componizer;
-use Gavrya\Componizer\ComponizerParser;
 
 error_reporting(E_ALL);
 

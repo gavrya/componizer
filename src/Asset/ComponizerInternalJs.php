@@ -3,48 +3,43 @@
  * Created by PhpStorm.
  * User: gavrya
  * Date: 11/24/15
- * Time: 7:33 PM
+ * Time: 7:39 PM
  */
 
-namespace Gavrya\Componizer\Skeleton;
+namespace Gavrya\Componizer\Asset;
 
 
 use InvalidArgumentException;
 
 /**
- * Represents internally included CSS.
+ * Represents internally included JavaScript.
  *
- * @package Gavrya\Componizer\Skeleton
+ * @package Gavrya\Componizer\Asset
  */
-class ComponizerInternalCss implements ComponizerAsset
+class ComponizerInternalJs implements ComponizerAsset
 {
 
     /**
-     * @var string HTML 'style' element
+     * @var string HTML 'script' element
      */
-    private $style = null;
+    private $script = null;
 
     //-----------------------------------------------------
     // Construct section
     //-----------------------------------------------------
 
-    /**
-     * ComponizerInternalCss constructor.
-     *
-     * @param string $style HTML 'style' element
-     */
-    public function __construct($style)
+    public function __construct($script)
     {
         if (
-            $style === null ||
-            !is_string($style) ||
-            strtolower(substr(trim($style), 0, strlen('<style>'))) !== '<style>' ||
-            strtolower(substr(trim($style), -strlen('</style>'))) !== '</style>'
+            $script === null ||
+            !is_string($script) ||
+            strtolower(substr(trim($script), 0, strlen('<script'))) !== '<script' ||
+            strtolower(substr(trim($script), -strlen('</script>'))) !== '</script>'
         ) {
-            throw new InvalidArgumentException('Invalid style');
+            throw new InvalidArgumentException('Invalid script');
         }
 
-        $this->style = $style;
+        $this->script = $script;
     }
 
     //-----------------------------------------------------
@@ -52,13 +47,13 @@ class ComponizerInternalCss implements ComponizerAsset
     //-----------------------------------------------------
 
     /**
-     * Returns 'style' element HTML.
+     * Returns 'script' element HTML.
      *
-     * @return string HTML 'style' element
+     * @return string HTML 'script' element
      */
-    public function style()
+    public function script()
     {
-        return $this->style;
+        return $this->script;
     }
 
     //-----------------------------------------------------
@@ -74,15 +69,15 @@ class ComponizerInternalCss implements ComponizerAsset
      */
     final public function getType()
     {
-        return ComponizerAsset::TYPE_INTERNAL_CSS;
+        return ComponizerAsset::TYPE_INTERNAL_JS;
     }
 
     /**
      * Returns asset include position.
      *
-     * @see ComponizerAsset::POSITION_* constants
+     * @see ComponizerInternalJs::POSITION_* constants
      *
-     * @return string Include position value
+     * @return string One of the position constants value
      */
     final public function getPosition()
     {
@@ -92,11 +87,11 @@ class ComponizerInternalCss implements ComponizerAsset
     /**
      * Returns HTML representation of the asset.
      *
-     * @return string HTML 'style' element
+     * @return string HTML 'script' element
      */
     public function toHtml()
     {
-        return $this->style;
+        return $this->script;
     }
 
 }

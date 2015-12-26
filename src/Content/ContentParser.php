@@ -6,13 +6,14 @@
  * Time: 8:30 PM
  */
 
-namespace Gavrya\Componizer;
+namespace Gavrya\Componizer\Content;
 
 
 use DOMElement;
 use DOMXPath;
+use Gavrya\Componizer\Componizer;
 use Gavrya\Componizer\Helper\DomHelper;
-use Gavrya\Componizer\Skeleton\ComponizerParser;
+use Gavrya\Componizer\Manager\WidgetManager;
 
 
 class ContentParser implements ComponizerParser

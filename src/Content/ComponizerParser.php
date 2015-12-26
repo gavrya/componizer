@@ -6,7 +6,7 @@
  * Time: 9:18 PM
  */
 
-namespace Gavrya\Componizer\Skeleton;
+namespace Gavrya\Componizer\Content;
 
 
 interface ComponizerParser

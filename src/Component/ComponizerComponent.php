@@ -6,12 +6,12 @@
  * Time: 2:49 PM
  */
 
-namespace Gavrya\Componizer\Skeleton;
+namespace Gavrya\Componizer\Component;
 
 /**
  * Interface required in order to implement any componizer component.
  *
- * @package Gavrya\Componizer\Skeleton
+ * @package Gavrya\Componizer\Component
  */
 interface ComponizerComponent
 {

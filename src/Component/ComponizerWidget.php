@@ -6,13 +6,15 @@
  * Time: 12:03 PM
  */
 
-namespace Gavrya\Componizer\Skeleton;
+namespace Gavrya\Componizer\Component;
+
+use Gavrya\Componizer\Content\ComponizerParser;
 
 
 /**
  * Required in order to implement componizer widget.
  *
- * @package Gavrya\Componizer\Skeleton
+ * @package Gavrya\Componizer\Component
  */
 abstract class ComponizerWidget
 {

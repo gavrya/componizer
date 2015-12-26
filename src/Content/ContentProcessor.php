@@ -6,8 +6,11 @@
  * Time: 8:31 PM
  */
 
-namespace Gavrya\Componizer;
+namespace Gavrya\Componizer\Content;
 
+
+use Gavrya\Componizer\Componizer;
+use Gavrya\Componizer\Manager\WidgetManager;
 
 class ContentProcessor
 {

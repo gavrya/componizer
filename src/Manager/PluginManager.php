@@ -6,15 +6,16 @@
  * Time: 4:54 PM
  */
 
-namespace Gavrya\Componizer;
+namespace Gavrya\Componizer\Manager;
 
 
 use Exception;
+use Gavrya\Componizer\Componizer;
 use Gavrya\Componizer\Helper\FsHelper;
 use Gavrya\Componizer\Helper\StorageHelper;
-use Gavrya\Componizer\Skeleton\ComponizerComponent;
-use Gavrya\Componizer\Skeleton\ComponizerException;
-use Gavrya\Componizer\Skeleton\ComponizerPlugin;
+use Gavrya\Componizer\Component\ComponizerComponent;
+use Gavrya\Componizer\Exception\ComponizerException;
+use Gavrya\Componizer\Component\ComponizerPlugin;
 
 class PluginManager
 {

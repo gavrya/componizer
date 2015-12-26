@@ -6,7 +6,7 @@
  * Time: 7:32 PM
  */
 
-namespace Gavrya\Componizer\Skeleton;
+namespace Gavrya\Componizer\Asset;
 
 
 use InvalidArgumentException;
@@ -14,7 +14,7 @@ use InvalidArgumentException;
 /**
  * Represents externally included CSS.
  *
- * @package Gavrya\Componizer\Skeleton
+ * @package Gavrya\Componizer\Asset
  */
 class ComponizerExternalCss implements ComponizerAsset
 {

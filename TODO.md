@@ -10,7 +10,7 @@ Important:
 
 -- Add AssetsManager ?
 
--- add namespaces: Assets, Components, Helpers, Managers, Content
+-- add namespaces: Asset, Component, Helper, Manager, Content
 
 Unimportant:
 
