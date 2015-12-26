@@ -18,6 +18,7 @@ use Exception;
  */
 class ComponizerException extends Exception
 {
+
     // Exception codes
     const EX_ERROR = 0;
     const EX_CONFIG_SETUP_ERROR = 100;

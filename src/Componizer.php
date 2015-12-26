@@ -319,6 +319,7 @@ class Componizer
     {
         if (array_key_exists($class, $this->container)) {
             $dependency = $this->container[$class];
+
             return $dependency instanceof Closure ? $this->container[$class] = $dependency() : $dependency;
         }
 

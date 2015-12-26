@@ -9,7 +9,7 @@
 namespace Gavrya\Componizer\Content;
 
 
-interface ComponizerParser
+interface ContentParserInterface
 {
 
     // Widget attributes

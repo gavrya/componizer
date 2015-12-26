@@ -9,6 +9,8 @@
 namespace Gavrya\Componizer\Content;
 
 
+use Gavrya\Componizer\Asset\AssetsCollection;
+use Gavrya\Componizer\Component\AbstractWidgetComponent;
 use Gavrya\Componizer\Componizer;
 use Gavrya\Componizer\Manager\WidgetManager;
 
@@ -31,24 +33,22 @@ class ContentProcessor
     }
 
     //-----------------------------------------------------
-    // Content init/make section
+    // Construct section
     //-----------------------------------------------------
 
     public function initEditorContent($editorContent)
     {
-        // reset previously required widgets
         $this->requiredWidgets = [];
 
         if (!is_string($editorContent) || empty($editorContent)) {
             return;
         }
 
-        /** @var ComponizerParser $contentParser */
-        $contentParser = $this->componizer->resolve(ComponizerParser::class);
+        /** @var ContentParser $contentParser */
+        $contentParser = $this->componizer->resolve(ContentParser::class);
 
         $widgetIds = array_unique($contentParser->parseWidgetIds($editorContent));
 
-        // return passed "editor content" back if no widget ids detected inside
         if (empty($widgetIds)) {
             return $editorContent;
         }
@@ -56,7 +56,7 @@ class ContentProcessor
         /** @var WidgetManager $widgetManager */
         $widgetManager = $this->componizer->resolve(WidgetManager::class);
 
-        $allowedWidgets = $widgetManager->allowed();
+        $allowedWidgets = $widgetManager->getAllowedWidgets();
 
         foreach ($widgetIds as $widgetId) {
             if (isset($allowedWidgets[$widgetId])) {
@@ -67,64 +67,87 @@ class ContentProcessor
 
     public function makeDisplayContent($editorContent)
     {
-        // check editor content
         if ($editorContent === null) {
             return '';
         }
 
-        /** @var ComponizerParser $contentParser */
-        $contentParser = $this->componizer->resolve(ComponizerParser::class);
+        /** @var ContentParser $contentParser */
+        $contentParser = $this->componizer->resolve(ContentParser::class);
 
-        $displayContent = $contentParser->parseDisplayContent($editorContent);
-
-        return $displayContent;
+        return $contentParser->parseDisplayContent($editorContent);
     }
 
     //-----------------------------------------------------
     // Required components section
     //-----------------------------------------------------
 
-    public function requiredComponents()
+    public function getRequiredComponents()
     {
         return [];
     }
 
-    public function requiredWidgets()
+    public function getRequiredWidgets()
     {
         return $this->requiredWidgets;
     }
 
     //-----------------------------------------------------
-    // Assets section (move to AssetsManager?)
+    // Required assets methods
     //-----------------------------------------------------
 
-    public function requiredGeneralAssets()
+    public function getRequiredGeneralAssets()
     {
         // todo: return componizer general assets needed in order to editor gets worked
     }
 
-    public function requiredEditorAssets()
+    public function getRequiredEditorAssets()
     {
-        $assets = [];
+        $requiredAssets = new AssetsCollection();
 
-        /** @var \Gavrya\Componizer\Skeleton\ComponizerWidget $requiredWidget */
+        /** @var AbstractWidgetComponent $requiredWidget */
         foreach ($this->requiredWidgets as $requiredWidget) {
-            $assets[] = $requiredWidget->editorAssets();
+            /** @var AssetsCollection $widgetAssets */
+            $widgetAssets = $requiredWidget->getEditorAssets();
+
+            if(!$widgetAssets->hasAssets()) {
+                continue;
+            }
+
+            if($widgetAssets->hasAddedAssets()) {
+                $requiredAssets->add($widgetAssets->getAddedAssets());
+            }
+
+            if($widgetAssets->hasInjectedAssets()) {
+                $requiredAssets->inject($widgetAssets->getInjectedAssets());
+            }
         }
 
-        return $assets;
+        return $requiredAssets;
     }
 
-    public function requiredDisplayAssets()
+    public function getRequiredDisplayAssets()
     {
-        $assets = [];
+        $requiredAssets = new AssetsCollection();
 
-        /** @var \Gavrya\Componizer\Skeleton\ComponizerWidget $requiredWidget */
+        /** @var AbstractWidgetComponent $requiredWidget */
         foreach ($this->requiredWidgets as $requiredWidget) {
-            $assets[] = $requiredWidget->displayAssets();
+            /** @var AssetsCollection $widgetAssets */
+            $widgetAssets = $requiredWidget->getDisplayAssets();
+
+            if(!$widgetAssets->hasAssets()) {
+                continue;
+            }
+
+            if($widgetAssets->hasAddedAssets()) {
+                $requiredAssets->add($widgetAssets->getAddedAssets());
+            }
+
+            if($widgetAssets->hasInjectedAssets()) {
+                $requiredAssets->inject($widgetAssets->getInjectedAssets());
+            }
         }
 
-        return $assets;
+        return $requiredAssets;
     }
 
 }

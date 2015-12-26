@@ -11,19 +11,20 @@ namespace Gavrya\Componizer\Content;
 
 use DOMElement;
 use DOMXPath;
+use Gavrya\Componizer\Component\AbstractWidgetComponent;
 use Gavrya\Componizer\Componizer;
 use Gavrya\Componizer\Helper\DomHelper;
 use Gavrya\Componizer\Manager\WidgetManager;
 
 
-class ContentParser implements ComponizerParser
+class ContentParser implements ContentParserInterface
 {
 
     // Componizer
     private $componizer = null;
 
     //-----------------------------------------------------
-    // Instance creation/init section
+    // Construct section
     //-----------------------------------------------------
 
     public function __construct(Componizer $componizer)
@@ -65,15 +66,11 @@ class ContentParser implements ComponizerParser
 
         $widgetElement = $this->findWidgetElement($docXpath, $docRoot);
 
-        // todo: find generic componizer component at first, then determine its type, then find that element
-
         if ($widgetElement === null) {
             return $editorContent;
         }
 
-        $this->parseWidgetElement($widgetElement, $domHelper);
-
-        // todo: prevent loop caused by incorrect widget if widget return editor content in display content
+        $this->replaceWidgetElementContent($widgetElement, $domHelper);
 
         return $this->parseDisplayContent($domHelper->getInnerHtml($docRoot));
     }
@@ -87,11 +84,11 @@ class ContentParser implements ComponizerParser
      *
      * @param DOMXPath $docXpath
      * @param DOMElement $docRoot
-     * @return \DOMElement|null widget element
+     * @return DOMElement|null widget element
      */
     private function findWidgetElement(DOMXpath $docXpath, DOMElement $docRoot)
     {
-        return $docXpath->query('(//*[@' . ComponizerParser::WIDGET_ATTR . '])[1]', $docRoot)->item(0);
+        return $docXpath->query('(//*[@' . ContentParserInterface::WIDGET_ATTR . '])[1]', $docRoot)->item(0);
     }
 
     /**
@@ -103,10 +100,10 @@ class ContentParser implements ComponizerParser
     private function isValidWidgetElement(DOMElement $widgetElement)
     {
         if (
-            !$widgetElement->hasAttribute(ComponizerParser::WIDGET_ATTR_ID) ||
-            !$widgetElement->hasAttribute(ComponizerParser::WIDGET_ATTR_NAME) ||
-            !$widgetElement->hasAttribute(ComponizerParser::WIDGET_ATTR_PROPERTIES) ||
-            !$widgetElement->hasAttribute(ComponizerParser::WIDGET_ATTR_CONTENT_TYPE)
+            !$widgetElement->hasAttribute(ContentParserInterface::WIDGET_ATTR_ID) ||
+            !$widgetElement->hasAttribute(ContentParserInterface::WIDGET_ATTR_NAME) ||
+            !$widgetElement->hasAttribute(ContentParserInterface::WIDGET_ATTR_PROPERTIES) ||
+            !$widgetElement->hasAttribute(ContentParserInterface::WIDGET_ATTR_CONTENT_TYPE)
         ) {
             return false;
         }
@@ -130,78 +127,66 @@ class ContentParser implements ComponizerParser
      */
     private function findWidgetContentElement(DOMElement $widgetElement)
     {
-        // find first nested element with target attribute
-        foreach ($widgetElement->childNodes as $childNode) {
-            if ($childNode instanceof DOMElement && $childNode->hasAttribute(ComponizerParser::WIDGET_ATTR_CONTENT)) {
-                return $childNode;
-            }
-        }
+        /** @var DomHelper $domHelper */
+        $domHelper = $this->componizer->resolve(DomHelper::class);
 
-        return null;
+        return $domHelper->findFirstChildWithAttribute($widgetElement, ContentParserInterface::WIDGET_ATTR_CONTENT);
     }
 
     /**
-     * Parse widget element and replace its "editor content" to "diplay content" representation.
+     * Parse widget element and replace its "editor content" to the "diplay content" representation.
      *
      * @param DOMElement $widgetElement
      * @param DomHelper $domHelper
      */
-    private function parseWidgetElement(DOMElement $widgetElement, DomHelper $domHelper)
+    private function replaceWidgetElementContent(DOMElement $widgetElement, DomHelper $domHelper)
     {
         if (!$this->isValidWidgetElement($widgetElement)) {
-            // remove invalid widget representation from "editor content"
             $domHelper->removeNode($widgetElement);
 
             return;
         }
 
-        // widget id
-        $widgetId = trim($widgetElement->getAttribute(ComponizerParser::WIDGET_ATTR_ID));
+        $widgetId = trim($widgetElement->getAttribute(ContentParserInterface::WIDGET_ATTR_ID));
 
-        // widget name
-        $widgetName = trim($widgetElement->getAttribute(ComponizerParser::WIDGET_ATTR_NAME));
+        $widgetName = trim($widgetElement->getAttribute(ContentParserInterface::WIDGET_ATTR_NAME));
 
-        // widget properties
-        $widgetProperties = trim($widgetElement->getAttribute(ComponizerParser::WIDGET_ATTR_PROPERTIES));
+        $widgetProperties = trim($widgetElement->getAttribute(ContentParserInterface::WIDGET_ATTR_PROPERTIES));
         $widgetProperties = json_decode($widgetProperties, true);
 
         if (!is_array($widgetProperties)) {
             $widgetProperties = [];
         }
 
-        // widget content type
-        $widgetContentType = trim($widgetElement->getAttribute(ComponizerParser::WIDGET_ATTR_CONTENT_TYPE));
+        $widgetContentType = trim($widgetElement->getAttribute(ContentParserInterface::WIDGET_ATTR_CONTENT_TYPE));
 
         $widgetContentTypes = [
-            ComponizerParser::WIDGET_CT_NONE,
-            ComponizerParser::WIDGET_CT_CODE,
-            ComponizerParser::WIDGET_CT_PLAIN_TEXT,
-            ComponizerParser::WIDGET_CT_RICH_TEXT,
-            ComponizerParser::WIDGET_CT_MIXED,
+            ContentParserInterface::WIDGET_CT_NONE,
+            ContentParserInterface::WIDGET_CT_CODE,
+            ContentParserInterface::WIDGET_CT_PLAIN_TEXT,
+            ContentParserInterface::WIDGET_CT_RICH_TEXT,
+            ContentParserInterface::WIDGET_CT_MIXED,
         ];
 
         if (!in_array($widgetContentType, $widgetContentTypes)) {
-            $widgetContentType = ComponizerParser::WIDGET_CT_NONE;
+            $widgetContentType = ContentParserInterface::WIDGET_CT_NONE;
         }
 
         $widgetContentElement = $this->findWidgetContentElement($widgetElement);
 
-        // widget content
-        $widgetContent = $widgetContentType !== ComponizerParser::WIDGET_CT_NONE ? $domHelper->getInnerHtml($widgetContentElement) : null;
+        $widgetContent = $widgetContentType !== ContentParserInterface::WIDGET_CT_NONE ? $domHelper->getInnerHtml($widgetContentElement) : null;
 
         /** @var WidgetManager $widgetManager */
         $widgetManager = $this->componizer->resolve(WidgetManager::class);
 
-        // find widget by id
-        $widget = $widgetManager->findAllowed($widgetId);
+        /** @var AbstractWidgetComponent $widget */
+        $widget = $widgetManager->findAllowedWidget($widgetId);
 
-        // display content
         $widgetDisplayContent = null;
 
-        // check if widget exists and allowed
         if ($widget !== null) {
             $widgetDisplayContent = $widget->makeDisplayContent(
-                [$this, 'parseDisplayContent'],
+                $this,
                 $widgetProperties,
                 $widgetContentType,
                 $widgetContent
@@ -209,15 +194,13 @@ class ContentParser implements ComponizerParser
         }
 
         if (is_string($widgetDisplayContent) && !empty($widgetDisplayContent)) {
-            // replace widget "editor content" to "display content" representation
             $domHelper->replaceNodeWith($widgetElement, $widgetDisplayContent);
         } else {
             $id = htmlentities($widgetId);
             $name = htmlentities($widgetName);
-            $comment = '<!-- Componizer widget not found or disabled: id: "' . $id . '", name: "' . $name . '" -->';
+            $comment = '<!-- Widget component not found or disabled: id: %s, name: %s -->';
 
-            // replace widget "editor content" representation to componizer html warning comment
-            $domHelper->replaceNodeWith($widgetElement, $comment);
+            $domHelper->replaceNodeWith($widgetElement, sprintf($comment, $id, $name));
         }
     }
 
@@ -253,7 +236,7 @@ class ContentParser implements ComponizerParser
         $docXpath = new DOMXpath($doc);
 
         /** @var DOMNodeList $widgetElements */
-        $widgetElements = $docXpath->query('(//*[@' . ComponizerParser::WIDGET_ATTR . '])', $docRoot);
+        $widgetElements = $docXpath->query('(//*[@' . ContentParserInterface::WIDGET_ATTR . '])', $docRoot);
 
         if ($widgetElements !== false) {
             /** @var DOMElement $widgetElement */
@@ -262,7 +245,7 @@ class ContentParser implements ComponizerParser
                     continue;
                 }
 
-                $widgetId = trim($widgetElement->getAttribute(ComponizerParser::WIDGET_ATTR_ID));
+                $widgetId = trim($widgetElement->getAttribute(ContentParserInterface::WIDGET_ATTR_ID));
 
                 if (!empty($widgetId)) {
                     $widgetIds[] = $widgetId;

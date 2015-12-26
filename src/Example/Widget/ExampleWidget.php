@@ -49,7 +49,7 @@ class ExampleWidget extends ComponizerWidget implements ComponizerComponent
     }
 
     //-----------------------------------------------------
-    // ComponizerComponent section
+    // ComponentInterface section
     //-----------------------------------------------------
 
     public function id()
@@ -98,7 +98,7 @@ class ExampleWidget extends ComponizerWidget implements ComponizerComponent
     }
 
     //-----------------------------------------------------
-    // ComponizerWidget section
+    // AbstractWidgetComponent section
     //-----------------------------------------------------
 
     public function makeDisplayContent(ComponizerParser $parser, array $properties, $contentType, $content = null)

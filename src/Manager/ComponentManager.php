@@ -11,7 +11,7 @@ namespace Gavrya\Componizer\Manager;
 
 use Gavrya\Componizer\Componizer;
 use Gavrya\Componizer\Helper\FsHelper;
-use Gavrya\Componizer\Component\ComponizerComponent;
+use Gavrya\Componizer\Component\ComponentInterface;
 
 class ComponentManager
 {
@@ -32,14 +32,14 @@ class ComponentManager
     // Methods implementation section
     //-----------------------------------------------------
 
-    public function isValid($component)
+    public function isComponentValid($component)
     {
-        if (!($component instanceof ComponizerComponent)) {
+        if (!($component instanceof ComponentInterface)) {
             return false;
         }
 
         // check id
-        $id = $component->id();
+        $id = $component->getId();
 
         if (!is_string($id)) {
             return false;
@@ -50,28 +50,28 @@ class ComponentManager
         }
 
         // check name
-        $name = $component->name();
+        $name = $component->getName();
 
         if (!is_string($name) || empty(trim($name))) {
             return false;
         }
 
         // check version
-        $version = $component->version();
+        $version = $component->getVersion();
 
         if (!is_string($version) || empty(trim($version))) {
             return false;
         }
 
         // check info
-        $info = $component->info();
+        $info = $component->getInfo();
 
         if (!is_string($info) || empty(trim($info))) {
             return false;
         }
 
         // assets dir
-        $assetsDir = $component->assetsDir();
+        $assetsDir = $component->getAssetsDir();
 
         if ($component->hasAssets() && !is_string($assetsDir)) {
             return false;
@@ -95,13 +95,13 @@ class ComponentManager
         return true;
     }
 
-    public function init(ComponizerComponent $component)
+    public function initComponent(ComponentInterface $component)
     {
         // create component cache dir
-        $componentCacheDir = $this->createCacheDir($component);
+        $componentCacheDir = $this->createComponentCacheDir($component);
 
         // sync assets
-        $this->syncAssetsDir($component);
+        $this->syncComponentAssetsDir($component);
 
         // componizer config
         $config = $this->componizer->config();
@@ -113,31 +113,31 @@ class ComponentManager
         $component->init($lang, $componentCacheDir);
     }
 
-    public function enable(ComponizerComponent $component)
+    public function enableComponent(ComponentInterface $component)
     {
         // create component cache dir
-        $this->createCacheDir($component);
+        $this->createComponentCacheDir($component);
 
         // sync assets
-        $this->syncAssetsDir($component);
+        $this->syncComponentAssetsDir($component);
 
         // call up() method
         $component->up();
     }
 
-    public function disable(ComponizerComponent $component)
+    public function disableComponent(ComponentInterface $component)
     {
         // call down() method
         $component->down();
 
         // unsync assets
-        $this->unsyncAssetsDir($component);
+        $this->unsyncComponentAssetsDir($component);
 
         // remove component cache dir
-        $this->removeCacheDir($component);
+        $this->removeComponentCacheDir($component);
     }
 
-    private function createCacheDir(ComponizerComponent $component)
+    private function createComponentCacheDir(ComponentInterface $component)
     {
         // componizer config
         $config = $this->componizer->config();
@@ -146,7 +146,7 @@ class ComponentManager
         $cacheDir = $config[Componizer::CONFIG_CACHE_DIR];
 
         // component cache dir
-        $componentCacheDir = $cacheDir . DIRECTORY_SEPARATOR . $component->id();
+        $componentCacheDir = $cacheDir . DIRECTORY_SEPARATOR . $component->getId();
 
         /** @var FsHelper $fsHelper */
         $fsHelper = $this->componizer->resolve(FsHelper::class);
@@ -157,7 +157,7 @@ class ComponentManager
         return $componentCacheDir;
     }
 
-    private function removeCacheDir(ComponizerComponent $component)
+    private function removeComponentCacheDir(ComponentInterface $component)
     {
         // componizer config
         $config = $this->componizer->config();
@@ -166,7 +166,7 @@ class ComponentManager
         $cacheDir = $config[Componizer::CONFIG_CACHE_DIR];
 
         // component cache dir
-        $componentCacheDir = $cacheDir . DIRECTORY_SEPARATOR . $component->id();
+        $componentCacheDir = $cacheDir . DIRECTORY_SEPARATOR . $component->getId();
 
         /** @var FsHelper $fsHelper */
         $fsHelper = $this->componizer->resolve(FsHelper::class);
@@ -175,7 +175,7 @@ class ComponentManager
         $fsHelper->removeDir($componentCacheDir);
     }
 
-    private function syncAssetsDir(ComponizerComponent $component)
+    private function syncComponentAssetsDir(ComponentInterface $component)
     {
         if (!$component->hasAssets()) {
             return;
@@ -188,18 +188,18 @@ class ComponentManager
         $publicDir = $config[Componizer::CONFIG_PUBLIC_DIR];
 
         // component public dir symlink
-        $targetLink = $publicDir . DIRECTORY_SEPARATOR . $component->id();
+        $targetLink = $publicDir . DIRECTORY_SEPARATOR . $component->getId();
 
         /** @var FsHelper $fsHelper */
         $fsHelper = $this->componizer->resolve(FsHelper::class);
 
         // create symlink
-        $fsHelper->createSymlink($component->assetsDir(), $targetLink);
+        $fsHelper->createSymlink($component->getAssetsDir(), $targetLink);
 
         return $targetLink;
     }
 
-    private function unsyncAssetsDir(ComponizerComponent $component)
+    private function unsyncComponentAssetsDir(ComponentInterface $component)
     {
         if (!$component->hasAssets()) {
             return;
@@ -212,7 +212,7 @@ class ComponentManager
         $publicDir = $config[Componizer::CONFIG_PUBLIC_DIR];
 
         // component public dir symlink
-        $targetLink = $publicDir . DIRECTORY_SEPARATOR . $component->id();
+        $targetLink = $publicDir . DIRECTORY_SEPARATOR . $component->getId();
 
         /** @var FsHelper $fsHelper */
         $fsHelper = $this->componizer->resolve(FsHelper::class);

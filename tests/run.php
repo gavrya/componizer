@@ -26,7 +26,7 @@ $componizer = Componizer::instance();
 
 $pluginManager = $componizer->pluginManager();
 
-$pluginManager->enable($pluginManager->disabled());
+$pluginManager->enablePlugin($pluginManager->getDisabledPlugins());
 //$pluginManager->disable($pluginManager->enabled());
 
 //var_dump($pluginManager->enabled());
@@ -71,15 +71,15 @@ echo $contentProcessor->initEditorContent($editorContent);
 echo PHP_EOL;
 
 echo PHP_EOL;
-echo 'Required widgets: ' . count($contentProcessor->requiredWidgets());
+echo 'Required widgets: ' . count($contentProcessor->getRequiredWidgets());
 echo PHP_EOL;
 
 echo PHP_EOL;
-echo 'Required editor assets: ' . count($contentProcessor->requiredEditorAssets());
+echo 'Required editor assets: ' . count($contentProcessor->getRequiredEditorAssets());
 echo PHP_EOL;
 
 echo PHP_EOL;
-echo 'Required display assets: ' . count($contentProcessor->requiredDisplayAssets());
+echo 'Required display assets: ' . count($contentProcessor->getRequiredDisplayAssets());
 echo PHP_EOL;
 
 echo PHP_EOL;

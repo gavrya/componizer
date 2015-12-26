@@ -126,6 +126,24 @@ class DomHelper
     }
 
     /**
+     * Returns first found child element with provided attribute name.
+     *
+     * @param DOMNode $domNode
+     * @param string $attributeName
+     * @return DOMElement|null
+     */
+    function findFirstChildWithAttribute(DOMNode $domNode, $attributeName)
+    {
+        foreach ($domNode->childNodes as $childNode) {
+            if ($childNode instanceof DOMElement && $childNode->hasAttribute($attributeName)) {
+                return $childNode;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Clears HTML fragment from JavaScript.
      *
      * Removes all 'script' HTML elements.

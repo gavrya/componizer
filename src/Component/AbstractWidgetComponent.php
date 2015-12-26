@@ -8,6 +8,7 @@
 
 namespace Gavrya\Componizer\Component;
 
+use Gavrya\Componizer\Asset\AssetsCollection;
 use Gavrya\Componizer\Content\ContentParserInterface;
 
 
@@ -28,7 +29,7 @@ abstract class AbstractWidgetComponent implements ComponentInterface
      *
      * Required for the editor widget related HTML.
      *
-     * @return ComponizerAssets Assets
+     * @return AssetsCollection Assets collection
      */
     abstract public function getEditorAssets();
 
@@ -37,7 +38,7 @@ abstract class AbstractWidgetComponent implements ComponentInterface
      *
      * Required for the generated "display content" HTML.
      *
-     * @return ComponizerAssets Assets
+     * @return AssetsCollection Assets collection
      */
     abstract public function getDisplayAssets();
 

@@ -9,9 +9,9 @@
 namespace Gavrya\Componizer\Manager;
 
 
-use Gavrya\Componizer\Asset\ComponizerAssets;
-use Gavrya\Componizer\Component\ComponizerComponent;
-use Gavrya\Componizer\Component\ComponizerWidget;
+use Gavrya\Componizer\Asset\AssetsCollection;
+use Gavrya\Componizer\Component\ComponentInterface;
+use Gavrya\Componizer\Component\AbstractWidgetComponent;
 use Gavrya\Componizer\Componizer;
 
 class WidgetManager
@@ -33,10 +33,10 @@ class WidgetManager
     // Validation section
     //-----------------------------------------------------
 
-    public function isValid($widget)
+    public function isWidgetValid($widget)
     {
         // check instance
-        if (!($widget instanceof ComponizerComponent && $widget instanceof ComponizerWidget)) {
+        if (!($widget instanceof AbstractWidgetComponent)) {
             return false;
         }
 
@@ -44,18 +44,18 @@ class WidgetManager
         $componentManager = $this->componizer->resolve(ComponentManager::class);
 
         // validate component
-        if (!$componentManager->isValid($widget)) {
+        if (!$componentManager->isComponentValid($widget)) {
             return false;
         }
 
         // check widget editor assets
-        if (!($widget->editorAssets() instanceof ComponizerAssets)) {
+        if (!($widget->getEditorAssets() instanceof AssetsCollection)) {
             // todo: check if empty
             return false;
         }
 
         // check widget display assets
-        if (!($widget->displayAssets() instanceof ComponizerAssets)) {
+        if (!($widget->getDisplayAssets() instanceof AssetsCollection)) {
             // todo: check if empty
             return false;
         }
@@ -67,47 +67,47 @@ class WidgetManager
     // Get/find section
     //-----------------------------------------------------
 
-    public function all()
+    public function getAllWidgets()
     {
         /** @var PluginManager $pluginManager */
         $pluginManager = $this->componizer->resolve(PluginManager::class);
 
-        return $this->findWidgets($pluginManager->all());
+        return $this->findWidgetComponents($pluginManager->getAllPlugins());
     }
 
-    public function find($widget)
+    public function findWidget($widget)
     {
-        return $this->findWidget($widget, $this->all());
+        return $this->findWidgetComponent($widget, $this->getAllWidgets());
     }
 
     //-----------------------------------------------------
     // Enabled/disabled section
     //-----------------------------------------------------
 
-    public function enabled()
+    public function getEnabledWidgets()
     {
         /** @var PluginManager $pluginManager */
         $pluginManager = $this->componizer->resolve(PluginManager::class);
 
-        return $this->findWidgets($pluginManager->enabled());
+        return $this->findWidgetComponents($pluginManager->getEnabledPlugins());
     }
 
-    public function disabled()
+    public function getDisabledWidgets()
     {
         /** @var PluginManager $pluginManager */
         $pluginManager = $this->componizer->resolve(PluginManager::class);
 
-        return $this->findWidgets($pluginManager->disabled());
+        return $this->findWidgetComponents($pluginManager->getDisabledPlugins());
     }
 
-    public function findEnabled($widget)
+    public function findEnabledWidget($widget)
     {
-        return $this->findWidget($widget, $this->enabled());
+        return $this->findWidgetComponent($widget, $this->getEnabledWidgets());
     }
 
-    public function isEnabled($widget)
+    public function isWidgetEnabled($widget)
     {
-        return $this->findEnabled($widget) !== null;
+        return $this->findEnabledWidget($widget) !== null;
     }
 
     //-----------------------------------------------------
@@ -119,55 +119,55 @@ class WidgetManager
      *
      * @return array
      */
-    public function allowed()
+    public function getAllowedWidgets()
     {
         // todo: implement using SettingsManager in future
-        return $this->enabled();
+        return $this->getEnabledWidgets();
     }
 
-    public function denied()
+    public function getDeniedWidgets()
     {
         // todo: implement using SettingsManager in future
-        return $this->disabled();
+        return $this->getDisabledWidgets();
     }
 
-    public function findAllowed($widget)
+    public function findAllowedWidget($widget)
     {
-        return $this->findWidget($widget, $this->allowed());
+        return $this->findWidgetComponent($widget, $this->getAllowedWidgets());
     }
 
-    public function isAllowed($widget)
+    public function isWidgetAllowed($widget)
     {
-        return $this->findAllowed($widget) !== null;
+        return $this->findAllowedWidget($widget) !== null;
     }
 
     //-----------------------------------------------------
     // Internal methods section
     //-----------------------------------------------------
 
-    private function findWidgets(array $plugins)
+    private function findWidgetComponents(array $plugins)
     {
         $widgets = [];
 
         /** @var \Gavrya\Componizer\Skeleton\ComponizerPlugin $plugin */
         foreach ($plugins as $plugin) {
-            /** @var ComponizerComponent|ComponizerWidget $widget */
+            /** @var ComponentInterface|AbstractWidgetComponent $widget */
             foreach ($plugin->widgets() as $widget) {
-                $widgets[$widget->id()] = $widget;
+                $widgets[$widget->getId()] = $widget;
             }
         }
 
         return $widgets;
     }
 
-    private function findWidget($widget, array $widgets)
+    private function findWidgetComponent($widget, array $widgets)
     {
         $widgetId = null;
 
         if (is_string($widget)) {
             $widgetId = $widget;
-        } elseif ($widget instanceof ComponizerWidget && $widget instanceof ComponizerComponent) {
-            $widgetId = $widget->id();
+        } elseif ($widget instanceof AbstractWidgetComponent) {
+            $widgetId = $widget->getId();
         } else {
             return null;
         }

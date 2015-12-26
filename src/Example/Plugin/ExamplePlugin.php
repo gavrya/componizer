@@ -29,7 +29,7 @@ class ExamplePlugin extends ComponizerPlugin implements ComponizerComponent
     }
 
     //-----------------------------------------------------
-    // ComponizerComponent section
+    // ComponentInterface section
     //-----------------------------------------------------
 
     public function id()
@@ -78,7 +78,7 @@ class ExamplePlugin extends ComponizerPlugin implements ComponizerComponent
     }
 
     //-----------------------------------------------------
-    // ComponizerPlugin section
+    // AbstractPluginComponent section
     //-----------------------------------------------------
 
     public function widgets()

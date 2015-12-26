@@ -1,8 +1,8 @@
 Important:
 
--- implement ComponizerComponent by component abstracts !!!
+-- implement ComponentInterface by component abstracts !!!
 
--- Rename ComponizerAssets to the ComponizerAssetsCollection ?
+-- Rename AssetsCollection to the ComponizerAssetsCollection ?
 
 -- Omit Singleton usage from Componizer !!!
 
@@ -10,15 +10,17 @@ Important:
 
 -- Add AssetsManager ?
 
--- add namespaces: Asset, Component, Helper, Manager, Content
+-- add namespaces: AssetInterface, Component, Helper, Manager, Content
 
 Unimportant:
 
--- ComponizerAssets: add ability to push/remove assets on the fly !!!
+-- AssetsCollection: add ability to push/remove assets on the fly !!!
 
--- Add ComponizerMeta asset class for key=value passing to components js: <meta name="key" content="value">?
+-- Add ComponizerMetaAsset ?
 
--- Prevent infinite loop in ComponizerParser !!!
+-- Add ComponizerTemplateAsset ?
+
+-- Prevent infinite loop in ContentParserInterface !!!
 
 -- ContentProcessor: add ability to pass array of content with target keys ($editorContent, $targetKeys = null).
    Usefull for parsing results from database rows with multiple "editor content" fields in each row.
