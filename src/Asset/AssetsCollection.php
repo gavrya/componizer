@@ -103,6 +103,10 @@ class AssetsCollection
         $this->resetAssets($this->injectedAssets);
     }
 
+    //-----------------------------------------------------
+    // Assets HTML methods section
+    //-----------------------------------------------------
+
     public function getHeadAssetsHtml(array $options = null)
     {
         $this->getAssetsHtml(AssetInterface::POSITION_HEAD, $options);

@@ -13,7 +13,7 @@ namespace Gavrya\Componizer\Component;
  *
  * @package Gavrya\Componizer\Component
  */
-abstract class ComponizerPlugin
+abstract class AbstractPluginComponent implements ComponentInterface
 {
 
     //-----------------------------------------------------
@@ -23,11 +23,11 @@ abstract class ComponizerPlugin
     /**
      * Returns an array with all provided components.
      *
-     * @return ComponizerComponent[] An array with components
+     * @return ComponentInterface[] An array with components
      */
-    final public function components()
+    final public function getComponents()
     {
-        return array_merge($this->widgets());
+        return array_merge($this->getWidgets());
     }
 
     /**
@@ -37,7 +37,7 @@ abstract class ComponizerPlugin
      */
     final public function countComponents()
     {
-        return count($this->components());
+        return count($this->getComponents());
     }
 
     /**
@@ -47,13 +47,13 @@ abstract class ComponizerPlugin
      */
     final public function hasComponents()
     {
-        return !empty($this->components());
+        return !empty($this->getComponents());
     }
 
     /**
      * Checks if the plugin has component.
      *
-     * @param string|ComponizerComponent $component Component id or instance
+     * @param string|ComponentInterface $component Component id or instance
      * @return bool true if it has, false otherwise
      */
     final public function hasComponent($component)
@@ -64,9 +64,9 @@ abstract class ComponizerPlugin
     /**
      * Finds component inside all of its components or inside an array with components.
      *
-     * @param string|ComponizerComponent $component Component id or instance
+     * @param string|ComponentInterface $component Component id or instance
      * @param array|null $components Optional array with components to search in
-     * @return ComponizerComponent|null Found component, null otherwise
+     * @return ComponentInterface|null Found component, null otherwise
      */
     final public function findComponent($component, array $components = null)
     {
@@ -74,22 +74,22 @@ abstract class ComponizerPlugin
 
         if (is_string($component)) {
             $componentId = $component;
-        } elseif ($component instanceof ComponizerComponent) {
-            $componentId = $component->id();
+        } elseif ($component instanceof ComponentInterface) {
+            $componentId = $component->getId();
         } else {
             return null;
         }
 
         if ($components === null) {
-            $components = $this->components();
+            $components = $this->getComponents();
         }
 
         foreach ($components as $item) {
-            if ($component instanceof ComponizerComponent && $item === $component) {
+            if ($component instanceof ComponentInterface && $item === $component) {
                 return $item;
             }
 
-            if ($item instanceof ComponizerComponent && $item->id() === $componentId) {
+            if ($item instanceof ComponentInterface && $item->getId() === $componentId) {
                 return $item;
             }
         }
@@ -106,9 +106,9 @@ abstract class ComponizerPlugin
      *
      * This method should be overridden in widget implementation classes.
      *
-     * @return ComponizerWidget[] An array with widget components
+     * @return AbstractWidgetComponent[] An array with widget components
      */
-    public function widgets()
+    public function getWidgets()
     {
         return [];
     }
@@ -120,7 +120,7 @@ abstract class ComponizerPlugin
      */
     final public function countWidgets()
     {
-        return count($this->widgets());
+        return count($this->getWidgets());
     }
 
     /**
@@ -130,13 +130,13 @@ abstract class ComponizerPlugin
      */
     final public function hasWidgets()
     {
-        return !empty($this->widgets());
+        return !empty($this->getWidgets());
     }
 
     /**
      * Checks if the plugin has widget component.
      *
-     * @param string|ComponizerWidget $widget Widget component id or instance
+     * @param string|AbstractWidgetComponent $widget Widget component id or instance
      * @return bool true if it has, false otherwise
      */
     final public function hasWidget($widget)
@@ -147,14 +147,14 @@ abstract class ComponizerPlugin
     /**
      * Finds widget component inside all of its widget components.
      *
-     * @param string|ComponizerWidget $widget Component id or instance
-     * @return ComponizerWidget|null Found widget component, null otherwise
+     * @param string|AbstractWidgetComponent $widget Component id or instance
+     * @return AbstractWidgetComponent|null Found widget component, null otherwise
      */
     final public function findWidget($widget)
     {
-        $component = $this->findComponent($widget, $this->widgets());
+        $component = $this->findComponent($widget, $this->getWidgets());
 
-        return $component instanceof ComponizerWidget ? $component : null;
+        return $component instanceof AbstractWidgetComponent ? $component : null;
     }
 
 }

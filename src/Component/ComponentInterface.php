@@ -13,7 +13,7 @@ namespace Gavrya\Componizer\Component;
  *
  * @package Gavrya\Componizer\Component
  */
-interface ComponizerComponent
+interface ComponentInterface
 {
 
     /**
@@ -24,28 +24,28 @@ interface ComponizerComponent
      *
      * @return string Component id
      */
-    public function id();
+    public function getId();
 
     /**
      * Returns component name.
      *
      * @return string Component name
      */
-    public function name();
+    public function getName();
 
     /**
      * Returns component version.
      *
      * @return string Component version
      */
-    public function version();
+    public function getVersion();
 
     /**
      * Returns short information about the component without containing HTML tags.
      *
      * @return string Component information
      */
-    public function info();
+    public function getInfo();
 
     /**
      * Tells if the component is shipped with assets that need to be symlinked to the public directory.
@@ -59,7 +59,7 @@ interface ComponizerComponent
      *
      * @return string|null Absolute path to the component assets directory, null if component has no assets
      */
-    public function assetsDir();
+    public function getAssetsDir();
 
     /**
      * Callback method that is invoked when the component need to be initialed.

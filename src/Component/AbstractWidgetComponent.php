@@ -8,7 +8,7 @@
 
 namespace Gavrya\Componizer\Component;
 
-use Gavrya\Componizer\Content\ComponizerParser;
+use Gavrya\Componizer\Content\ContentParserInterface;
 
 
 /**
@@ -16,7 +16,7 @@ use Gavrya\Componizer\Content\ComponizerParser;
  *
  * @package Gavrya\Componizer\Component
  */
-abstract class ComponizerWidget
+abstract class AbstractWidgetComponent implements ComponentInterface
 {
 
     //-----------------------------------------------------
@@ -30,7 +30,7 @@ abstract class ComponizerWidget
      *
      * @return ComponizerAssets Assets
      */
-    abstract public function editorAssets();
+    abstract public function getEditorAssets();
 
     /**
      * Returns display assets.
@@ -39,7 +39,7 @@ abstract class ComponizerWidget
      *
      * @return ComponizerAssets Assets
      */
-    abstract public function displayAssets();
+    abstract public function getDisplayAssets();
 
     //-----------------------------------------------------
     // Make display content section
@@ -48,14 +48,14 @@ abstract class ComponizerWidget
     /**
      * Generates widget "display content" HTML.
      *
-     * @param ComponizerParser $parser Parser util
+     * @param ContentParserInterface $parser Parser util
      * @param array $properties Widget related JSON data
      * @param string $contentType Content type of the passed content
      * @param string|null $content Widget content in format of "editor content"
      * @return string Generated "display content" HTML
      * @internal param callable $parser Helper function for parsing "editor content" to the "display content"
      */
-    public function makeDisplayContent(ComponizerParser $parser, array $properties, $contentType, $content = null)
+    public function makeDisplayContent(ContentParserInterface $parser, array $properties, $contentType, $content = null)
     {
         return '';
     }
