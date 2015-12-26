@@ -10,14 +10,14 @@ namespace Gavrya\Componizer\Asset;
 
 
 /**
- * Interface ComponizerAsset required in order to implement componizer asset.
+ * Interface AssetInterface required in order to implement componizer asset.
  *
- * @package Gavrya\Componizer\Asset
+ * @package Gavrya\Componizer\AssetInterface
  */
-interface ComponizerAsset
+interface AssetInterface
 {
 
-    // Include positions
+    // AssetInterface types
     const TYPE_EXTERNAL_JS = 'external_js';
     const TYPE_INTERNAL_JS = 'internal_js';
     const TYPE_EXTERNAL_CSS = 'external_css';
@@ -33,7 +33,7 @@ interface ComponizerAsset
      *
      * @see ComponizerAsset::TYPE_* constants
      *
-     * @return string Asset type
+     * @return string AssetInterface type
      */
     public function getType();
 

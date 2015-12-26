@@ -14,9 +14,9 @@ use InvalidArgumentException;
 /**
  * Represents externally included JavaScript.
  *
- * @package Gavrya\Componizer\Asset
+ * @package Gavrya\Componizer\AssetInterface
  */
-class ComponizerExternalJs implements ComponizerAsset
+class ExternalJsAsset implements AssetInterface
 {
 
     // JavaScript execution modes
@@ -29,7 +29,7 @@ class ComponizerExternalJs implements ComponizerAsset
     private $url = null;
 
     /**
-     * @var string Asset include position
+     * @var string AssetInterface include position
      */
     private $position = null;
 
@@ -43,22 +43,22 @@ class ComponizerExternalJs implements ComponizerAsset
     //-----------------------------------------------------
 
     /**
-     * ComponizerExternalJs constructor.
+     * ExternalJsAsset constructor.
      *
      * @param string $url Relative or absolute link to the JavaScript file
-     * @param string $position Asset required include position
+     * @param string $position AssetInterface required include position
      * @param string $mode Required JavaScript execution mode
      */
-    public function __construct($url, $position = ComponizerAsset::POSITION_HEAD, $mode = null)
+    public function __construct($url, $position = AssetInterface::POSITION_HEAD, $mode = null)
     {
         if ($url === null || !is_string($url) || strtolower(substr($url, -strlen('.js'))) !== '.js') {
             throw new InvalidArgumentException(sprintf('Invalid url: %s', $url));
         }
 
         $positions = [
-            ComponizerAsset::POSITION_HEAD,
-            ComponizerAsset::POSITION_BODY_TOP,
-            ComponizerAsset::POSITION_BODY_BOTTOM,
+            AssetInterface::POSITION_HEAD,
+            AssetInterface::POSITION_BODY_TOP,
+            AssetInterface::POSITION_BODY_BOTTOM,
         ];
 
         if (!in_array($position, $positions)) {
@@ -83,13 +83,13 @@ class ComponizerExternalJs implements ComponizerAsset
      *
      * @return string Link to the JavaScript file
      */
-    public function url()
+    public function getUrl()
     {
         return $this->url;
     }
 
     //-----------------------------------------------------
-    // ComponizerAsset methods section
+    // AssetInterface methods section
     //-----------------------------------------------------
 
     /**
@@ -97,11 +97,11 @@ class ComponizerExternalJs implements ComponizerAsset
      *
      * @see ComponizerAsset::TYPE_* constants
      *
-     * @return string Asset type
+     * @return string AssetInterface type
      */
     final public function getType()
     {
-        return ComponizerAsset::TYPE_EXTERNAL_JS;
+        return AssetInterface::TYPE_EXTERNAL_JS;
     }
 
     /**

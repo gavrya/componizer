@@ -14,9 +14,9 @@ use InvalidArgumentException;
 /**
  * Represents externally included CSS.
  *
- * @package Gavrya\Componizer\Asset
+ * @package Gavrya\Componizer\AssetInterface
  */
-class ComponizerExternalCss implements ComponizerAsset
+class ExternalCssAsset implements AssetInterface
 {
 
     /**
@@ -34,7 +34,7 @@ class ComponizerExternalCss implements ComponizerAsset
     //-----------------------------------------------------
 
     /**
-     * ComponizerExternalCss constructor.
+     * ExternalCssAsset constructor.
      *
      * @param string $url Relative or absolute link to the CSS file
      * @param string $media HTML link element media attributes
@@ -63,13 +63,13 @@ class ComponizerExternalCss implements ComponizerAsset
      *
      * @return string Link to the CSS file
      */
-    public function url()
+    public function getUrl()
     {
         return $this->url;
     }
 
     //-----------------------------------------------------
-    // ComponizerAsset methods section
+    // AssetInterface methods section
     //-----------------------------------------------------
 
     /**
@@ -77,11 +77,11 @@ class ComponizerExternalCss implements ComponizerAsset
      *
      * @see ComponizerAsset::TYPE_* constants
      *
-     * @return string Asset type
+     * @return string AssetInterface type
      */
     final public function getType()
     {
-        return ComponizerAsset::TYPE_EXTERNAL_CSS;
+        return AssetInterface::TYPE_EXTERNAL_CSS;
     }
 
     /**
@@ -93,7 +93,7 @@ class ComponizerExternalCss implements ComponizerAsset
      */
     final public function getPosition()
     {
-        return ComponizerAsset::POSITION_HEAD;
+        return AssetInterface::POSITION_HEAD;
     }
 
     /**

@@ -14,9 +14,9 @@ use InvalidArgumentException;
 /**
  * Represents internally included CSS.
  *
- * @package Gavrya\Componizer\Asset
+ * @package Gavrya\Componizer\AssetInterface
  */
-class ComponizerInternalCss implements ComponizerAsset
+class InternalCssAsset implements AssetInterface
 {
 
     /**
@@ -29,7 +29,7 @@ class ComponizerInternalCss implements ComponizerAsset
     //-----------------------------------------------------
 
     /**
-     * ComponizerInternalCss constructor.
+     * InternalCssAsset constructor.
      *
      * @param string $style HTML 'style' element
      */
@@ -56,13 +56,13 @@ class ComponizerInternalCss implements ComponizerAsset
      *
      * @return string HTML 'style' element
      */
-    public function style()
+    public function getStyle()
     {
         return $this->style;
     }
 
     //-----------------------------------------------------
-    // ComponizerAsset methods section
+    // AssetInterface methods section
     //-----------------------------------------------------
 
     /**
@@ -70,11 +70,11 @@ class ComponizerInternalCss implements ComponizerAsset
      *
      * @see ComponizerAsset::TYPE_* constants
      *
-     * @return string Asset type
+     * @return string AssetInterface type
      */
     final public function getType()
     {
-        return ComponizerAsset::TYPE_INTERNAL_CSS;
+        return AssetInterface::TYPE_INTERNAL_CSS;
     }
 
     /**
@@ -86,7 +86,7 @@ class ComponizerInternalCss implements ComponizerAsset
      */
     final public function getPosition()
     {
-        return ComponizerAsset::POSITION_HEAD;
+        return AssetInterface::POSITION_HEAD;
     }
 
     /**

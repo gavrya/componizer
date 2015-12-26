@@ -12,9 +12,9 @@ namespace Gavrya\Componizer\Asset;
 /**
  * Incapsulates all nessesary assets.
  *
- * @package Gavrya\Componizer\Asset
+ * @package Gavrya\Componizer\AssetInterface
  */
-class ComponizerAssets
+class AssetsCollection
 {
 
     // Assets print options
@@ -35,7 +35,7 @@ class ComponizerAssets
     //-----------------------------------------------------
 
     /**
-     * ComponizerAssets constructor.
+     * AssetsCollection constructor.
      */
     public function __construct()
     {
@@ -105,17 +105,17 @@ class ComponizerAssets
 
     public function getHeadAssetsHtml(array $options = null)
     {
-        $this->getAssetsHtml(ComponizerAsset::POSITION_HEAD, $options);
+        $this->getAssetsHtml(AssetInterface::POSITION_HEAD, $options);
     }
 
     public function getBodyTopAssetsHtml(array $options = null)
     {
-        $this->getAssetsHtml(ComponizerAsset::POSITION_BODY_TOP, $options);
+        $this->getAssetsHtml(AssetInterface::POSITION_BODY_TOP, $options);
     }
 
     public function getBodyBottomAssetsHtml(array $options = null)
     {
-        $this->getAssetsHtml(ComponizerAsset::POSITION_BODY_BOTTOM, $options);
+        $this->getAssetsHtml(AssetInterface::POSITION_BODY_BOTTOM, $options);
     }
 
     //-----------------------------------------------------
@@ -125,17 +125,17 @@ class ComponizerAssets
     private function resetAssets(array &$collection)
     {
         $collection = [
-            ComponizerAsset::TYPE_EXTERNAL_JS => [],
-            ComponizerAsset::TYPE_INTERNAL_JS => [],
-            ComponizerAsset::TYPE_EXTERNAL_CSS => [],
-            ComponizerAsset::TYPE_INTERNAL_CSS => [],
+            AssetInterface::TYPE_EXTERNAL_JS => [],
+            AssetInterface::TYPE_INTERNAL_JS => [],
+            AssetInterface::TYPE_EXTERNAL_CSS => [],
+            AssetInterface::TYPE_INTERNAL_CSS => [],
         ];
     }
 
     private function collectAssets(array $assets, array &$collection)
     {
         foreach ($assets as $asset) {
-            if ($asset instanceof ComponizerAsset && array_key_exists($asset->getType(), $collection)) {
+            if ($asset instanceof AssetInterface && array_key_exists($asset->getType(), $collection)) {
                 $collection[$asset->getType()][] = $asset;
             }
         }
@@ -144,29 +144,29 @@ class ComponizerAssets
     private function getCollectedAssets(array &$collection)
     {
         return array_merge(
-            $this->$collection[ComponizerAsset::TYPE_EXTERNAL_JS],
-            $this->$collection[ComponizerAsset::TYPE_INTERNAL_JS],
-            $this->$collection[ComponizerAsset::TYPE_EXTERNAL_CSS],
-            $this->$collection[ComponizerAsset::TYPE_INTERNAL_CSS]
+            $this->$collection[AssetInterface::TYPE_EXTERNAL_JS],
+            $this->$collection[AssetInterface::TYPE_INTERNAL_JS],
+            $this->$collection[AssetInterface::TYPE_EXTERNAL_CSS],
+            $this->$collection[AssetInterface::TYPE_INTERNAL_CSS]
         );
     }
 
     private function containsAssets(array &$collection)
     {
         return (
-            !empty($this->$collection[ComponizerAsset::TYPE_EXTERNAL_JS]) ||
-            !empty($this->$collection[ComponizerAsset::TYPE_INTERNAL_JS]) ||
-            !empty($this->$collection[ComponizerAsset::TYPE_EXTERNAL_CSS]) ||
-            !empty($this->$collection[ComponizerAsset::TYPE_INTERNAL_CSS])
+            !empty($this->$collection[AssetInterface::TYPE_EXTERNAL_JS]) ||
+            !empty($this->$collection[AssetInterface::TYPE_INTERNAL_JS]) ||
+            !empty($this->$collection[AssetInterface::TYPE_EXTERNAL_CSS]) ||
+            !empty($this->$collection[AssetInterface::TYPE_INTERNAL_CSS])
         );
     }
 
     private function getAssetsHtml($position, array $options = null)
     {
         $positions = [
-            ComponizerAsset::POSITION_HEAD,
-            ComponizerAsset::POSITION_BODY_TOP,
-            ComponizerAsset::POSITION_BODY_BOTTOM,
+            AssetInterface::POSITION_HEAD,
+            AssetInterface::POSITION_BODY_TOP,
+            AssetInterface::POSITION_BODY_BOTTOM,
         ];
 
         if (!in_array($position, $positions)) {
@@ -175,22 +175,22 @@ class ComponizerAssets
 
         $baseUrl = $this->getOption($options, static::OPTION_BASE_URL);
 
-        $assetsHtml = '<!-- Componizer assets begin -->';
+        $assetsHtml = '<!-- Assets section begin -->';
 
-        /** @var ComponizerAsset $asset */
+        /** @var AssetInterface $asset */
         foreach ($this->getAssets() as $asset) {
             if ($asset->getPosition() !== $position) {
                 continue;
             }
 
-            if ($asset instanceof ComponizerExternalCss || $asset instanceof ComponizerExternalJs) {
+            if ($asset instanceof ExternalCssAsset || $asset instanceof ExternalJsAsset) {
                 $assetsHtml .= $asset->toHtml($baseUrl);
             }
 
             $assetsHtml .= $asset->toHtml();
         }
 
-        $assetsHtml .= '<!-- Componizer assets end -->';
+        $assetsHtml .= '<!-- Assets section end -->';
 
         return $assetsHtml;
     }

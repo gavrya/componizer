@@ -14,9 +14,9 @@ use InvalidArgumentException;
 /**
  * Represents internally included JavaScript.
  *
- * @package Gavrya\Componizer\Asset
+ * @package Gavrya\Componizer\AssetInterface
  */
-class ComponizerInternalJs implements ComponizerAsset
+class InternalJsAsset implements AssetInterface
 {
 
     /**
@@ -51,13 +51,13 @@ class ComponizerInternalJs implements ComponizerAsset
      *
      * @return string HTML 'script' element
      */
-    public function script()
+    public function getScript()
     {
         return $this->script;
     }
 
     //-----------------------------------------------------
-    // ComponizerAsset methods section
+    // AssetInterface methods section
     //-----------------------------------------------------
 
     /**
@@ -65,11 +65,11 @@ class ComponizerInternalJs implements ComponizerAsset
      *
      * @see ComponizerAsset::TYPE_* constants
      *
-     * @return string Asset type
+     * @return string AssetInterface type
      */
     final public function getType()
     {
-        return ComponizerAsset::TYPE_INTERNAL_JS;
+        return AssetInterface::TYPE_INTERNAL_JS;
     }
 
     /**
@@ -81,7 +81,7 @@ class ComponizerInternalJs implements ComponizerAsset
      */
     final public function getPosition()
     {
-        return ComponizerAsset::POSITION_HEAD;
+        return AssetInterface::POSITION_HEAD;
     }
 
     /**
