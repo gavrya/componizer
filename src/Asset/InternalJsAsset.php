@@ -61,25 +61,13 @@ class InternalJsAsset implements AssetInterface
     //-----------------------------------------------------
 
     /**
-     * Returns type of the asset.
-     *
-     * @see ComponizerAsset::TYPE_* constants
-     *
-     * @return string AssetInterface type
-     */
-    final public function getType()
-    {
-        return AssetInterface::TYPE_INTERNAL_JS;
-    }
-
-    /**
      * Returns asset include position.
      *
      * @see ComponizerInternalJs::POSITION_* constants
      *
      * @return string One of the position constants value
      */
-    final public function getPosition()
+    public function getPosition()
     {
         return AssetInterface::POSITION_HEAD;
     }

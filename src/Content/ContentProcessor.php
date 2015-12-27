@@ -102,47 +102,40 @@ class ContentProcessor
 
     public function getRequiredEditorAssets()
     {
-        $requiredAssets = new AssetsCollection();
-
-        /** @var AbstractWidgetComponent $requiredWidget */
-        foreach ($this->requiredWidgets as $requiredWidget) {
-            /** @var AssetsCollection $widgetAssets */
-            $widgetAssets = $requiredWidget->getEditorAssets();
-
-            if(!$widgetAssets->hasAssets()) {
-                continue;
+        return $this->getRequiredWidgetAssets(
+            function (AbstractWidgetComponent $requiredWidget) {
+                return $requiredWidget->getEditorAssets();
             }
-
-            if($widgetAssets->hasAddedAssets()) {
-                $requiredAssets->add($widgetAssets->getAddedAssets());
-            }
-
-            if($widgetAssets->hasInjectedAssets()) {
-                $requiredAssets->inject($widgetAssets->getInjectedAssets());
-            }
-        }
-
-        return $requiredAssets;
+        );
     }
 
     public function getRequiredDisplayAssets()
+    {
+        return $this->getRequiredWidgetAssets(
+            function (AbstractWidgetComponent $requiredWidget) {
+                return $requiredWidget->getDisplayAssets();
+            }
+        );
+    }
+
+    private function getRequiredWidgetAssets(callable $assetsResolver)
     {
         $requiredAssets = new AssetsCollection();
 
         /** @var AbstractWidgetComponent $requiredWidget */
         foreach ($this->requiredWidgets as $requiredWidget) {
             /** @var AssetsCollection $widgetAssets */
-            $widgetAssets = $requiredWidget->getDisplayAssets();
+            $widgetAssets = $assetsResolver($requiredWidget);
 
-            if(!$widgetAssets->hasAssets()) {
+            if (!$widgetAssets->hasAssets()) {
                 continue;
             }
 
-            if($widgetAssets->hasAddedAssets()) {
+            if ($widgetAssets->hasAddedAssets()) {
                 $requiredAssets->add($widgetAssets->getAddedAssets());
             }
 
-            if($widgetAssets->hasInjectedAssets()) {
+            if ($widgetAssets->hasInjectedAssets()) {
                 $requiredAssets->inject($widgetAssets->getInjectedAssets());
             }
         }

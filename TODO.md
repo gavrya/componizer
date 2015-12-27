@@ -1,20 +1,10 @@
 Important:
 
--- implement ComponentInterface by component abstracts !!!
-
--- Rename AssetsCollection to the ComponizerAssetsCollection ?
+-- Separate ComponizerConfig class, isValid(), hasErrors(), getErrors() !!!
 
 -- Omit Singleton usage from Componizer !!!
 
--- Separate ComponizerConfig class, isValid(), hasErrors(), getErrors() !!!
-
--- Add AssetsManager ?
-
--- add namespaces: AssetInterface, Component, Helper, Manager, Content
-
 Unimportant:
-
--- AssetsCollection: add ability to push/remove assets on the fly !!!
 
 -- Add ComponizerMetaAsset ?
 

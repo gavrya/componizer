@@ -88,21 +88,20 @@ class ExternalJsAsset implements AssetInterface
         return $this->url;
     }
 
+    /**
+     * Returns JavaScript execution mode.
+     *
+     * @param mixed $default Default value
+     * @return string|null JavaScript execution mode or null by default
+     */
+    public function getMode($default = null)
+    {
+        return isset($this->mode) ? $this->mode : $default;
+    }
+
     //-----------------------------------------------------
     // AssetInterface methods section
     //-----------------------------------------------------
-
-    /**
-     * Returns type of the asset.
-     *
-     * @see ComponizerAsset::TYPE_* constants
-     *
-     * @return string AssetInterface type
-     */
-    final public function getType()
-    {
-        return AssetInterface::TYPE_EXTERNAL_JS;
-    }
 
     /**
      * Returns asset include position.
@@ -111,7 +110,7 @@ class ExternalJsAsset implements AssetInterface
      *
      * @return string One of the position constants value
      */
-    final public function getPosition()
+    public function getPosition()
     {
         return $this->position;
     }

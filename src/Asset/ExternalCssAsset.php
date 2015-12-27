@@ -68,21 +68,20 @@ class ExternalCssAsset implements AssetInterface
         return $this->url;
     }
 
+    /**
+     * Returns CSS link media attribute.
+     *
+     * @param mixed $default Default value
+     * @return string|null CSS link media attribute or null by default
+     */
+    public function getMedia($default = null)
+    {
+        return isset($this->media) ? $this->media : $default;
+    }
+
     //-----------------------------------------------------
     // AssetInterface methods section
     //-----------------------------------------------------
-
-    /**
-     * Returns type of the asset.
-     *
-     * @see ComponizerAsset::TYPE_* constants
-     *
-     * @return string AssetInterface type
-     */
-    final public function getType()
-    {
-        return AssetInterface::TYPE_EXTERNAL_CSS;
-    }
 
     /**
      * Returns asset include position.
@@ -91,7 +90,7 @@ class ExternalCssAsset implements AssetInterface
      *
      * @return string Include position value
      */
-    final public function getPosition()
+    public function getPosition()
     {
         return AssetInterface::POSITION_HEAD;
     }

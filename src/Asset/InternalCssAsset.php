@@ -66,25 +66,13 @@ class InternalCssAsset implements AssetInterface
     //-----------------------------------------------------
 
     /**
-     * Returns type of the asset.
-     *
-     * @see ComponizerAsset::TYPE_* constants
-     *
-     * @return string AssetInterface type
-     */
-    final public function getType()
-    {
-        return AssetInterface::TYPE_INTERNAL_CSS;
-    }
-
-    /**
      * Returns asset include position.
      *
      * @see ComponizerAsset::POSITION_* constants
      *
      * @return string Include position value
      */
-    final public function getPosition()
+    public function getPosition()
     {
         return AssetInterface::POSITION_HEAD;
     }

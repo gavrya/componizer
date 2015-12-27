@@ -10,6 +10,7 @@ namespace Gavrya\Componizer\Manager;
 
 
 use Gavrya\Componizer\Componizer;
+use Gavrya\Componizer\ComponizerConfig;
 use Gavrya\Componizer\Helper\FsHelper;
 use Gavrya\Componizer\Component\ComponentInterface;
 
@@ -104,10 +105,10 @@ class ComponentManager
         $this->syncComponentAssetsDir($component);
 
         // componizer config
-        $config = $this->componizer->config();
+        $config = $this->componizer->getConfig();
 
         // lang
-        $lang = $config[Componizer::CONFIG_LANG];
+        $lang = $config->get(ComponizerConfig::CONFIG_LANG);
 
         // init component
         $component->init($lang, $componentCacheDir);
@@ -140,10 +141,10 @@ class ComponentManager
     private function createComponentCacheDir(ComponentInterface $component)
     {
         // componizer config
-        $config = $this->componizer->config();
+        $config = $this->componizer->getConfig();
 
         // cache dir
-        $cacheDir = $config[Componizer::CONFIG_CACHE_DIR];
+        $cacheDir = $config->get(ComponizerConfig::CONFIG_CACHE_DIR);
 
         // component cache dir
         $componentCacheDir = $cacheDir . DIRECTORY_SEPARATOR . $component->getId();
@@ -160,10 +161,10 @@ class ComponentManager
     private function removeComponentCacheDir(ComponentInterface $component)
     {
         // componizer config
-        $config = $this->componizer->config();
+        $config = $this->componizer->getConfig();
 
         // cache dir
-        $cacheDir = $config[Componizer::CONFIG_CACHE_DIR];
+        $cacheDir = $config->get(ComponizerConfig::CONFIG_CACHE_DIR);
 
         // component cache dir
         $componentCacheDir = $cacheDir . DIRECTORY_SEPARATOR . $component->getId();
@@ -182,10 +183,10 @@ class ComponentManager
         }
 
         // componizer config
-        $config = $this->componizer->config();
+        $config = $this->componizer->getConfig();
 
         // public dir
-        $publicDir = $config[Componizer::CONFIG_PUBLIC_DIR];
+        $publicDir = $config->get(ComponizerConfig::CONFIG_PUBLIC_DIR);
 
         // component public dir symlink
         $targetLink = $publicDir . DIRECTORY_SEPARATOR . $component->getId();
@@ -206,10 +207,10 @@ class ComponentManager
         }
 
         // componizer config
-        $config = $this->componizer->config();
+        $config = $this->componizer->getConfig();
 
         // public dir
-        $publicDir = $config[Componizer::CONFIG_PUBLIC_DIR];
+        $publicDir = $config->get(ComponizerConfig::CONFIG_PUBLIC_DIR);
 
         // component public dir symlink
         $targetLink = $publicDir . DIRECTORY_SEPARATOR . $component->getId();

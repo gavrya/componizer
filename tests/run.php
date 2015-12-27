@@ -15,10 +15,10 @@ error_reporting(E_ALL);
 $timerStart = microtime(true);
 
 $config = [
-    Componizer::CONFIG_LANG => 'en',
-    Componizer::CONFIG_CACHE_DIR => '/Users/gavrya/Projects/componizer/vendor/test_cache',
-    Componizer::CONFIG_PUBLIC_DIR => '/Users/gavrya/Projects/componizer/vendor/test_public',
-    Componizer::CONFIG_PREVIEW_URL => '/preview.php',
+    ComponizerConfig::CONFIG_LANG => 'en',
+    ComponizerConfig::CONFIG_CACHE_DIR => '/Users/gavrya/Projects/componizer/vendor/test_cache',
+    ComponizerConfig::CONFIG_PUBLIC_DIR => '/Users/gavrya/Projects/componizer/vendor/test_public',
+    ComponizerConfig::CONFIG_PREVIEW_URL => '/preview.php',
 ];
 
 Componizer::setup($config);

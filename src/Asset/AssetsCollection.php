@@ -31,30 +31,17 @@ class AssetsCollection
     private $injectedAssets = [];
 
     //-----------------------------------------------------
-    // Construct section
-    //-----------------------------------------------------
-
-    /**
-     * AssetsCollection constructor.
-     */
-    public function __construct()
-    {
-        $this->resetAssets($this->addedAssets);
-        $this->resetAssets($this->injectedAssets);
-    }
-
-    //-----------------------------------------------------
     // General public methods section
     //-----------------------------------------------------
 
     public function add(array $assets)
     {
-        $this->collectAssets($assets, $this->addedAssets);
+        $this->collectAssets($this->addedAssets, $assets);
     }
 
     public function inject(array $assets)
     {
-        $this->collectAssets($assets, $this->injectedAssets);
+        $this->collectAssets($this->injectedAssets, $assets);
     }
 
     public function hasAssets()
@@ -64,12 +51,12 @@ class AssetsCollection
 
     public function hasAddedAssets()
     {
-        return $this->containsAssets($this->addedAssets);
+        return !empty($this->addedAssets);
     }
 
     public function hasInjectedAssets()
     {
-        return $this->containsAssets($this->injectedAssets);
+        return !empty($this->injectedAssets);
     }
 
     public function getAssets()
@@ -79,12 +66,12 @@ class AssetsCollection
 
     public function getAddedAssets()
     {
-        return $this->getCollectedAssets($this->addedAssets);
+        return $this->addedAssets;
     }
 
     public function getInjectedAssets()
     {
-        return $this->getCollectedAssets($this->injectedAssets);
+        return $this->injectedAssets;
     }
 
     public function clearAssets()
@@ -95,12 +82,12 @@ class AssetsCollection
 
     public function clearAddedAssets()
     {
-        $this->resetAssets($this->addedAssets);
+        $this->addedAssets = [];
     }
 
     public function clearInjectedAssets()
     {
-        $this->resetAssets($this->injectedAssets);
+        $this->injectedAssets = [];
     }
 
     //-----------------------------------------------------
@@ -126,46 +113,22 @@ class AssetsCollection
     // General private methods section
     //-----------------------------------------------------
 
-    private function resetAssets(array &$collection)
+    private function collectAssets(array &$collection, array $assets)
     {
-        $collection = [
-            AssetInterface::TYPE_EXTERNAL_JS => [],
-            AssetInterface::TYPE_INTERNAL_JS => [],
-            AssetInterface::TYPE_EXTERNAL_CSS => [],
-            AssetInterface::TYPE_INTERNAL_CSS => [],
+        $positions = [
+            AssetInterface::POSITION_HEAD,
+            AssetInterface::POSITION_BODY_TOP,
+            AssetInterface::POSITION_BODY_BOTTOM,
         ];
-    }
 
-    private function collectAssets(array $assets, array &$collection)
-    {
         foreach ($assets as $asset) {
-            if ($asset instanceof AssetInterface && array_key_exists($asset->getType(), $collection)) {
-                $collection[$asset->getType()][] = $asset;
+            if ($asset instanceof AssetInterface && in_array($asset->getPosition(), $positions)) {
+                $collection[] = $asset;
             }
         }
     }
 
-    private function getCollectedAssets(array &$collection)
-    {
-        return array_merge(
-            $this->$collection[AssetInterface::TYPE_EXTERNAL_JS],
-            $this->$collection[AssetInterface::TYPE_INTERNAL_JS],
-            $this->$collection[AssetInterface::TYPE_EXTERNAL_CSS],
-            $this->$collection[AssetInterface::TYPE_INTERNAL_CSS]
-        );
-    }
-
-    private function containsAssets(array &$collection)
-    {
-        return (
-            !empty($this->$collection[AssetInterface::TYPE_EXTERNAL_JS]) ||
-            !empty($this->$collection[AssetInterface::TYPE_INTERNAL_JS]) ||
-            !empty($this->$collection[AssetInterface::TYPE_EXTERNAL_CSS]) ||
-            !empty($this->$collection[AssetInterface::TYPE_INTERNAL_CSS])
-        );
-    }
-
-    private function getAssetsHtml($position, array $options = null)
+    private function getAssetsHtml($position, array $options = [])
     {
         $positions = [
             AssetInterface::POSITION_HEAD,
@@ -174,7 +137,11 @@ class AssetsCollection
         ];
 
         if (!in_array($position, $positions)) {
-            return;
+            return '';
+        }
+
+        if (!is_array($options)) {
+            $options = [];
         }
 
         $baseUrl = $this->getOption($options, static::OPTION_BASE_URL);
