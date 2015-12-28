@@ -20,7 +20,11 @@ use Gavrya\Componizer\Manager\PluginManager;
 use Gavrya\Componizer\Manager\WidgetManager;
 use InvalidArgumentException;
 
-
+/**
+ * Class Componizer represents the general class to interact with the library.
+ *
+ * @package Gavrya\Componizer
+ */
 class Componizer
 {
 
@@ -31,30 +35,39 @@ class Componizer
     const PUBLIC_DIR_NAME = 'componizer';
 
     /**
-     * @var ComponizerConfig|null
+     * @var Config Configuration object
      */
     private $config = null;
 
     /**
-     * @var array
+     * @var array Dependency container array
      */
     private $container = [];
 
     //-----------------------------------------------------
-    // Construct section
+    // Constructor section
     //-----------------------------------------------------
 
-    private function __construct(ComponizerConfig $config)
+    /**
+     * Componizer constructor.
+     *
+     * @param Config $config Configuration object
+     *
+     * @throws InvalidArgumentException When invalid configuration object passed
+     */
+    private function __construct(Config $config)
     {
         if($config === null || !$config->isValid()) {
             throw new InvalidArgumentException('Invalid config');
         }
 
         $this->config = $config;
-
         $this->init();
     }
 
+    /**
+     * Initiates object.
+     */
     private function init()
     {
         $this->initDependecyContainer();
@@ -62,19 +75,26 @@ class Componizer
         // todo: remove unused cache dirs of removed components
     }
 
+    /**
+     * Removes broken symlinks.
+     */
     private function removeBrokenSymlinks()
     {
-        $publicDir = $this->config->get(ComponizerConfig::CONFIG_PUBLIC_DIR);
+        $publicDir = $this->config->get(Config::CONFIG_PUBLIC_DIR);
 
+        /** @var FsHelper $fsHelper */
         $fsHelper = $this->resolve(FsHelper::class);
 
         $fsHelper->removeBrokenSymlinks($publicDir);
     }
 
     //-----------------------------------------------------
-    // Dependency container section
+    // Dependency container methods section
     //-----------------------------------------------------
 
+    /**
+     * Initiates dependency container.
+     */
     private function initDependecyContainer()
     {
         // alias
@@ -85,7 +105,7 @@ class Componizer
         };
 
         $this->container[StorageHelper::class] = function () use ($componizer) {
-            return new StorageHelper($componizer->getConfig()->get(ComponizerConfig::CONFIG_CACHE_DIR));
+            return new StorageHelper($componizer->getConfig()->get(Config::CONFIG_CACHE_DIR));
         };
 
         $this->container[DomHelper::class] = function () {
@@ -113,12 +133,18 @@ class Componizer
         };
     }
 
-    public function resolve($class)
+    /**
+     * Returns resolved dependency by the class name.
+     *
+     * @param string $className Class name
+     * @return mixed|null Resolved object, null otherwise
+     */
+    public function resolve($className)
     {
-        if (array_key_exists($class, $this->container)) {
-            $dependency = $this->container[$class];
+        if (array_key_exists($className, $this->container)) {
+            $dependency = $this->container[$className];
 
-            return $dependency instanceof Closure ? $this->container[$class] = $dependency() : $dependency;
+            return $dependency instanceof Closure ? $this->container[$className] = $dependency() : $dependency;
         }
 
         return null;
@@ -129,7 +155,7 @@ class Componizer
     //-----------------------------------------------------
 
     /**
-     * @return ComponizerConfig|null
+     * @return Config Configuration object
      */
     public function getConfig()
     {
@@ -137,7 +163,7 @@ class Componizer
     }
 
     /**
-     * Get plugin manager.
+     * Returns plugin manager.
      *
      * @return PluginManager Plugin manager
      */
@@ -147,7 +173,7 @@ class Componizer
     }
 
     /**
-     * Get widget manager.
+     * Returns widget manager.
      *
      * @return WidgetManager widget manager
      */
@@ -157,7 +183,7 @@ class Componizer
     }
 
     /**
-     * Get content processor.
+     * Returns content processor.
      *
      * @return ContentProcessor content processor
      */

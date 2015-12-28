@@ -130,7 +130,7 @@ class ContentParser implements ContentParserInterface
         /** @var DomHelper $domHelper */
         $domHelper = $this->componizer->resolve(DomHelper::class);
 
-        return $domHelper->findFirstChildWithAttribute($widgetElement, ContentParserInterface::WIDGET_ATTR_CONTENT);
+        return $domHelper->findFirstChildByAttribute($widgetElement, ContentParserInterface::WIDGET_ATTR_CONTENT);
     }
 
     /**

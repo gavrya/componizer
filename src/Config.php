@@ -13,7 +13,12 @@ namespace Gavrya\Componizer;
 use Exception;
 use InvalidArgumentException;
 
-class ComponizerConfig
+/**
+ * Class Config represents configuration required by the Componizer class.
+ *
+ * @package Gavrya\Componizer
+ */
+class Config
 {
 
     // Config keys
@@ -22,14 +27,25 @@ class ComponizerConfig
     const CONFIG_PUBLIC_DIR = 'public_dir';
     const CONFIG_PREVIEW_URL = 'preview_url';
 
-    // Internal variables
+    /**
+     * @var array Config array
+     */
     private $config = [];
+
+    /**
+     * @var array Validation errors array
+     */
     private $validationErrors = [];
 
     //-----------------------------------------------------
     // Constructor section
     //-----------------------------------------------------
 
+    /**
+     * Config constructor.
+     *
+     * @param array $config Config array
+     */
     public function __construct(array $config)
     {
         if (!is_array($config)) {
@@ -43,35 +59,56 @@ class ComponizerConfig
             static::CONFIG_PREVIEW_URL,
         ];
 
-        // leave only config related keys and values
         $this->config = array_intersect_key($config, array_flip($keys));
 
         $this->validateConfig();
     }
 
     //-----------------------------------------------------
-    // Config related methods section
+    // General methods section
     //-----------------------------------------------------
 
+    /**
+     * Returns config value by config key.
+     *
+     * @see Config::CONFIG_* constants
+     *
+     * @param string $configKey Config key
+     * @param mixed $defaultValue Optional default value
+     * @return string|null Config value or default value in case when config value not found by its config key
+     */
     public function get($configKey, $defaultValue = null)
     {
         return isset($this->config[$configKey]) ? $this->config[$configKey] : $defaultValue;
     }
 
+    /**
+     * Tells if the config is valid.
+     *
+     * @return bool true if there is no validation errors, false if exists
+     */
     public function isValid()
     {
         return empty($this->validationErrors);
     }
 
+    /**
+     * Returns validation errors.
+     *
+     * @return array Validation errors array
+     */
     public function getValidationErrors()
     {
         return $this->validationErrors;
     }
 
     //-----------------------------------------------------
-    // Validation related methods section
+    // Validation methods section
     //-----------------------------------------------------
 
+    /**
+     * Validates config.
+     */
     private function validateConfig()
     {
         $this->validateLang();
@@ -80,6 +117,9 @@ class ComponizerConfig
         $this->validatePreviewUrl();
     }
 
+    /**
+     * Validates language config.
+     */
     private function validateLang()
     {
         try {
@@ -95,6 +135,9 @@ class ComponizerConfig
         }
     }
 
+    /**
+     * Validates cache directory config.
+     */
     private function validateCacheDir()
     {
         try {
@@ -138,6 +181,9 @@ class ComponizerConfig
         }
     }
 
+    /**
+     * Validates public directory config.
+     */
     private function validatePublicDir()
     {
         try {
@@ -181,6 +227,9 @@ class ComponizerConfig
         }
     }
 
+    /**
+     * Validates preview URL config.
+     */
     private function validatePreviewUrl()
     {
         try {
@@ -192,6 +241,12 @@ class ComponizerConfig
         }
     }
 
+    /**
+     * Adds new validation error to the validation errors array.
+     *
+     * @param string $configKey Config key
+     * @param string $message Validation error message
+     */
     private function addValidationError($configKey, $message)
     {
         $this->validationErrors[$configKey][] = $message;

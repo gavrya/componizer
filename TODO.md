@@ -1,8 +1,6 @@
 Important:
 
--- Separate ComponizerConfig class, isValid(), hasErrors(), getErrors() !!!
-
--- Omit Singleton usage from Componizer !!!
+-- Update example plugin and widget
 
 Unimportant:
 

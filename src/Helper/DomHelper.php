@@ -132,7 +132,7 @@ class DomHelper
      * @param string $attributeName
      * @return DOMElement|null
      */
-    function findFirstChildWithAttribute(DOMNode $domNode, $attributeName)
+    function findFirstChildByAttribute(DOMNode $domNode, $attributeName)
     {
         foreach ($domNode->childNodes as $childNode) {
             if ($childNode instanceof DOMElement && $childNode->hasAttribute($attributeName)) {

@@ -10,7 +10,7 @@ namespace Gavrya\Componizer\Manager;
 
 
 use Gavrya\Componizer\Componizer;
-use Gavrya\Componizer\ComponizerConfig;
+use Gavrya\Componizer\Config;
 use Gavrya\Componizer\Helper\FsHelper;
 use Gavrya\Componizer\Component\ComponentInterface;
 
@@ -108,7 +108,7 @@ class ComponentManager
         $config = $this->componizer->getConfig();
 
         // lang
-        $lang = $config->get(ComponizerConfig::CONFIG_LANG);
+        $lang = $config->get(Config::CONFIG_LANG);
 
         // init component
         $component->init($lang, $componentCacheDir);
@@ -144,7 +144,7 @@ class ComponentManager
         $config = $this->componizer->getConfig();
 
         // cache dir
-        $cacheDir = $config->get(ComponizerConfig::CONFIG_CACHE_DIR);
+        $cacheDir = $config->get(Config::CONFIG_CACHE_DIR);
 
         // component cache dir
         $componentCacheDir = $cacheDir . DIRECTORY_SEPARATOR . $component->getId();
@@ -164,7 +164,7 @@ class ComponentManager
         $config = $this->componizer->getConfig();
 
         // cache dir
-        $cacheDir = $config->get(ComponizerConfig::CONFIG_CACHE_DIR);
+        $cacheDir = $config->get(Config::CONFIG_CACHE_DIR);
 
         // component cache dir
         $componentCacheDir = $cacheDir . DIRECTORY_SEPARATOR . $component->getId();
@@ -186,7 +186,7 @@ class ComponentManager
         $config = $this->componizer->getConfig();
 
         // public dir
-        $publicDir = $config->get(ComponizerConfig::CONFIG_PUBLIC_DIR);
+        $publicDir = $config->get(Config::CONFIG_PUBLIC_DIR);
 
         // component public dir symlink
         $targetLink = $publicDir . DIRECTORY_SEPARATOR . $component->getId();
@@ -210,7 +210,7 @@ class ComponentManager
         $config = $this->componizer->getConfig();
 
         // public dir
-        $publicDir = $config->get(ComponizerConfig::CONFIG_PUBLIC_DIR);
+        $publicDir = $config->get(Config::CONFIG_PUBLIC_DIR);
 
         // component public dir symlink
         $targetLink = $publicDir . DIRECTORY_SEPARATOR . $component->getId();
