@@ -10,9 +10,9 @@ namespace Gavrya\Componizer\Asset;
 
 
 /**
- * Interface AssetInterface required in order to implement componizer asset.
+ * Interface AssetInterface required in order to implement component related asset.
  *
- * @package Gavrya\Componizer\AssetInterface
+ * @package Gavrya\Componizer\Asset
  */
 interface AssetInterface
 {

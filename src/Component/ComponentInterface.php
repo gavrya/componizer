@@ -9,7 +9,7 @@
 namespace Gavrya\Componizer\Component;
 
 /**
- * Interface required in order to implement any componizer component.
+ * Interface ComponentInterface required in order to implement any componizer component.
  *
  * @package Gavrya\Componizer\Component
  */

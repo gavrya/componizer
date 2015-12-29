@@ -12,9 +12,9 @@ namespace Gavrya\Componizer\Asset;
 use InvalidArgumentException;
 
 /**
- * Represents externally included CSS.
+ * Class ExternalCssAsset represents externally included CSS.
  *
- * @package Gavrya\Componizer\AssetInterface
+ * @package Gavrya\Componizer\Asset
  */
 class ExternalCssAsset implements AssetInterface
 {
@@ -25,12 +25,12 @@ class ExternalCssAsset implements AssetInterface
     private $url = null;
 
     /**
-     * @var string HTML link element media attributes.
+     * @var string|null HTML link element media attributes.
      */
     private $media = null;
 
     //-----------------------------------------------------
-    // Construct section
+    // Constructor section
     //-----------------------------------------------------
 
     /**

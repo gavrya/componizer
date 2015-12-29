@@ -12,9 +12,9 @@ namespace Gavrya\Componizer\Asset;
 use InvalidArgumentException;
 
 /**
- * Represents internally included CSS.
+ * Class InternalCssAsset represents internally included CSS.
  *
- * @package Gavrya\Componizer\AssetInterface
+ * @package Gavrya\Componizer\Asset
  */
 class InternalCssAsset implements AssetInterface
 {
@@ -25,7 +25,7 @@ class InternalCssAsset implements AssetInterface
     private $style = null;
 
     //-----------------------------------------------------
-    // Construct section
+    // Constructor section
     //-----------------------------------------------------
 
     /**

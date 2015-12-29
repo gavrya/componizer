@@ -35,12 +35,12 @@ class Componizer
     const PUBLIC_DIR_NAME = 'componizer';
 
     /**
-     * @var Config Configuration object
+     * @var Config Configuration
      */
     private $config = null;
 
     /**
-     * @var array Dependency container array
+     * @var array Dependency container
      */
     private $container = [];
 
@@ -51,9 +51,9 @@ class Componizer
     /**
      * Componizer constructor.
      *
-     * @param Config $config Configuration object
+     * @param Config $config Configuration
      *
-     * @throws InvalidArgumentException When invalid configuration object passed
+     * @throws InvalidArgumentException When invalid configuration passed
      */
     private function __construct(Config $config)
     {
@@ -65,32 +65,68 @@ class Componizer
         $this->init();
     }
 
+    //-----------------------------------------------------
+    // General methods section
+    //-----------------------------------------------------
+
     /**
-     * Initiates object.
+     * @return Config Configuration
      */
-    private function init()
+    public function getConfig()
     {
-        $this->initDependecyContainer();
-        $this->removeBrokenSymlinks();
-        // todo: remove unused cache dirs of removed components
+        return $this->config;
     }
 
     /**
-     * Removes broken symlinks.
+     * Returns plugin manager.
+     *
+     * @return PluginManager Plugin manager
      */
-    private function removeBrokenSymlinks()
+    public function getPluginManager()
     {
-        $publicDir = $this->config->get(Config::CONFIG_PUBLIC_DIR);
+        return $this->resolve(PluginManager::class);
+    }
 
-        /** @var FsHelper $fsHelper */
-        $fsHelper = $this->resolve(FsHelper::class);
+    /**
+     * Returns widget manager.
+     *
+     * @return WidgetManager Widget manager
+     */
+    public function getWidgetManager()
+    {
+        return $this->resolve(WidgetManager::class);
+    }
 
-        $fsHelper->removeBrokenSymlinks($publicDir);
+    /**
+     * Returns content processor.
+     *
+     * @return ContentProcessor Content processor
+     */
+    public function getContentProcessor()
+    {
+        return $this->resolve(ContentProcessor::class);
     }
 
     //-----------------------------------------------------
     // Dependency container methods section
     //-----------------------------------------------------
+
+    /**
+     * Returns resolved dependency by the class name.
+     *
+     * @param string $className Class name
+     * @return mixed|null Resolved object, null otherwise
+     */
+    public function resolve($className)
+    {
+        if (array_key_exists($className, $this->container)) {
+            $dependency = $this->container[$className];
+
+            return $dependency instanceof Closure ? $this->container[$className] = $dependency() : $dependency;
+        }
+
+        return null;
+    }
 
     /**
      * Initiates dependency container.
@@ -133,63 +169,31 @@ class Componizer
         };
     }
 
-    /**
-     * Returns resolved dependency by the class name.
-     *
-     * @param string $className Class name
-     * @return mixed|null Resolved object, null otherwise
-     */
-    public function resolve($className)
-    {
-        if (array_key_exists($className, $this->container)) {
-            $dependency = $this->container[$className];
-
-            return $dependency instanceof Closure ? $this->container[$className] = $dependency() : $dependency;
-        }
-
-        return null;
-    }
-
     //-----------------------------------------------------
-    // General methods section
+    // Init methods section
     //-----------------------------------------------------
 
     /**
-     * @return Config Configuration object
+     * Initiates object.
      */
-    public function getConfig()
+    private function init()
     {
-        return $this->config;
+        $this->initDependecyContainer();
+        $this->removeBrokenSymlinks();
+        // todo: remove unused cache dirs of removed components
     }
 
     /**
-     * Returns plugin manager.
-     *
-     * @return PluginManager Plugin manager
+     * Removes broken symlinks.
      */
-    public function getPluginManager()
+    private function removeBrokenSymlinks()
     {
-        return $this->resolve(PluginManager::class);
-    }
+        $publicDir = $this->config->get(Config::CONFIG_PUBLIC_DIR);
 
-    /**
-     * Returns widget manager.
-     *
-     * @return WidgetManager widget manager
-     */
-    public function getWidgetManager()
-    {
-        return $this->resolve(WidgetManager::class);
-    }
+        /** @var FsHelper $fsHelper */
+        $fsHelper = $this->resolve(FsHelper::class);
 
-    /**
-     * Returns content processor.
-     *
-     * @return ContentProcessor content processor
-     */
-    public function getContentProcessor()
-    {
-        return $this->resolve(ContentProcessor::class);
+        $fsHelper->removeBrokenSymlinks($publicDir);
     }
 
 }

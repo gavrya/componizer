@@ -12,9 +12,9 @@ namespace Gavrya\Componizer\Asset;
 use InvalidArgumentException;
 
 /**
- * Represents internally included JavaScript.
+ * Class InternalJsAsset represents internally included JavaScript.
  *
- * @package Gavrya\Componizer\AssetInterface
+ * @package Gavrya\Componizer\Asset
  */
 class InternalJsAsset implements AssetInterface
 {
@@ -25,7 +25,7 @@ class InternalJsAsset implements AssetInterface
     private $script = null;
 
     //-----------------------------------------------------
-    // Construct section
+    // Constructor section
     //-----------------------------------------------------
 
     public function __construct($script)

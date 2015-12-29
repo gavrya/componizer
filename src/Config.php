@@ -14,7 +14,9 @@ use Exception;
 use InvalidArgumentException;
 
 /**
- * Class Config represents configuration required by the Componizer class.
+ * Class Config represents configuration required in order to create Componizer instance.
+ *
+ * @see Componizer
  *
  * @package Gavrya\Componizer
  */
@@ -22,7 +24,7 @@ class Config
 {
 
     // Config keys
-    const CONFIG_LANG = 'lang_code';
+    const CONFIG_LANG = 'lang';
     const CONFIG_CACHE_DIR = 'cache_dir';
     const CONFIG_PUBLIC_DIR = 'public_dir';
     const CONFIG_PREVIEW_URL = 'preview_url';
@@ -45,6 +47,8 @@ class Config
      * Config constructor.
      *
      * @param array $config Config array
+     *
+     * @throws InvalidArgumentException When invalid config array passed
      */
     public function __construct(array $config)
     {
@@ -118,7 +122,7 @@ class Config
     }
 
     /**
-     * Validates language config.
+     * Validates language.
      */
     private function validateLang()
     {
@@ -136,7 +140,7 @@ class Config
     }
 
     /**
-     * Validates cache directory config.
+     * Validates cache directory.
      */
     private function validateCacheDir()
     {
@@ -182,7 +186,7 @@ class Config
     }
 
     /**
-     * Validates public directory config.
+     * Validates public directory.
      */
     private function validatePublicDir()
     {
@@ -228,7 +232,7 @@ class Config
     }
 
     /**
-     * Validates preview URL config.
+     * Validates preview URL.
      */
     private function validatePreviewUrl()
     {

@@ -12,9 +12,9 @@ namespace Gavrya\Componizer\Asset;
 use InvalidArgumentException;
 
 /**
- * Represents externally included JavaScript.
+ * Class ExternalJsAsset represents externally included JavaScript.
  *
- * @package Gavrya\Componizer\AssetInterface
+ * @package Gavrya\Componizer\Asset
  */
 class ExternalJsAsset implements AssetInterface
 {
@@ -39,7 +39,7 @@ class ExternalJsAsset implements AssetInterface
     private $mode = null;
 
     //-----------------------------------------------------
-    // Construct section
+    // Constructor section
     //-----------------------------------------------------
 
     /**

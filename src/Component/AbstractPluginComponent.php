@@ -9,7 +9,7 @@
 namespace Gavrya\Componizer\Component;
 
 /**
- * Required in order to implement componizer plugin.
+ * Class AbstractPluginComponent required in order to implement plugin.
  *
  * @package Gavrya\Componizer\Component
  */

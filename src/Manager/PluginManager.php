@@ -14,7 +14,6 @@ use Gavrya\Componizer\Componizer;
 use Gavrya\Componizer\Helper\FsHelper;
 use Gavrya\Componizer\Helper\StorageHelper;
 use Gavrya\Componizer\Component\ComponentInterface;
-use Gavrya\Componizer\Exception\ComponizerException;
 use Gavrya\Componizer\Component\AbstractPluginComponent;
 
 class PluginManager
