@@ -23,6 +23,15 @@ interface AssetInterface
     const POSITION_BODY_BOTTOM = 'body_bottom';
 
     /**
+     * Returns asset unique hash.
+     *
+     * Two objects with the same hashes are considered equal.
+     *
+     * @return string Asset hash
+     */
+    public function getHash();
+
+    /**
      * Returns asset include position.
      *
      * @see ComponizerAsset::POSITION_* constants

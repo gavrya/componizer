@@ -20,6 +20,11 @@ class InternalCssAsset implements AssetInterface
 {
 
     /**
+     * @var string Asset unique hash.
+     */
+    private $hash = null;
+
+    /**
      * @var string HTML 'style' element
      */
     private $style = null;
@@ -44,6 +49,7 @@ class InternalCssAsset implements AssetInterface
             throw new InvalidArgumentException('Invalid style');
         }
 
+        $this->hash = md5($style);
         $this->style = $style;
     }
 
@@ -64,6 +70,16 @@ class InternalCssAsset implements AssetInterface
     //-----------------------------------------------------
     // AssetInterface methods section
     //-----------------------------------------------------
+
+    /**
+     * Returns asset unique hash.
+     *
+     * @return string Asset hash
+     */
+    public function getHash()
+    {
+        return $this->hash;
+    }
 
     /**
      * Returns asset include position.

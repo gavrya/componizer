@@ -20,6 +20,11 @@ class InternalJsAsset implements AssetInterface
 {
 
     /**
+     * @var string Asset unique hash.
+     */
+    private $hash = null;
+
+    /**
      * @var string HTML 'script' element
      */
     private $script = null;
@@ -39,6 +44,7 @@ class InternalJsAsset implements AssetInterface
             throw new InvalidArgumentException('Invalid script');
         }
 
+        $this->hash = md5($script);
         $this->script = $script;
     }
 
@@ -59,6 +65,16 @@ class InternalJsAsset implements AssetInterface
     //-----------------------------------------------------
     // AssetInterface methods section
     //-----------------------------------------------------
+
+    /**
+     * Returns asset unique hash.
+     *
+     * @return string Asset hash
+     */
+    public function getHash()
+    {
+        return $this->hash;
+    }
 
     /**
      * Returns asset include position.

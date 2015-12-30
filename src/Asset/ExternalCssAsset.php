@@ -20,6 +20,11 @@ class ExternalCssAsset implements AssetInterface
 {
 
     /**
+     * @var string Asset unique hash.
+     */
+    private $hash = null;
+
+    /**
      * @var string Relative or absolute link to the CSS file.
      */
     private $url = null;
@@ -50,6 +55,7 @@ class ExternalCssAsset implements AssetInterface
             throw new InvalidArgumentException(sprintf('Invalid media: %s', $media));
         }
 
+        $this->hash = md5($url);
         $this->url = $url;
         $this->media = $media;
     }
@@ -82,6 +88,16 @@ class ExternalCssAsset implements AssetInterface
     //-----------------------------------------------------
     // AssetInterface methods section
     //-----------------------------------------------------
+
+    /**
+     * Returns asset unique hash.
+     *
+     * @return string Asset hash
+     */
+    public function getHash()
+    {
+        return $this->hash;
+    }
 
     /**
      * Returns asset include position.

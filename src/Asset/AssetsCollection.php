@@ -85,7 +85,7 @@ class AssetsCollection
     }
 
     /**
-     * Returns all assets, added and injected.
+     * Returns all assets with unique hashes.
      *
      * @return AssetInterface[] Array of assets
      */
@@ -95,7 +95,7 @@ class AssetsCollection
     }
 
     /**
-     * Returns all added assets.
+     * Returns all added assets with unique hashes.
      *
      * @return AssetInterface[] Array of assets
      */
@@ -105,7 +105,7 @@ class AssetsCollection
     }
 
     /**
-     * Returns all injected assets.
+     * Returns all injected assets with unique hashes.
      *
      * @return AssetInterface[] Array of assets
      */
@@ -196,7 +196,7 @@ class AssetsCollection
 
         foreach ($assets as $asset) {
             if ($asset instanceof AssetInterface && in_array($asset->getPosition(), $positions)) {
-                $targetAssets[] = $asset;
+                $targetAssets[$asset->getHash()] = $asset;
             }
         }
     }

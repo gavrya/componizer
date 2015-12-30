@@ -24,6 +24,11 @@ class ExternalJsAsset implements AssetInterface
     const MODE_DEFER = 'defer';
 
     /**
+     * @var string Asset unique hash.
+     */
+    private $hash = null;
+
+    /**
      * @var string Relative or absolute link to the JavaScript file.
      */
     private $url = null;
@@ -69,6 +74,7 @@ class ExternalJsAsset implements AssetInterface
             throw new InvalidArgumentException(sprintf('Invalid mode: %s', $mode));
         }
 
+        $this->hash = md5($url);
         $this->url = $url;
         $this->position = $position;
         $this->mode = $mode;
@@ -102,6 +108,16 @@ class ExternalJsAsset implements AssetInterface
     //-----------------------------------------------------
     // AssetInterface methods section
     //-----------------------------------------------------
+
+    /**
+     * Returns asset unique hash.
+     *
+     * @return string Asset hash
+     */
+    public function getHash()
+    {
+        return $this->hash;
+    }
 
     /**
      * Returns asset include position.
