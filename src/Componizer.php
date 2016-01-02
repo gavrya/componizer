@@ -12,6 +12,7 @@ namespace Gavrya\Componizer;
 use Closure;
 use Gavrya\Componizer\Content\ContentParser;
 use Gavrya\Componizer\Content\ContentProcessor;
+use Gavrya\Componizer\Content\WidgetParser;
 use Gavrya\Componizer\Helper\DomHelper;
 use Gavrya\Componizer\Helper\FsHelper;
 use Gavrya\Componizer\Helper\StorageHelper;
@@ -158,6 +159,10 @@ class Componizer
 
         $this->container[WidgetManager::class] = function () use ($componizer) {
             return new WidgetManager($componizer);
+        };
+
+        $this->container[WidgetParser::class] = function () use ($componizer) {
+            return new WidgetParser($componizer);
         };
 
         $this->container[ContentParser::class] = function () use ($componizer) {

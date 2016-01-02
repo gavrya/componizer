@@ -91,9 +91,10 @@ class InternalJsAsset implements AssetInterface
     /**
      * Returns HTML representation of the asset.
      *
-     * @return string HTML 'script' element
+     * @param array|null $options
+     * @return string
      */
-    public function toHtml()
+    public function toHtml(array $options = null)
     {
         return $this->script;
     }

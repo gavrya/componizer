@@ -202,7 +202,7 @@ class Config
             }
 
             if (is_link($dirPath) || !is_dir($dirPath)) {
-                throw new Exception('Public directory is not a directory');
+                throw new Exception('Public directory is not a valid directory');
             }
 
             if (!is_writable($dirPath)) {
@@ -246,7 +246,7 @@ class Config
     }
 
     /**
-     * Adds new validation error to the validation errors array.
+     * Adds new validation error.
      *
      * @param string $configKey Config key
      * @param string $message Validation error message

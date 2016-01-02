@@ -114,12 +114,14 @@ class ExternalCssAsset implements AssetInterface
     /**
      * Returns HTML representation of the asset.
      *
-     * @param string|null $baseUrl Optional base url to prefix an existed relative url
-     * @return string HTML 'link' element
+     * @param array|null $options
+     * @return string
      */
-    public function toHtml($baseUrl = null)
+    public function toHtml(array $options = null)
     {
         $targetUrl = $this->url;
+
+        $baseUrl = isset($options) && isset($options['base_url']) ? $options['base_url'] : null;
 
         if (is_string($baseUrl) && strpos($this->url, '/') === 0 && strpos($this->url, '//') !== 0) {
             $targetUrl = rtrim($baseUrl, '/') . $this->url;

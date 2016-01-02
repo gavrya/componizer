@@ -43,8 +43,9 @@ interface AssetInterface
     /**
      * Returns HTML representation of the asset.
      *
+     * @param array $options
      * @return string HTML representation of the asset
      */
-    public function toHtml();
+    public function toHtml(array $options = null);
 
 }

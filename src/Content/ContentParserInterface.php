@@ -28,7 +28,7 @@ interface ContentParserInterface
     const WIDGET_CT_MIXED = 'mixed';
 
     /**
-     * Parse provided "editor content" to "display content" representation.
+     * Parses provided "editor content" to "display content" representation.
      *
      * Parsing is processed based on allowed/disabled plugins/components and other settings from SettingsManager.
      *

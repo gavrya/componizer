@@ -1,14 +1,18 @@
 Important:
 
+-- Update phpdocs
+
 -- Update example plugin and widget
+
+-- Add widget content parser
+
+-- Rename Config to ComponizerConfig
 
 Unimportant:
 
 -- Add ComponizerMetaAsset ?
 
 -- Add ComponizerTemplateAsset ?
-
--- Prevent infinite loop in ContentParserInterface !!!
 
 -- ContentProcessor: add ability to pass array of content with target keys ($editorContent, $targetKeys = null).
    Usefull for parsing results from database rows with multiple "editor content" fields in each row.

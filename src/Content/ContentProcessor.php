@@ -14,43 +14,58 @@ use Gavrya\Componizer\Component\AbstractWidgetComponent;
 use Gavrya\Componizer\Componizer;
 use Gavrya\Componizer\Manager\WidgetManager;
 
+/**
+ * Class ContentProcessor is responsible for processing "editor content".
+ *
+ * @package Gavrya\Componizer\Content
+ */
 class ContentProcessor
 {
 
-    // Componizer
+    /**
+     * @var Componizer Componizer instance
+     */
     private $componizer = null;
 
-    // Internal variables
+    /**
+     * @var AbstractWidgetComponent[] Required widgets
+     */
     private $requiredWidgets = [];
 
     //-----------------------------------------------------
-    // Instance creation/init section
+    // Constructor section
     //-----------------------------------------------------
 
+    /**
+     * ContentProcessor constructor.
+     *
+     * @param Componizer $componizer Componizer instance
+     */
     public function __construct(Componizer $componizer)
     {
         $this->componizer = $componizer;
     }
 
     //-----------------------------------------------------
-    // Construct section
+    // Content processing methods section
     //-----------------------------------------------------
 
+    /**
+     * Analyzes provided "editor content" and finds required widgets and assets in order to make/view "display content".
+     *
+     * @param string $editorContent Editor content to analyze
+     */
     public function initEditorContent($editorContent)
     {
         $this->requiredWidgets = [];
 
-        if (!is_string($editorContent) || empty($editorContent)) {
-            return;
-        }
+        /** @var WidgetParser $widgetParser */
+        $widgetParser = $this->componizer->resolve(WidgetParser::class);
 
-        /** @var ContentParser $contentParser */
-        $contentParser = $this->componizer->resolve(ContentParser::class);
-
-        $widgetIds = array_unique($contentParser->parseWidgetIds($editorContent));
+        $widgetIds = array_unique($widgetParser->parseWidgetIds($editorContent));
 
         if (empty($widgetIds)) {
-            return $editorContent;
+            return;
         }
 
         /** @var WidgetManager $widgetManager */
@@ -59,18 +74,20 @@ class ContentProcessor
         $allowedWidgets = $widgetManager->getAllowedWidgets();
 
         foreach ($widgetIds as $widgetId) {
-            if (isset($allowedWidgets[$widgetId])) {
+            if (isset($allowedWidgets[$widgetId]) && !isset($this->requiredWidgets[$widgetId])) {
                 $this->requiredWidgets[$widgetId] = $allowedWidgets[$widgetId];
             }
         }
     }
 
+    /**
+     * Makes "display content" from the "editor content".
+     *
+     * @param $editorContent Editor content HTML
+     * @return string Display content HTML
+     */
     public function makeDisplayContent($editorContent)
     {
-        if ($editorContent === null) {
-            return '';
-        }
-
         /** @var ContentParser $contentParser */
         $contentParser = $this->componizer->resolve(ContentParser::class);
 
@@ -81,11 +98,21 @@ class ContentProcessor
     // Required components section
     //-----------------------------------------------------
 
+    /**
+     * Returns required components.
+     *
+     * @return ComponentInterface[] Required components
+     */
     public function getRequiredComponents()
     {
-        return [];
+        return $this->requiredWidgets;
     }
 
+    /**
+     * Returns required widgets.
+     *
+     * @return AbstractWidgetComponent[] Required widgets
+     */
     public function getRequiredWidgets()
     {
         return $this->requiredWidgets;
@@ -95,11 +122,21 @@ class ContentProcessor
     // Required assets methods
     //-----------------------------------------------------
 
+    /**
+     * Returns required general assets needed in order to editor gets worked.
+     *
+     * @return AssetsCollection Assets collection
+     */
     public function getRequiredGeneralAssets()
     {
-        // todo: return componizer general assets needed in order to editor gets worked
+        return new AssetsCollection();
     }
 
+    /**
+     * Returns required editor assets.
+     *
+     * @return AssetsCollection Assets collection
+     */
     public function getRequiredEditorAssets()
     {
         return $this->getRequiredWidgetAssets(
@@ -109,6 +146,11 @@ class ContentProcessor
         );
     }
 
+    /**
+     * Returns required display assets.
+     *
+     * @return AssetsCollection Assets collection
+     */
     public function getRequiredDisplayAssets()
     {
         return $this->getRequiredWidgetAssets(
@@ -118,6 +160,12 @@ class ContentProcessor
         );
     }
 
+    /**
+     * Returns required widget display assets.
+     *
+     * @param callable $assetsResolver Widget assets resolver closure
+     * @return AssetsCollection Assets collection
+     */
     private function getRequiredWidgetAssets(callable $assetsResolver)
     {
         $requiredAssets = new AssetsCollection();

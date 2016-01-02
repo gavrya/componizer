@@ -43,16 +43,20 @@ abstract class AbstractWidgetComponent implements ComponentInterface
     //-----------------------------------------------------
 
     /**
-     * Generates widget "display content" HTML.
+     * Makes widget "display content" HTML.
      *
-     * @param ContentParserInterface $parser Content parser helper
+     * @param ContentParserInterface $contentParser Content parser helper
      * @param array $properties Widget related JSON data
      * @param string $contentType Content type of the passed content
      * @param string|null $content Widget content in format of "editor content"
      * @return string Generated "display content" HTML
      */
-    public function makeDisplayContent(ContentParserInterface $parser, array $properties, $contentType, $content = null)
-    {
+    public function makeDisplayContent(
+        ContentParserInterface $contentParser,
+        array $properties,
+        $contentType,
+        $content = null
+    ) {
         return '';
     }
 

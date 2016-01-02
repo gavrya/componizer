@@ -10,15 +10,12 @@ namespace Gavrya\Componizer\Asset;
 
 
 /**
- * Class AssetsCollection represents a collection of assets.
+ * Class AssetsCollection represents a collection of added and injected assets.
  *
  * @package Gavrya\Componizer\Asset
  */
 class AssetsCollection
 {
-
-    // Assets print options
-    const OPTION_BASE_URL = 'base_url';
 
     /**
      * @var AssetInterface[] Added assets
@@ -140,7 +137,7 @@ class AssetsCollection
     }
 
     //-----------------------------------------------------
-    // HTML representation methods section
+    // Assets HTML methods section
     //-----------------------------------------------------
 
     /**
@@ -205,10 +202,10 @@ class AssetsCollection
      * Returns HTML representation of the assets collection based on include position and other options.
      *
      * @param string $position Include position
-     * @param array $options Optional parameters
+     * @param array|null $options Optional parameters
      * @return string HTML representation of the assets collection
      */
-    private function getAssetsHtml($position, array $options = [])
+    private function getAssetsHtml($position, array $options = null)
     {
         $positions = [
             AssetInterface::POSITION_HEAD,
@@ -220,12 +217,6 @@ class AssetsCollection
             return '';
         }
 
-        if (!is_array($options)) {
-            $options = [];
-        }
-
-        $baseUrl = $this->getOption($options, static::OPTION_BASE_URL);
-
         $assetsHtml = '<!-- Assets collection begin -->';
 
         /** @var AssetInterface $asset */
@@ -234,28 +225,12 @@ class AssetsCollection
                 continue;
             }
 
-            if ($asset instanceof ExternalCssAsset || $asset instanceof ExternalJsAsset) {
-                $assetsHtml .= $asset->toHtml($baseUrl);
-            }
-
-            $assetsHtml .= $asset->toHtml();
+            $assetsHtml .= $asset->toHtml($options);
         }
 
         $assetsHtml .= '<!-- Assets collection end -->';
 
         return $assetsHtml;
-    }
-
-    /**
-     * Returns option value by the option key.
-     *
-     * @param array $options Options array
-     * @param string $optionKey Option key
-     * @return string|null Option value, null otherwise
-     */
-    private function getOption(array $options, $optionKey)
-    {
-        return isset($options[$optionKey]) ? $options[$optionKey] : null;
     }
 
 }
