@@ -20,17 +20,17 @@ class ExternalCssAsset implements AssetInterface
 {
 
     /**
-     * @var string Asset unique hash.
+     * @var string
      */
     private $hash = null;
 
     /**
-     * @var string Relative or absolute link to the CSS file.
+     * @var string
      */
     private $url = null;
 
     /**
-     * @var string|null HTML link element media attributes.
+     * @var string|null
      */
     private $media = null;
 
@@ -41,9 +41,9 @@ class ExternalCssAsset implements AssetInterface
     /**
      * ExternalCssAsset constructor.
      *
-     * @param string $url Relative or absolute link to the CSS file
-     * @param string $media HTML link element media attributes
-     * @throws InvalidArgumentException When arguments was invalid
+     * @param string $url
+     * @param string $media
+     * @throws InvalidArgumentException
      */
     public function __construct($url, $media = null)
     {
@@ -67,7 +67,7 @@ class ExternalCssAsset implements AssetInterface
     /**
      * Returns link to the CSS file.
      *
-     * @return string Link to the CSS file
+     * @return string
      */
     public function getUrl()
     {
@@ -77,8 +77,8 @@ class ExternalCssAsset implements AssetInterface
     /**
      * Returns CSS link media attribute.
      *
-     * @param mixed $default Default value
-     * @return string|null CSS link media attribute or null by default
+     * @param mixed $default
+     * @return string|null
      */
     public function getMedia($default = null)
     {
@@ -92,7 +92,7 @@ class ExternalCssAsset implements AssetInterface
     /**
      * Returns asset unique hash.
      *
-     * @return string Asset hash
+     * @return string
      */
     public function getHash()
     {
@@ -104,7 +104,7 @@ class ExternalCssAsset implements AssetInterface
      *
      * @see ComponizerAsset::POSITION_* constants
      *
-     * @return string Include position value
+     * @return string
      */
     public function getPosition()
     {

@@ -20,12 +20,12 @@ class InternalCssAsset implements AssetInterface
 {
 
     /**
-     * @var string Asset unique hash.
+     * @var string
      */
     private $hash = null;
 
     /**
-     * @var string HTML 'style' element
+     * @var string
      */
     private $style = null;
 
@@ -36,7 +36,7 @@ class InternalCssAsset implements AssetInterface
     /**
      * InternalCssAsset constructor.
      *
-     * @param string $style HTML 'style' element
+     * @param string $style
      */
     public function __construct($style)
     {
@@ -60,7 +60,7 @@ class InternalCssAsset implements AssetInterface
     /**
      * Returns 'style' element HTML.
      *
-     * @return string HTML 'style' element
+     * @return string
      */
     public function getStyle()
     {
@@ -74,7 +74,7 @@ class InternalCssAsset implements AssetInterface
     /**
      * Returns asset unique hash.
      *
-     * @return string Asset hash
+     * @return string
      */
     public function getHash()
     {
@@ -86,7 +86,7 @@ class InternalCssAsset implements AssetInterface
      *
      * @see ComponizerAsset::POSITION_* constants
      *
-     * @return string Include position value
+     * @return string
      */
     public function getPosition()
     {

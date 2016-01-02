@@ -9,13 +9,9 @@
 namespace Gavrya\Componizer\Content;
 
 
-use DOMElement;
 use DOMXPath;
-use Exception;
-use Gavrya\Componizer\Component\AbstractWidgetComponent;
 use Gavrya\Componizer\Componizer;
 use Gavrya\Componizer\Helper\DomHelper;
-use Gavrya\Componizer\Manager\WidgetManager;
 
 /**
  * Class ContentParser is used for parsing "editor content".
@@ -26,7 +22,7 @@ class ContentParser implements ContentParserInterface
 {
 
     /**
-     * @var Componizer Componizer instance
+     * @var Componizer
      */
     private $componizer = null;
 
@@ -37,7 +33,7 @@ class ContentParser implements ContentParserInterface
     /**
      * ContentParser constructor.
      *
-     * @param Componizer $componizer Componizer instance
+     * @param Componizer $componizer
      */
     public function __construct(Componizer $componizer)
     {
@@ -54,8 +50,8 @@ class ContentParser implements ContentParserInterface
      *
      * Parsing is processed based on allowed/disabled plugins/components and other settings from SettingsManager.
      *
-     * @param string $editorContent Editor content to parse
-     * @return string Resulting display content or empty string
+     * @param string $editorContent
+     * @return string
      */
     public function parseDisplayContent($editorContent)
     {

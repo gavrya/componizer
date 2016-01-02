@@ -24,22 +24,22 @@ class ExternalJsAsset implements AssetInterface
     const MODE_DEFER = 'defer';
 
     /**
-     * @var string Asset unique hash.
+     * @var string
      */
     private $hash = null;
 
     /**
-     * @var string Relative or absolute link to the JavaScript file.
+     * @var string
      */
     private $url = null;
 
     /**
-     * @var string AssetInterface include position
+     * @var string
      */
     private $position = null;
 
     /**
-     * @var string|null JavaScript execution mode
+     * @var string|null
      */
     private $mode = null;
 
@@ -50,9 +50,9 @@ class ExternalJsAsset implements AssetInterface
     /**
      * ExternalJsAsset constructor.
      *
-     * @param string $url Relative or absolute link to the JavaScript file
-     * @param string $position AssetInterface required include position
-     * @param string $mode Required JavaScript execution mode
+     * @param string $url
+     * @param string $position
+     * @param string $mode
      */
     public function __construct($url, $position = AssetInterface::POSITION_HEAD, $mode = null)
     {
@@ -87,7 +87,7 @@ class ExternalJsAsset implements AssetInterface
     /**
      * Returns link to the JavaScript file.
      *
-     * @return string Link to the JavaScript file
+     * @return string
      */
     public function getUrl()
     {
@@ -97,8 +97,8 @@ class ExternalJsAsset implements AssetInterface
     /**
      * Returns JavaScript execution mode.
      *
-     * @param mixed $default Default value
-     * @return string|null JavaScript execution mode or null by default
+     * @param mixed $default
+     * @return string|null
      */
     public function getMode($default = null)
     {
@@ -112,7 +112,7 @@ class ExternalJsAsset implements AssetInterface
     /**
      * Returns asset unique hash.
      *
-     * @return string Asset hash
+     * @return string
      */
     public function getHash()
     {
@@ -124,7 +124,7 @@ class ExternalJsAsset implements AssetInterface
      *
      * @see ComponizerExternalJs::POSITION_* constants
      *
-     * @return string One of the position constants value
+     * @return string
      */
     public function getPosition()
     {

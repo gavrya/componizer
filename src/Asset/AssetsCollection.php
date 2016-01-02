@@ -18,12 +18,12 @@ class AssetsCollection
 {
 
     /**
-     * @var AssetInterface[] Added assets
+     * @var AssetInterface[]
      */
     private $addedAssets = [];
 
     /**
-     * @var AssetInterface[] Injected assets
+     * @var AssetInterface[]
      */
     private $injectedAssets = [];
 
@@ -34,7 +34,7 @@ class AssetsCollection
     /**
      * Adds assets.
      *
-     * @param array $assets Assets to add
+     * @param array $assets
      */
     public function add(array $assets)
     {
@@ -44,7 +44,7 @@ class AssetsCollection
     /**
      * Injects assets.
      *
-     * @param array $assets Assets to inject
+     * @param array $assets
      */
     public function inject(array $assets)
     {
@@ -54,7 +54,7 @@ class AssetsCollection
     /**
      * Tells if the assets exists.
      *
-     * @return bool true if any assets exists, false if not
+     * @return bool
      */
     public function hasAssets()
     {
@@ -64,7 +64,7 @@ class AssetsCollection
     /**
      * Tells if the added assets exists.
      *
-     * @return bool true if added assets exists, false if not
+     * @return bool
      */
     public function hasAddedAssets()
     {
@@ -74,7 +74,7 @@ class AssetsCollection
     /**
      * Tells if the injected assets exists.
      *
-     * @return bool true if injected assets exists, false if not
+     * @return bool
      */
     public function hasInjectedAssets()
     {
@@ -84,7 +84,7 @@ class AssetsCollection
     /**
      * Returns all assets with unique hashes.
      *
-     * @return AssetInterface[] Array of assets
+     * @return AssetInterface[]
      */
     public function getAssets()
     {
@@ -94,7 +94,7 @@ class AssetsCollection
     /**
      * Returns all added assets with unique hashes.
      *
-     * @return AssetInterface[] Array of assets
+     * @return AssetInterface[]
      */
     public function getAddedAssets()
     {
@@ -104,7 +104,7 @@ class AssetsCollection
     /**
      * Returns all injected assets with unique hashes.
      *
-     * @return AssetInterface[] Array of assets
+     * @return AssetInterface[]
      */
     public function getInjectedAssets()
     {
@@ -143,8 +143,8 @@ class AssetsCollection
     /**
      * Returns HTML representation of the assets collection required to be included at HTML head position.
      *
-     * @param array|null $options Optional parameters
-     * @return string HTML representation of the assets collection
+     * @param array|null $options
+     * @return string
      */
     public function getHeadAssetsHtml(array $options = null)
     {
@@ -154,8 +154,8 @@ class AssetsCollection
     /**
      * Returns HTML representation of the assets collection required to be included at HTML body top position.
      *
-     * @param array|null $options Optional parameters
-     * @return string HTML representation of the assets collection
+     * @param array|null $options
+     * @return string
      */
     public function getBodyTopAssetsHtml(array $options = null)
     {
@@ -165,8 +165,8 @@ class AssetsCollection
     /**
      * Returns HTML representation of the assets collection required to be included at HTML body bottom position.
      *
-     * @param array|null $options Optional parameters
-     * @return string HTML representation of the assets collection
+     * @param array|null $options
+     * @return string
      */
     public function getBodyBottomAssetsHtml(array $options = null)
     {
@@ -180,8 +180,8 @@ class AssetsCollection
     /**
      * Collects newly added or injected assets to the target assets array.
      *
-     * @param array $targetAssets Target assets array
-     * @param array $assets Assets to add
+     * @param array $targetAssets
+     * @param array $assets
      */
     private function collectAssets(array &$targetAssets, array $assets)
     {
@@ -201,9 +201,9 @@ class AssetsCollection
     /**
      * Returns HTML representation of the assets collection based on include position and other options.
      *
-     * @param string $position Include position
-     * @param array|null $options Optional parameters
-     * @return string HTML representation of the assets collection
+     * @param string $position
+     * @param array|null $options
+     * @return string
      */
     private function getAssetsHtml($position, array $options = null)
     {

@@ -23,7 +23,7 @@ abstract class AbstractPluginComponent implements ComponentInterface
     /**
      * Returns an array with all provided components.
      *
-     * @return ComponentInterface[] An array with components
+     * @return ComponentInterface[]
      */
     final public function getComponents()
     {
@@ -33,7 +33,7 @@ abstract class AbstractPluginComponent implements ComponentInterface
     /**
      * Returns number of all provided components.
      *
-     * @return int Number of components
+     * @return int
      */
     final public function countComponents()
     {
@@ -43,7 +43,7 @@ abstract class AbstractPluginComponent implements ComponentInterface
     /**
      * Checks if the plugin has any components.
      *
-     * @return bool true if plugin has at least one component, false otherwise
+     * @return bool
      */
     final public function hasComponents()
     {
@@ -53,8 +53,8 @@ abstract class AbstractPluginComponent implements ComponentInterface
     /**
      * Checks if the plugin has component.
      *
-     * @param string|ComponentInterface $component Component id or instance
-     * @return bool true if it has, false otherwise
+     * @param string|ComponentInterface $component
+     * @return bool
      */
     final public function hasComponent($component)
     {
@@ -64,9 +64,9 @@ abstract class AbstractPluginComponent implements ComponentInterface
     /**
      * Finds component inside all of its components or inside an array with components.
      *
-     * @param string|ComponentInterface $component Component id or instance
-     * @param array|null $components Optional array with components to search in
-     * @return ComponentInterface|null Found component, null otherwise
+     * @param string|ComponentInterface $component
+     * @param array|null $components
+     * @return ComponentInterface|null
      */
     final public function findComponent($component, array $components = null)
     {
@@ -106,7 +106,7 @@ abstract class AbstractPluginComponent implements ComponentInterface
      *
      * This method should be overridden in widget implementation classes.
      *
-     * @return AbstractWidgetComponent[] An array with widget components
+     * @return AbstractWidgetComponent[]
      */
     public function getWidgets()
     {
@@ -116,7 +116,7 @@ abstract class AbstractPluginComponent implements ComponentInterface
     /**
      * Returns number of all provided widget components.
      *
-     * @return int Number of widget components
+     * @return int
      */
     final public function countWidgets()
     {
@@ -126,7 +126,7 @@ abstract class AbstractPluginComponent implements ComponentInterface
     /**
      * Checks if the plugin has any widget components.
      *
-     * @return bool true if plugin has at least one widget component, false otherwise
+     * @return bool
      */
     final public function hasWidgets()
     {
@@ -137,7 +137,7 @@ abstract class AbstractPluginComponent implements ComponentInterface
      * Checks if the plugin has widget component.
      *
      * @param string|AbstractWidgetComponent $widget Widget component id or instance
-     * @return bool true if it has, false otherwise
+     * @return bool
      */
     final public function hasWidget($widget)
     {
@@ -147,8 +147,8 @@ abstract class AbstractPluginComponent implements ComponentInterface
     /**
      * Finds widget component inside all of its widget components.
      *
-     * @param string|AbstractWidgetComponent $widget Component id or instance
-     * @return AbstractWidgetComponent|null Found widget component, null otherwise
+     * @param string|AbstractWidgetComponent $widget
+     * @return AbstractWidgetComponent|null
      */
     final public function findWidget($widget)
     {

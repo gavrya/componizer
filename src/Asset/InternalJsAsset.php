@@ -20,12 +20,12 @@ class InternalJsAsset implements AssetInterface
 {
 
     /**
-     * @var string Asset unique hash.
+     * @var string
      */
     private $hash = null;
 
     /**
-     * @var string HTML 'script' element
+     * @var string
      */
     private $script = null;
 
@@ -55,7 +55,7 @@ class InternalJsAsset implements AssetInterface
     /**
      * Returns 'script' element HTML.
      *
-     * @return string HTML 'script' element
+     * @return string
      */
     public function getScript()
     {
@@ -69,7 +69,7 @@ class InternalJsAsset implements AssetInterface
     /**
      * Returns asset unique hash.
      *
-     * @return string Asset hash
+     * @return string
      */
     public function getHash()
     {
@@ -81,7 +81,7 @@ class InternalJsAsset implements AssetInterface
      *
      * @see ComponizerInternalJs::POSITION_* constants
      *
-     * @return string One of the position constants value
+     * @return string
      */
     public function getPosition()
     {

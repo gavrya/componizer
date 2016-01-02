@@ -27,7 +27,7 @@ interface AssetInterface
      *
      * Two objects with the same hashes are considered equal.
      *
-     * @return string Asset hash
+     * @return string
      */
     public function getHash();
 
@@ -36,7 +36,7 @@ interface AssetInterface
      *
      * @see ComponizerAsset::POSITION_* constants
      *
-     * @return string Include position value
+     * @return string
      */
     public function getPosition();
 
@@ -44,7 +44,7 @@ interface AssetInterface
      * Returns HTML representation of the asset.
      *
      * @param array $options
-     * @return string HTML representation of the asset
+     * @return string
      */
     public function toHtml(array $options = null);
 

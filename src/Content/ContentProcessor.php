@@ -23,12 +23,12 @@ class ContentProcessor
 {
 
     /**
-     * @var Componizer Componizer instance
+     * @var Componizer
      */
     private $componizer = null;
 
     /**
-     * @var AbstractWidgetComponent[] Required widgets
+     * @var AbstractWidgetComponent[]
      */
     private $requiredWidgets = [];
 
@@ -39,7 +39,7 @@ class ContentProcessor
     /**
      * ContentProcessor constructor.
      *
-     * @param Componizer $componizer Componizer instance
+     * @param Componizer $componizer
      */
     public function __construct(Componizer $componizer)
     {
@@ -53,7 +53,7 @@ class ContentProcessor
     /**
      * Analyzes provided "editor content" and finds required widgets and assets in order to make/view "display content".
      *
-     * @param string $editorContent Editor content to analyze
+     * @param string $editorContent
      */
     public function initEditorContent($editorContent)
     {
@@ -83,8 +83,8 @@ class ContentProcessor
     /**
      * Makes "display content" from the "editor content".
      *
-     * @param $editorContent Editor content HTML
-     * @return string Display content HTML
+     * @param string $editorContent
+     * @return string
      */
     public function makeDisplayContent($editorContent)
     {
@@ -101,7 +101,7 @@ class ContentProcessor
     /**
      * Returns required components.
      *
-     * @return ComponentInterface[] Required components
+     * @return ComponentInterface[]
      */
     public function getRequiredComponents()
     {
@@ -111,7 +111,7 @@ class ContentProcessor
     /**
      * Returns required widgets.
      *
-     * @return AbstractWidgetComponent[] Required widgets
+     * @return AbstractWidgetComponent[]
      */
     public function getRequiredWidgets()
     {
@@ -125,7 +125,7 @@ class ContentProcessor
     /**
      * Returns required general assets needed in order to editor gets worked.
      *
-     * @return AssetsCollection Assets collection
+     * @return AssetsCollection
      */
     public function getRequiredGeneralAssets()
     {
@@ -135,7 +135,7 @@ class ContentProcessor
     /**
      * Returns required editor assets.
      *
-     * @return AssetsCollection Assets collection
+     * @return AssetsCollection
      */
     public function getRequiredEditorAssets()
     {
@@ -149,7 +149,7 @@ class ContentProcessor
     /**
      * Returns required display assets.
      *
-     * @return AssetsCollection Assets collection
+     * @return AssetsCollection
      */
     public function getRequiredDisplayAssets()
     {
@@ -163,8 +163,8 @@ class ContentProcessor
     /**
      * Returns required widget display assets.
      *
-     * @param callable $assetsResolver Widget assets resolver closure
-     * @return AssetsCollection Assets collection
+     * @param callable $assetsResolver
+     * @return AssetsCollection
      */
     private function getRequiredWidgetAssets(callable $assetsResolver)
     {

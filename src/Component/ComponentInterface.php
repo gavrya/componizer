@@ -22,50 +22,50 @@ interface ComponentInterface
      * Must be globally unique, lowercased string with the first 8 characters from a random sha-1 hash.
      * Must be the same for all versions of the component.
      *
-     * @return string Component id
+     * @return string
      */
     public function getId();
 
     /**
      * Returns component name.
      *
-     * @return string Component name
+     * @return string
      */
     public function getName();
 
     /**
      * Returns component version.
      *
-     * @return string Component version
+     * @return string
      */
     public function getVersion();
 
     /**
      * Returns short information about the component without containing HTML tags.
      *
-     * @return string Component information
+     * @return string
      */
     public function getInfo();
 
     /**
      * Tells if the component is shipped with assets that need to be symlinked to the public directory.
      *
-     * @return bool true if component has assets that need to be symlinked to the public directory, false otherwise
+     * @return bool
      */
     public function hasAssets();
 
     /**
      * Returns absolute path to the component assets directory.
      *
-     * @return string|null Absolute path to the component assets directory, null if component has no assets
+     * @return string|null
      */
     public function getAssetsDir();
 
     /**
      * Callback method that is invoked when the component need to be initialed.
      *
-     * @param string $lang Language code
-     * @param string $cacheDir Absolute path to the component cache directory where component data storing allowed
+     * @param string $lang
+     * @param string $cacheDir
      */
     public function init($lang, $cacheDir);
 

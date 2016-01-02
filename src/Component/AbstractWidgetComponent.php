@@ -27,14 +27,14 @@ abstract class AbstractWidgetComponent implements ComponentInterface
     /**
      * Returns editor related assets.
      *
-     * @return AssetsCollection Assets collection
+     * @return AssetsCollection
      */
     abstract public function getEditorAssets();
 
     /**
      * Returns display related assets.
      *
-     * @return AssetsCollection Assets collection
+     * @return AssetsCollection
      */
     abstract public function getDisplayAssets();
 
@@ -45,11 +45,11 @@ abstract class AbstractWidgetComponent implements ComponentInterface
     /**
      * Makes widget "display content" HTML.
      *
-     * @param ContentParserInterface $contentParser Content parser helper
-     * @param array $properties Widget related JSON data
-     * @param string $contentType Content type of the passed content
-     * @param string|null $content Widget content in format of "editor content"
-     * @return string Generated "display content" HTML
+     * @param ContentParserInterface $contentParser
+     * @param array $properties
+     * @param string $contentType
+     * @param string|null $content
+     * @return string
      */
     public function makeDisplayContent(
         ContentParserInterface $contentParser,

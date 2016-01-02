@@ -12,7 +12,7 @@ use InvalidArgumentException;
 
 
 /**
- * Provides helpfull methods for storing and retrieving data based on JSON file.
+ * Provides helpfull methods for storing and retrieving data using JSON file.
  *
  * Class StorageHelper
  * @package Gavrya\Componizer\Helper

@@ -27,7 +27,7 @@ class WidgetParser
 {
 
     /**
-     * @var Componizer Componizer instance
+     * @var Componizer
      */
     private $componizer = null;
 
@@ -66,11 +66,11 @@ class WidgetParser
             return;
         }
 
-        $widgetId = $this->getWidgetId($widgetElement);
-        $widgetName = $this->getWidgetName($widgetElement);
-        $widgetProperties = $this->getWidgetProperties($widgetElement);
-        $widgetContentType = $this->getWidgetContentType($widgetElement);
-        $widgetContent = $this->getWidgetContent($widgetElement, $widgetContentType);
+        $widgetId = $this->parseWidgetId($widgetElement);
+        $widgetName = $this->parseWidgetName($widgetElement);
+        $widgetProperties = $this->parseWidgetProperties($widgetElement);
+        $widgetContentType = $this->parseWidgetContentType($widgetElement);
+        $widgetContent = $this->parseWidgetContent($widgetElement, $widgetContentType);
 
         /** @var WidgetManager $widgetManager */
         $widgetManager = $this->componizer->resolve(WidgetManager::class);
@@ -85,37 +85,39 @@ class WidgetParser
                 htmlentities($widgetName)
             );
             $domHelper->replaceNodeWith($widgetElement, $comment);
-        } else {
-            try {
-                $widgetDisplayContent = $widget->makeDisplayContent(
-                    $contentParser,
-                    $widgetProperties,
-                    $widgetContentType,
-                    $widgetContent
-                );
 
-                if(
-                    !is_string($widgetDisplayContent) ||
-                    empty(trim($widgetDisplayContent)) ||
-                    !empty($this->parseWidgetIds($widgetDisplayContent))
-                ) {
-                    $comment = sprintf(
-                        '<!-- Widget component with invalid content: id: %s, name: %s -->',
-                        htmlentities($widgetId),
-                        htmlentities($widgetName)
-                    );
-                    $domHelper->replaceNodeWith($widgetElement, $comment);
-                } else {
-                    $domHelper->replaceNodeWith($widgetElement, $widgetDisplayContent);
-                }
-            } catch (Exception $ex) {
+            return;
+        }
+
+        try {
+            $widgetDisplayContent = $widget->makeDisplayContent(
+                $contentParser,
+                $widgetProperties,
+                $widgetContentType,
+                $widgetContent
+            );
+
+            if(
+                !is_string($widgetDisplayContent) ||
+                empty(trim($widgetDisplayContent)) ||
+                !empty($this->parseWidgetIds($widgetDisplayContent))
+            ) {
                 $comment = sprintf(
-                    '<!-- Widget component error: id: %s, name: %s -->',
+                    '<!-- Widget component with invalid content: id: %s, name: %s -->',
                     htmlentities($widgetId),
                     htmlentities($widgetName)
                 );
                 $domHelper->replaceNodeWith($widgetElement, $comment);
+            } else {
+                $domHelper->replaceNodeWith($widgetElement, $widgetDisplayContent);
             }
+        } catch (Exception $ex) {
+            $comment = sprintf(
+                '<!-- Widget component error: id: %s, name: %s -->',
+                htmlentities($widgetId),
+                htmlentities($widgetName)
+            );
+            $domHelper->replaceNodeWith($widgetElement, $comment);
         }
     }
 
@@ -158,11 +160,7 @@ class WidgetParser
                     continue;
                 }
 
-                $widgetId = $this->getWidgetId($widgetElement);
-
-                if (!empty($widgetId)) {
-                    $widgetIds[] = $widgetId;
-                }
+                $widgetIds[] = $this->parseWidgetId($widgetElement);
             }
         }
 
@@ -233,17 +231,35 @@ class WidgetParser
         return $domHelper->findFirstChildByAttribute($widgetElement, ContentParserInterface::WIDGET_ATTR_CONTENT);
     }
 
-    public function getWidgetId(DOMElement $widgetElement)
+    /**
+     * Returns widget id.
+     *
+     * @param DOMElement $widgetElement
+     * @return string
+     */
+    public function parseWidgetId(DOMElement $widgetElement)
     {
         return trim($widgetElement->getAttribute(ContentParserInterface::WIDGET_ATTR_ID));
     }
 
-    public function getWidgetName(DOMElement $widgetElement)
+    /**
+     * Returns widget name.
+     *
+     * @param DOMElement $widgetElement
+     * @return string
+     */
+    public function parseWidgetName(DOMElement $widgetElement)
     {
         return trim($widgetElement->getAttribute(ContentParserInterface::WIDGET_ATTR_NAME));
     }
 
-    public function getWidgetProperties(DOMElement $widgetElement)
+    /**
+     * Returns widget properties.
+     *
+     * @param DOMElement $widgetElement
+     * @return array
+     */
+    public function parseWidgetProperties(DOMElement $widgetElement)
     {
         $widgetProperties = trim($widgetElement->getAttribute(ContentParserInterface::WIDGET_ATTR_PROPERTIES));
         $widgetProperties = json_decode($widgetProperties, true);
@@ -255,7 +271,13 @@ class WidgetParser
         return $widgetProperties;
     }
 
-    public function getWidgetContentType(DOMElement $widgetElement)
+    /**
+     * Returns widget content type.
+     *
+     * @param DOMElement $widgetElement
+     * @return string
+     */
+    public function parseWidgetContentType(DOMElement $widgetElement)
     {
         $widgetContentType = trim($widgetElement->getAttribute(ContentParserInterface::WIDGET_ATTR_CONTENT_TYPE));
 
@@ -274,7 +296,14 @@ class WidgetParser
         return $widgetContentType;
     }
 
-    public function getWidgetContent(DOMElement $widgetElement, $widgetContentType)
+    /**
+     * Returns widget content.
+     *
+     * @param DOMElement $widgetElement
+     * @param $widgetContentType
+     * @return string|null
+     */
+    public function parseWidgetContent(DOMElement $widgetElement, $widgetContentType)
     {
         $widgetContentElement = $this->findWidgetContentElement($widgetElement);
 
