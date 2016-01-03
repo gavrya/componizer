@@ -10,38 +10,61 @@ namespace Gavrya\Componizer\Manager;
 
 
 use Exception;
+use Gavrya\Componizer\Component\AbstractPluginComponent;
+use Gavrya\Componizer\Component\ComponentInterface;
 use Gavrya\Componizer\Componizer;
 use Gavrya\Componizer\Helper\FsHelper;
 use Gavrya\Componizer\Helper\StorageHelper;
-use Gavrya\Componizer\Component\ComponentInterface;
-use Gavrya\Componizer\Component\AbstractPluginComponent;
 
+/**
+ * Class PluginManager is used for plugins management.
+ *
+ * @package Gavrya\Componizer\Manager
+ */
 class PluginManager
 {
 
-    // Componizer
+    // Storage key constant
+    const STORAGE_ENABLED_PLUGINS = 'enabled_plugins';
+
+    // Plugin JSON constants
+    const JSON_VAR_COMPONIZER = 'componizer';
+    const JSON_VAR_VERSION = 'version';
+    const JSON_VAR_PLUGIN = 'plugin';
+    const JSON_VAR_CLASS = 'class';
+
+    /**
+     * @var Componizer
+     */
     private $componizer = null;
 
-    // Plugins
+    /**
+     * @var AbstractPluginComponent[]
+     */
     private $plugins = null;
 
     //-----------------------------------------------------
-    // Instance creation/init section
+    // Constructor section
     //-----------------------------------------------------
 
+    /**
+     * PluginManager constructor.
+     *
+     * @param Componizer $componizer
+     */
     public function __construct(Componizer $componizer)
     {
         $this->componizer = $componizer;
     }
 
     //-----------------------------------------------------
-    // Get section
+    // Get/find section
     //-----------------------------------------------------
 
     /**
-     * Return array of all available plugins as $pluginId => $plugin.
+     * Returns all available valid plugins.
      *
-     * @return array|null
+     * @return AbstractPluginComponent[]
      */
     public function getAllPlugins()
     {
@@ -54,53 +77,52 @@ class PluginManager
         /** @var FsHelper $fsHelper */
         $fsHelper = $this->componizer->resolve(FsHelper::class);
 
-        // prepare plugins data
-        $vendorPath = $fsHelper->composerVendorDir();
+        $vendorPath = $fsHelper->getComposerVendorDir();
 
-        if($vendorPath === null) {
+        if ($vendorPath === null) {
             return [];
         }
 
-        $jsonFiles = $fsHelper->pluginsJsonFiles($vendorPath, Componizer::PLUGIN_JSON_FILE_NAME);
+        $pluginsJsonFiles = $fsHelper->getPluginsJsonFiles($vendorPath, Componizer::PLUGIN_JSON_FILE_NAME);
 
-        $jsonData = $fsHelper->pluginsJsonData($jsonFiles);
+        $pluginsJsonData = $fsHelper->getPluginsJsonData($pluginsJsonFiles);
 
-        // check plugin data
-        foreach ($jsonData as $data) {
-            // check version
-            // todo: compare using version_compare() in future (http://php.net/manual/ru/function.version-compare.php)
-            if (!isset($data['componizer']['version']) || $data['componizer']['version'] !== Componizer::VERSION) {
+        foreach ($pluginsJsonData as $pluginJsonData) {
+            if (!isset($pluginJsonData[static::JSON_VAR_COMPONIZER][static::JSON_VAR_VERSION])) {
                 continue;
             }
 
-            // check plugin class
-            if (!isset($data['plugin']['class'])) {
+            // todo: compare using version_compare()
+            if ($pluginJsonData[static::JSON_VAR_COMPONIZER][static::JSON_VAR_VERSION] !== Componizer::VERSION) {
                 continue;
             }
 
-            // create plugin instance from class name (may throw FatalException if not loadable)
-            $plugin = new $data['plugin']['class'];
+            if (!isset($pluginJsonData[static::JSON_VAR_PLUGIN][static::JSON_VAR_CLASS])) {
+                continue;
+            }
 
-            // validate plugin and its components
+            // creates plugin instance from class name (may throw FatalException if not loadable)
+
+            /** @var AbstractPluginComponent $plugin */
+            $plugin = new $pluginJsonData[static::JSON_VAR_PLUGIN][static::JSON_VAR_CLASS];
+
             if (!$this->isPluginValid($plugin)) {
                 continue;
             }
 
-            // init plugin
             $this->initPlugin($plugin);
 
-            // add plugin to available plugins
-            $plugins[$plugin->id()] = $plugin;
+            $plugins[$plugin->getId()] = $plugin;
         }
 
         return $this->plugins = $plugins;
     }
 
     /**
-     * Find plugin by plugin id or plugin instance.
+     * Finds available plugin by id or instance.
      *
-     * @param $plugin
-     * @return null
+     * @param AbstractPluginComponent|string $plugin
+     * @return AbstractPluginComponent|null
      */
     public function findPlugin($plugin)
     {
@@ -124,24 +146,24 @@ class PluginManager
     //-----------------------------------------------------
 
     /**
-     * Return all enabled plugins as array of $pluginId => $plugin.
+     * Returns all enabled plugins.
      *
-     * @return array
+     * @return AbstractPluginComponent[]
      */
     public function getEnabledPlugins()
     {
         /** @var StorageHelper $storageHelper */
         $storageHelper = $this->componizer->resolve(StorageHelper::class);
 
-        $plugins = $storageHelper->get('enabled_plugins', []);
+        $plugins = $storageHelper->get(static::STORAGE_ENABLED_PLUGINS, []);
 
         return array_intersect_key($this->getAllPlugins(), $plugins);
     }
 
     /**
-     * Return all disabled plugins as array of $pluginId => $plugin.
+     * Returns all disabled plugins.
      *
-     * @return array
+     * @return AbstractPluginComponent[]
      */
     public function getDisabledPlugins()
     {
@@ -149,16 +171,13 @@ class PluginManager
     }
 
     /**
-     * Enable plugin by plugin instance or plugin id.
-     * Enable plugins by array of plugin instances or plugin ids.
+     * Enables plugin by id or instance.
      *
-     * @param $plugin
+     * @param AbstractPluginComponent|AbstractPluginComponent[]|string $plugin
      * @return bool
-     * @throws ComponizerException
      */
     public function enablePlugin($plugin)
     {
-        // enable plugins using array
         if (is_array($plugin)) {
             foreach ($plugin as $item) {
                 $this->enablePlugin($item);
@@ -167,64 +186,54 @@ class PluginManager
             return true;
         }
 
-        // check plugin
         $plugin = $this->findPlugin($plugin);
 
         if ($plugin === null) {
             return false;
         }
 
-        // save to storage
         try {
             /** @var StorageHelper $storageHelper */
             $storageHelper = $this->componizer->resolve(StorageHelper::class);
 
-            $plugins = $storageHelper->get('enabled_plugins', []);
+            $enabledPlugins = $storageHelper->get(static::STORAGE_ENABLED_PLUGINS, []);
 
-            // check existance
-            if (isset($plugins[$plugin->id()])) {
+            if (isset($enabledPlugins[$plugin->getId()])) {
                 return true;
             }
 
             /** @var ComponentManager $componentManager */
             $componentManager = $this->componizer->resolve(ComponentManager::class);
 
-            // enable component
             $componentManager->enableComponent($plugin);
 
-            // enable plugin components
-            foreach ($plugin->components() as $pluginComponent) {
-                if ($pluginComponent instanceof ComponentInterface) {
-                    $componentManager->enableComponent($pluginComponent);
+            foreach ($plugin->getComponents() as $component) {
+                if ($component instanceof ComponentInterface) {
+                    $componentManager->enableComponent($component);
                 }
             }
 
-            // update enabled plugins
-            $plugins[$plugin->id()] = get_class($plugin);
+            $enabledPlugins[$plugin->getId()] = get_class($plugin);
 
-            // update storage
-            $storageHelper->set('enabled_plugins', $plugins);
+            $storageHelper->set(static::STORAGE_ENABLED_PLUGINS, $enabledPlugins);
             $storageHelper->save();
 
             return true;
         } catch (Exception $ex) {
-            throw new ComponizerException('Unable to enable plugin with id: ' . $plugin->id());
+            // Unable to enable plugin
         }
 
         return false;
     }
 
     /**
-     * Disable plugin by plugin instance or plugin id.
-     * Disable plugins by array of plugin instances or plugin ids.
+     * Disables plugin by id or instance.
      *
-     * @param $plugin
+     * @param AbstractPluginComponent|AbstractPluginComponent[]|string $plugin
      * @return bool
-     * @throws ComponizerException
      */
     public function disablePlugin($plugin)
     {
-        // disable plugins using array
         if (is_array($plugin)) {
             foreach ($plugin as $item) {
                 $this->disablePlugin($item);
@@ -233,57 +242,50 @@ class PluginManager
             return true;
         }
 
-        // check plugin
         $plugin = $this->findPlugin($plugin);
 
         if ($plugin === null) {
             return false;
         }
 
-        // delete from storage
         try {
             /** @var StorageHelper $storageHelper */
             $storageHelper = $this->componizer->resolve(StorageHelper::class);
 
-            $plugins = $storageHelper->get('enabled_plugins', []);
+            $enabledPlugins = $storageHelper->get(static::STORAGE_ENABLED_PLUGINS, []);
 
-            // check existance
-            if (!isset($plugins[$plugin->id()])) {
+            if (!isset($enabledPlugins[$plugin->getId()])) {
                 return true;
             }
 
             /** @var ComponentManager $componentManager */
             $componentManager = $this->componizer->resolve(ComponentManager::class);
 
-            // disable component
             $componentManager->disableComponent($plugin);
 
-            // disable plugin components
-            foreach ($plugin->components() as $pluginComponent) {
-                if ($pluginComponent instanceof ComponentInterface) {
-                    $componentManager->disableComponent($pluginComponent);
+            foreach ($plugin->components() as $component) {
+                if ($component instanceof ComponentInterface) {
+                    $componentManager->disableComponent($component);
                 }
             }
 
-            // unset enabled plugin
-            unset($plugins[$plugin->id()]);
+            unset($enabledPlugins[$plugin->getId()]);
 
-            // update storage
-            $storageHelper->set('enabled_plugins', $plugins);
+            $storageHelper->set(static::STORAGE_ENABLED_PLUGINS, $enabledPlugins);
             $storageHelper->save();
 
             return true;
         } catch (Exception $ex) {
-            throw new ComponizerException('Unable to disable plugin with id: ' . $plugin->id());
+            // Unable to disable
         }
 
         return false;
     }
 
     /**
-     * Check if the plugin is enabled by plugin inatance or plugin id.
+     * Tells if plugin is enabled by id or instance.
      *
-     * @param $plugin
+     * @param AbstractPluginComponent|string $plugin
      * @return bool
      */
     public function isPluginEnabled($plugin)
@@ -296,22 +298,21 @@ class PluginManager
 
         $plugins = $this->getEnabledPlugins();
 
-        return isset($plugins[$plugin->id()]);
+        return isset($plugins[$plugin->getId()]);
     }
 
     //-----------------------------------------------------
-    // Internal methods section
+    // Private methods section
     //-----------------------------------------------------
 
     /**
-     * Check if the plugin and all of its components is valid
+     * Tells if plugin and all of its components is valid.
      *
-     * @param $plugin
+     * @param AbstractPluginComponent|string $plugin
      * @return bool
      */
     private function isPluginValid($plugin)
     {
-        // check plugin instance
         if (!($plugin instanceof AbstractPluginComponent)) {
             return false;
         }
@@ -319,12 +320,10 @@ class PluginManager
         /** @var ComponentManager $componentManager */
         $componentManager = $this->componizer->resolve(ComponentManager::class);
 
-        // check plugin
         if (!$componentManager->isComponentValid($plugin)) {
             return false;
         }
 
-        // plugin widgets
         $widgets = $plugin->getWidgets();
 
         if (!is_array($widgets)) {
@@ -344,7 +343,7 @@ class PluginManager
     }
 
     /**
-     * Init plugin and all of its components
+     * Initiates plugin and all of its components.
      *
      * @param AbstractPluginComponent $plugin
      */
@@ -353,13 +352,11 @@ class PluginManager
         /** @var ComponentManager $componentManager */
         $componentManager = $this->componizer->resolve(ComponentManager::class);
 
-        // init plugin
         $componentManager->initComponent($plugin);
 
-        // init plugin components
-        foreach ($plugin->getComponents() as $pluginComponent) {
-            if ($pluginComponent instanceof ComponentInterface) {
-                $componentManager->initComponent($pluginComponent);
+        foreach ($plugin->getComponents() as $component) {
+            if ($component instanceof ComponentInterface) {
+                $componentManager->initComponent($component);
             }
         }
     }

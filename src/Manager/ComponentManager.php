@@ -10,36 +10,53 @@ namespace Gavrya\Componizer\Manager;
 
 
 use Gavrya\Componizer\Componizer;
-use Gavrya\Componizer\Config;
+use Gavrya\Componizer\ComponizerConfig;
 use Gavrya\Componizer\Helper\FsHelper;
 use Gavrya\Componizer\Component\ComponentInterface;
 
+/**
+ * Class ComponentManager is used for component management.
+ *
+ * @package Gavrya\Componizer\Manager
+ */
 class ComponentManager
 {
 
-    // Componizer
+    /**
+     * @var Componizer
+     */
     private $componizer = null;
 
     //-----------------------------------------------------
-    // Instance creation/init section
+    // Constructor section
     //-----------------------------------------------------
 
+    /**
+     * ComponentManager constructor.
+     *
+     * @param Componizer $componizer
+     */
     public function __construct(Componizer $componizer)
     {
         $this->componizer = $componizer;
     }
 
     //-----------------------------------------------------
-    // Methods implementation section
+    // General methods section
     //-----------------------------------------------------
 
+    /**
+     * Tells if component valid.
+     *
+     * @param $component
+     * @return bool
+     */
     public function isComponentValid($component)
     {
         if (!($component instanceof ComponentInterface)) {
             return false;
         }
 
-        // check id
         $id = $component->getId();
 
         if (!is_string($id)) {
@@ -50,45 +67,38 @@ class ComponentManager
             return false;
         }
 
-        // check name
         $name = $component->getName();
 
         if (!is_string($name) || empty(trim($name))) {
             return false;
         }
 
-        // check version
         $version = $component->getVersion();
 
         if (!is_string($version) || empty(trim($version))) {
             return false;
         }
 
-        // check info
         $info = $component->getInfo();
 
         if (!is_string($info) || empty(trim($info))) {
             return false;
         }
 
-        // assets dir
         $assetsDir = $component->getAssetsDir();
 
         if ($component->hasAssets() && !is_string($assetsDir)) {
             return false;
         }
 
-        // check assets dir
         if ($component->hasAssets() && (!file_exists($assetsDir) || !is_dir($assetsDir))) {
             return false;
         }
 
-        // check assets dir real path
         if ($component->hasAssets() && $assetsDir !== realpath($assetsDir)) {
             return false;
         }
 
-        // check assets dir name = component id
         if ($component->hasAssets() && basename($assetsDir) !== $id) {
             return false;
         }
@@ -96,129 +106,139 @@ class ComponentManager
         return true;
     }
 
+    /**
+     * Initiates component.
+     *
+     * @param ComponentInterface $component
+     */
     public function initComponent(ComponentInterface $component)
     {
-        // create component cache dir
         $componentCacheDir = $this->createComponentCacheDir($component);
 
-        // sync assets
         $this->syncComponentAssetsDir($component);
 
-        // componizer config
         $config = $this->componizer->getConfig();
 
-        // lang
-        $lang = $config->get(Config::CONFIG_LANG);
+        $lang = $config->get(ComponizerConfig::CONFIG_LANG);
 
-        // init component
         $component->init($lang, $componentCacheDir);
     }
 
+    /**
+     * Enables component.
+     *
+     * @param ComponentInterface $component
+     */
     public function enableComponent(ComponentInterface $component)
     {
-        // create component cache dir
         $this->createComponentCacheDir($component);
 
-        // sync assets
         $this->syncComponentAssetsDir($component);
 
-        // call up() method
         $component->up();
     }
 
+    /**
+     * Disables component.
+     *
+     * @param ComponentInterface $component
+     */
     public function disableComponent(ComponentInterface $component)
     {
-        // call down() method
         $component->down();
 
-        // unsync assets
         $this->unsyncComponentAssetsDir($component);
 
-        // remove component cache dir
         $this->removeComponentCacheDir($component);
     }
 
+    /**
+     * Creates component cache dir.
+     *
+     * @param ComponentInterface $component
+     * @return string
+     */
     private function createComponentCacheDir(ComponentInterface $component)
     {
-        // componizer config
         $config = $this->componizer->getConfig();
 
-        // cache dir
-        $cacheDir = $config->get(Config::CONFIG_CACHE_DIR);
+        $cacheDir = $config->get(ComponizerConfig::CONFIG_CACHE_DIR);
 
-        // component cache dir
         $componentCacheDir = $cacheDir . DIRECTORY_SEPARATOR . $component->getId();
 
         /** @var FsHelper $fsHelper */
         $fsHelper = $this->componizer->resolve(FsHelper::class);
 
-        // make dir
         $fsHelper->makeDir($componentCacheDir);
 
         return $componentCacheDir;
     }
 
+    /**
+     * Removes component cache dir.
+     *
+     * @param ComponentInterface $component
+     */
     private function removeComponentCacheDir(ComponentInterface $component)
     {
-        // componizer config
         $config = $this->componizer->getConfig();
 
-        // cache dir
-        $cacheDir = $config->get(Config::CONFIG_CACHE_DIR);
+        $cacheDir = $config->get(ComponizerConfig::CONFIG_CACHE_DIR);
 
-        // component cache dir
         $componentCacheDir = $cacheDir . DIRECTORY_SEPARATOR . $component->getId();
 
         /** @var FsHelper $fsHelper */
         $fsHelper = $this->componizer->resolve(FsHelper::class);
 
-        // remove dir
         $fsHelper->removeDir($componentCacheDir);
     }
 
+    /**
+     * Syncs component assets dir.
+     *
+     * @param ComponentInterface $component
+     * @return string|void
+     */
     private function syncComponentAssetsDir(ComponentInterface $component)
     {
         if (!$component->hasAssets()) {
             return;
         }
 
-        // componizer config
         $config = $this->componizer->getConfig();
 
-        // public dir
-        $publicDir = $config->get(Config::CONFIG_PUBLIC_DIR);
+        $publicDir = $config->get(ComponizerConfig::CONFIG_PUBLIC_DIR);
 
-        // component public dir symlink
         $targetLink = $publicDir . DIRECTORY_SEPARATOR . $component->getId();
 
         /** @var FsHelper $fsHelper */
         $fsHelper = $this->componizer->resolve(FsHelper::class);
 
-        // create symlink
         $fsHelper->createSymlink($component->getAssetsDir(), $targetLink);
 
         return $targetLink;
     }
 
+    /**
+     * Unsyncs component assets dir.
+     *
+     * @param ComponentInterface $component
+     */
     private function unsyncComponentAssetsDir(ComponentInterface $component)
     {
         if (!$component->hasAssets()) {
             return;
         }
 
-        // componizer config
         $config = $this->componizer->getConfig();
 
-        // public dir
-        $publicDir = $config->get(Config::CONFIG_PUBLIC_DIR);
+        $publicDir = $config->get(ComponizerConfig::CONFIG_PUBLIC_DIR);
 
-        // component public dir symlink
         $targetLink = $publicDir . DIRECTORY_SEPARATOR . $component->getId();
 
         /** @var FsHelper $fsHelper */
         $fsHelper = $this->componizer->resolve(FsHelper::class);
 
-        // remove symlink
         $fsHelper->removeSymlink($targetLink);
     }
 

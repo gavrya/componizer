@@ -61,7 +61,7 @@ class WidgetParser
         $domHelper = $this->componizer->resolve(DomHelper::class);
 
         if (!$this->isValidWidgetElement($widgetElement)) {
-            $domHelper->removeNode($widgetElement);
+            $domHelper->replaceNodeWith($widgetElement, '<!-- Removed invalid widget component -->');
 
             return;
         }

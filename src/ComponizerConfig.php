@@ -14,28 +14,28 @@ use Exception;
 use InvalidArgumentException;
 
 /**
- * Class Config represents configuration required in order to create Componizer instance.
+ * Class ComponizerConfig represents configuration required in order to create Componizer instance.
  *
  * @see Componizer
  *
  * @package Gavrya\Componizer
  */
-class Config
+class ComponizerConfig
 {
 
-    // Config keys
+    // ComponizerConfig keys
     const CONFIG_LANG = 'lang';
     const CONFIG_CACHE_DIR = 'cache_dir';
     const CONFIG_PUBLIC_DIR = 'public_dir';
     const CONFIG_PREVIEW_URL = 'preview_url';
 
     /**
-     * @var array Config array
+     * @var array
      */
     private $config = [];
 
     /**
-     * @var array Validation errors array
+     * @var array
      */
     private $validationErrors = [];
 
@@ -44,11 +44,11 @@ class Config
     //-----------------------------------------------------
 
     /**
-     * Config constructor.
+     * ComponizerConfig constructor.
      *
-     * @param array $config Config array
+     * @param array $config
      *
-     * @throws InvalidArgumentException When invalid config array passed
+     * @throws InvalidArgumentException
      */
     public function __construct(array $config)
     {
@@ -77,9 +77,9 @@ class Config
      *
      * @see Config::CONFIG_* constants
      *
-     * @param string $configKey Config key
-     * @param mixed $defaultValue Optional default value
-     * @return string|null Config value or default value in case when config value not found by its config key
+     * @param string $configKey
+     * @param mixed $defaultValue
+     * @return string|null
      */
     public function get($configKey, $defaultValue = null)
     {
@@ -89,7 +89,7 @@ class Config
     /**
      * Tells if the config is valid.
      *
-     * @return bool true if there is no validation errors, false if exists
+     * @return bool
      */
     public function isValid()
     {
@@ -99,7 +99,7 @@ class Config
     /**
      * Returns validation errors.
      *
-     * @return array Validation errors array
+     * @return array
      */
     public function getValidationErrors()
     {
@@ -167,8 +167,8 @@ class Config
 
             $this->config[static::CONFIG_CACHE_DIR] = $dirPath;
 
-            if (basename($dirPath) != static::CACHE_DIR_NAME) {
-                $dirPath = $dirPath . DIRECTORY_SEPARATOR . static::CACHE_DIR_NAME;
+            if (basename($dirPath) != static::CONFIG_CACHE_DIR) {
+                $dirPath = $dirPath . DIRECTORY_SEPARATOR . static::CONFIG_CACHE_DIR;
 
                 if (file_exists($dirPath) && is_dir($dirPath) && !is_writable($dirPath)) {
                     throw new Exception('Cache directory is not writable');
@@ -213,8 +213,8 @@ class Config
 
             $this->config[static::CONFIG_PUBLIC_DIR] = $dirPath;
 
-            if (basename($dirPath) != static::PUBLIC_DIR_NAME) {
-                $dirPath = $dirPath . DIRECTORY_SEPARATOR . static::PUBLIC_DIR_NAME;
+            if (basename($dirPath) != static::CONFIG_PUBLIC_DIR) {
+                $dirPath = $dirPath . DIRECTORY_SEPARATOR . static::CONFIG_PUBLIC_DIR;
 
                 if (file_exists($dirPath) && is_dir($dirPath) && !is_writable($dirPath)) {
                     throw new Exception('Public directory is not writable');
@@ -248,8 +248,8 @@ class Config
     /**
      * Adds new validation error.
      *
-     * @param string $configKey Config key
-     * @param string $message Validation error message
+     * @param string $configKey
+     * @param string $message
      */
     private function addValidationError($configKey, $message)
     {

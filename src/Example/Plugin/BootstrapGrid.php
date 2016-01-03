@@ -6,60 +6,61 @@
  * Time: 11:03 AM
  */
 
-namespace Gavrya\Componizer\Component\Plugin;
+namespace Gavrya\Componizer\Example\Plugin;
 
 
-use Gavrya\Componizer\Component\Widget\ExampleWidget;
-use Gavrya\Componizer\Skeleton\ComponizerComponent;
-use Gavrya\Componizer\Skeleton\ComponizerPlugin;
+use Gavrya\Componizer\Component\AbstractPluginComponent;
+use Gavrya\Componizer\Example\Widget\BootstrapColumn;
+use Gavrya\Componizer\Example\Widget\BootstrapRow;
 
-class ExamplePlugin extends ComponizerPlugin implements ComponizerComponent
+
+class BootstrapGrid extends AbstractPluginComponent
 {
 
     private $id = '55963a8f';
     private $widgets = null;
 
     //-----------------------------------------------------
-    // Create/init section
+    // Constructor section
     //-----------------------------------------------------
 
     public function __construct()
     {
-        $this->widgets = [new ExampleWidget()];
+        $this->widgets = [new BootstrapRow(), new BootstrapColumn()];
     }
 
     //-----------------------------------------------------
     // ComponentInterface section
     //-----------------------------------------------------
 
-    public function id()
+    public function getId()
     {
         return $this->id;
     }
 
-    public function name()
+    public function getName()
     {
-        return 'Example plugin';
+        return 'Bootstrap grid plugin';
     }
 
-    public function version()
+    public function getVersion()
     {
         return '1.0';
     }
 
-    public function info()
+    public function getInfo()
     {
-        return 'Info about example plugin';
+        return 'Provides bootstrap grid layout';
     }
 
     public function hasAssets()
     {
-        return true;
+        return false;
     }
 
-    public function assetsDir()
+    public function getAssetsDir()
     {
-        return dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR . $this->id;
+        return dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR . 'assets'. DIRECTORY_SEPARATOR . $this->id;
     }
 
     public function init($lang, $cacheDir)
@@ -81,10 +82,9 @@ class ExamplePlugin extends ComponizerPlugin implements ComponizerComponent
     // AbstractPluginComponent section
     //-----------------------------------------------------
 
-    public function widgets()
+    public function getWidgets()
     {
         return $this->widgets;
     }
-
 
 }

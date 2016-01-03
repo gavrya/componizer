@@ -1,16 +1,9 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: gavrya
- * Date: 10/23/15
- * Time: 5:50 PM
- */
+
 use Gavrya\Componizer\Componizer;
+use Gavrya\Componizer\ComponizerConfig;
 
-require('/Users/gavrya/Projects/componizer/vendor/autoload.php');
-
-
-error_reporting(E_ALL);
+include('init.php');
 
 $timerStart = microtime(true);
 
@@ -21,50 +14,59 @@ $config = [
     ComponizerConfig::CONFIG_PREVIEW_URL => '/preview.php',
 ];
 
-Componizer::setup($config);
-$componizer = Componizer::instance();
+var_dump($config);
 
-$pluginManager = $componizer->pluginManager();
+$componnizerConfig = new ComponizerConfig($config);
+
+
+var_dump($componnizerConfig);
+
+$componizer = new Componizer($componnizerConfig);
+
+var_dump($componizer);
+
+$pluginManager = $componizer->getPluginManager();
 
 $pluginManager->enablePlugin($pluginManager->getDisabledPlugins());
-//$pluginManager->disable($pluginManager->enabled());
 
-//var_dump($pluginManager->enabled());
+var_dump($pluginManager->getEnabledPlugins());
 
 $editorContent = <<<EOD
         <div
          data-componizer-widget
-         data-componizer-widget-id="c770076f"
-         data-componizer-widget-name="lister"
+         data-componizer-widget-id="22222222"
+         data-componizer-widget-name="Bootstrap column widget"
          data-componizer-widget-properties='{"key": "value"}'
          data-componizer-widget-content-type="mixed">
             <div data-componizer-widget-content>
 
                 <div
                  data-componizer-widget
-                 data-componizer-widget-id="c770076f"
-                 data-componizer-widget-name="lister"
-                 data-componizer-widget-properties='{"key": "value"}'
+                 data-componizer-widget-id="44444444"
+                 data-componizer-widget-name="Bootstrap row widget"
+                 data-componizer-widget-properties='{"class": "col-md-6"}'
                  data-componizer-widget-content-type="mixed">
                     <div data-componizer-widget-content>
+                        First column
                     </div>
                 </div>
 
-	        </div>
-        </div>
+                <div
+                 data-componizer-widget
+                 data-componizer-widget-id="44444444"
+                 data-componizer-widget-name="Bootstrap row widget"
+                 data-componizer-widget-properties='{"class": "col-md-6"}'
+                 data-componizer-widget-content-type="mixed">
+                    <div data-componizer-widget-content>
+                        Second column
+                    </div>
+                </div>
 
-        <div
-         data-componizer-widget
-         data-componizer-widget-id="fake-id"
-         data-componizer-widget-name="faker"
-         data-componizer-widget-properties='{"key": "value"}'
-         data-componizer-widget-content-type="mixed">
-            <div data-componizer-widget-content>
             </div>
         </div>
 EOD;
 
-$contentProcessor = $componizer->contentProcessor();
+$contentProcessor = $componizer->getContentProcessor();
 
 echo PHP_EOL;
 echo $contentProcessor->initEditorContent($editorContent);
@@ -72,14 +74,6 @@ echo PHP_EOL;
 
 echo PHP_EOL;
 echo 'Required widgets: ' . count($contentProcessor->getRequiredWidgets());
-echo PHP_EOL;
-
-echo PHP_EOL;
-echo 'Required editor assets: ' . count($contentProcessor->getRequiredEditorAssets());
-echo PHP_EOL;
-
-echo PHP_EOL;
-echo 'Required display assets: ' . count($contentProcessor->getRequiredDisplayAssets());
 echo PHP_EOL;
 
 echo PHP_EOL;

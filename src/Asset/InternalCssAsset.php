@@ -96,10 +96,9 @@ class InternalCssAsset implements AssetInterface
     /**
      * Returns HTML representation of the asset.
      *
-     * @param array|null $options
      * @return string
      */
-    public function toHtml(array $options = null)
+    public function toHtml()
     {
         return $this->style;
     }

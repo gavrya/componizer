@@ -134,23 +134,14 @@ class ExternalJsAsset implements AssetInterface
     /**
      * Returns HTML representation of the asset.
      *
-     * @param array|null $options
      * @return string
      */
-    public function toHtml(array $options = null)
+    public function toHtml()
     {
-        $targetUrl = $this->url;
-
-        $baseUrl = isset($options) && isset($options['base_url']) ? $options['base_url'] : null;
-
-        if (is_string($baseUrl) && strpos($this->url, '/') === 0 && strpos($this->url, '//') !== 0) {
-            $targetUrl = rtrim($baseUrl, '/') . $this->url;
-        }
-
         if ($this->mode === null) {
-            return sprintf('<script src="%s" type="text/javascript"></script>', $targetUrl);
+            return sprintf('<script src="%s"></script>', $this->url);
         }
 
-        return sprintf('<script src="%s" type="text/javascript" %s></script>', $targetUrl, $this->mode);
+        return sprintf('<script src="%s" %s></script>', $this->url, $this->mode);
     }
 }

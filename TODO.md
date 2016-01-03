@@ -4,11 +4,15 @@ Important:
 
 -- Update example plugin and widget
 
--- Add widget content parser
+-- Rename ComponizerConfig to ComponizerConfig
 
--- Rename Config to ComponizerConfig
+-- Add required plugins to ContentProcessor
 
 Unimportant:
+
+-- Assets add array of parameters
+
+-- Add Integration dir for Laravel and other frameworks integration
 
 -- Add ComponizerMetaAsset ?
 

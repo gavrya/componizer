@@ -143,34 +143,31 @@ class AssetsCollection
     /**
      * Returns HTML representation of the assets collection required to be included at HTML head position.
      *
-     * @param array|null $options
      * @return string
      */
-    public function getHeadAssetsHtml(array $options = null)
+    public function getHeadAssetsHtml()
     {
-        return $this->getAssetsHtml(AssetInterface::POSITION_HEAD, $options);
+        return $this->getAssetsHtml(AssetInterface::POSITION_HEAD);
     }
 
     /**
      * Returns HTML representation of the assets collection required to be included at HTML body top position.
      *
-     * @param array|null $options
      * @return string
      */
-    public function getBodyTopAssetsHtml(array $options = null)
+    public function getBodyTopAssetsHtml()
     {
-        return $this->getAssetsHtml(AssetInterface::POSITION_BODY_TOP, $options);
+        return $this->getAssetsHtml(AssetInterface::POSITION_BODY_TOP);
     }
 
     /**
      * Returns HTML representation of the assets collection required to be included at HTML body bottom position.
      *
-     * @param array|null $options
      * @return string
      */
-    public function getBodyBottomAssetsHtml(array $options = null)
+    public function getBodyBottomAssetsHtml()
     {
-        return $this->getAssetsHtml(AssetInterface::POSITION_BODY_BOTTOM, $options);
+        return $this->getAssetsHtml(AssetInterface::POSITION_BODY_BOTTOM);
     }
 
     //-----------------------------------------------------
@@ -202,10 +199,9 @@ class AssetsCollection
      * Returns HTML representation of the assets collection based on include position and other options.
      *
      * @param string $position
-     * @param array|null $options
      * @return string
      */
-    private function getAssetsHtml($position, array $options = null)
+    private function getAssetsHtml($position)
     {
         $positions = [
             AssetInterface::POSITION_HEAD,
@@ -225,7 +221,7 @@ class AssetsCollection
                 continue;
             }
 
-            $assetsHtml .= $asset->toHtml($options);
+            $assetsHtml .= $asset->toHtml();
         }
 
         $assetsHtml .= '<!-- Assets collection end -->';

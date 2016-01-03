@@ -12,38 +12,37 @@ use InvalidArgumentException;
 
 
 /**
- * Provides helpfull methods for storing and retrieving data using JSON file.
+ * Class StorageHelper provides helpfull methods for storing and retrieving data using JSON file.
  *
- * Class StorageHelper
  * @package Gavrya\Componizer\Helper
  */
 class StorageHelper
 {
 
     /**
-     * @var string Absolute path to the cache directory where JSON file is located
+     * @var string
      */
     private $cacheDir = null;
 
     /**
-     * @var string Absolute path to the storage JSON file
+     * @var string
      */
     private $storageFile = null;
 
     /**
-     * @var array Storage data array
+     * @var array
      */
     private $data = [];
 
     //-----------------------------------------------------
-    // Construct section
+    // Constructor section
     //-----------------------------------------------------
 
     /**
      * StorageHelper constructor.
      *
-     * @param $cacheDir string Absolute path to the cache directory where JSON file is located (without trailing slash)
-     * @param string $fileName Optional name of the storage JSON file, by default 'storage.json' will be used
+     * @param string $cacheDir
+     * @param string $fileName
      */
     public function __construct($cacheDir, $fileName = 'storage.json')
     {
@@ -53,9 +52,9 @@ class StorageHelper
     }
 
     /**
-     * Initiates storage data from JSON file.
+     * Loads storage data from JSON file.
      *
-     * @throws InvalidArgumentException When one of the arguments was invalid
+     * @throws InvalidArgumentException
      */
     private function init()
     {
@@ -90,25 +89,25 @@ class StorageHelper
     }
 
     //-----------------------------------------------------
-    // Basic methods section
+    // General methods section
     //-----------------------------------------------------
 
     /**
-     * Returns storage data array.
+     * Returns all storage data.
      *
-     * @return array Storage data array
+     * @return array
      */
-    public function all()
+    public function getAll()
     {
         return $this->data;
     }
 
     /**
-     * Returns key based data or default value if there is no data for provided key.
+     * Returns key based data or default value if there is no data.
      *
-     * @param string $key Key to search data for
-     * @param mixed|null $default Default value to return
-     * @return mixed|null Returned data from storage
+     * @param string $key
+     * @param mixed|null $default
+     * @return mixed|null
      */
     public function get($key, $default = null)
     {
@@ -121,8 +120,8 @@ class StorageHelper
      * Use save() method to actually save storage data.
      * @see save
      *
-     * @param string $key Storage key
-     * @param mixed $value Data to store
+     * @param string $key
+     * @param mixed $value
      */
     public function set($key, $value)
     {
@@ -132,8 +131,8 @@ class StorageHelper
     /**
      * Checks if key based data exist.
      *
-     * @param string $key Storage key to check
-     * @return bool true if data exists, false otherwise
+     * @param string $key
+     * @return bool
      */
     public function has($key)
     {
@@ -148,7 +147,7 @@ class StorageHelper
      *
      * @see save
      *
-     * @param null $key Storage key wich data need to be removed
+     * @param string|null $key
      */
     public function delete($key = null)
     {
@@ -164,7 +163,7 @@ class StorageHelper
     /**
      * Saves storage data to disk by writing out storage JSON file.
      *
-     * @return bool true if storage JSON file was written successfully, false otherwise
+     * @return bool
      */
     public function save()
     {

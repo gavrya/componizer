@@ -36,14 +36,14 @@ class Componizer
     const PUBLIC_DIR_NAME = 'componizer';
 
     /**
-     * @var Config Configuration
+     * @var ComponizerConfig
      */
     private $config = null;
 
     /**
-     * @var array Dependency container
+     * @var array
      */
-    private $container = [];
+    private $dependencyContainer = [];
 
     //-----------------------------------------------------
     // Constructor section
@@ -52,11 +52,11 @@ class Componizer
     /**
      * Componizer constructor.
      *
-     * @param Config $config Configuration
+     * @param ComponizerConfig $config
      *
-     * @throws InvalidArgumentException When invalid configuration passed
+     * @throws InvalidArgumentException
      */
-    private function __construct(Config $config)
+    public function __construct(ComponizerConfig $config)
     {
         if($config === null || !$config->isValid()) {
             throw new InvalidArgumentException('Invalid config');
@@ -71,7 +71,7 @@ class Componizer
     //-----------------------------------------------------
 
     /**
-     * @return Config Configuration
+     * @return ComponizerConfig
      */
     public function getConfig()
     {
@@ -81,7 +81,7 @@ class Componizer
     /**
      * Returns plugin manager.
      *
-     * @return PluginManager Plugin manager
+     * @return PluginManager
      */
     public function getPluginManager()
     {
@@ -91,7 +91,7 @@ class Componizer
     /**
      * Returns widget manager.
      *
-     * @return WidgetManager Widget manager
+     * @return WidgetManager
      */
     public function getWidgetManager()
     {
@@ -101,7 +101,7 @@ class Componizer
     /**
      * Returns content processor.
      *
-     * @return ContentProcessor Content processor
+     * @return ContentProcessor
      */
     public function getContentProcessor()
     {
@@ -115,15 +115,15 @@ class Componizer
     /**
      * Returns resolved dependency by the class name.
      *
-     * @param string $className Class name
-     * @return mixed|null Resolved object, null otherwise
+     * @param string $className
+     * @return mixed|null
      */
     public function resolve($className)
     {
-        if (array_key_exists($className, $this->container)) {
-            $dependency = $this->container[$className];
+        if (array_key_exists($className, $this->dependencyContainer)) {
+            $dependency = $this->dependencyContainer[$className];
 
-            return $dependency instanceof Closure ? $this->container[$className] = $dependency() : $dependency;
+            return $dependency instanceof Closure ? $this->dependencyContainer[$className] = $dependency() : $dependency;
         }
 
         return null;
@@ -137,39 +137,39 @@ class Componizer
         // alias
         $componizer = $this;
 
-        $this->container[FsHelper::class] = function () {
+        $this->dependencyContainer[FsHelper::class] = function () {
             return new FsHelper();
         };
 
-        $this->container[StorageHelper::class] = function () use ($componizer) {
-            return new StorageHelper($componizer->getConfig()->get(Config::CONFIG_CACHE_DIR));
+        $this->dependencyContainer[StorageHelper::class] = function () use ($componizer) {
+            return new StorageHelper($componizer->getConfig()->get(ComponizerConfig::CONFIG_CACHE_DIR));
         };
 
-        $this->container[DomHelper::class] = function () {
+        $this->dependencyContainer[DomHelper::class] = function () {
             return new DomHelper();
         };
 
-        $this->container[PluginManager::class] = function () use ($componizer) {
+        $this->dependencyContainer[PluginManager::class] = function () use ($componizer) {
             return new PluginManager($componizer);
         };
 
-        $this->container[ComponentManager::class] = function () use ($componizer) {
+        $this->dependencyContainer[ComponentManager::class] = function () use ($componizer) {
             return new ComponentManager($componizer);
         };
 
-        $this->container[WidgetManager::class] = function () use ($componizer) {
+        $this->dependencyContainer[WidgetManager::class] = function () use ($componizer) {
             return new WidgetManager($componizer);
         };
 
-        $this->container[WidgetParser::class] = function () use ($componizer) {
+        $this->dependencyContainer[WidgetParser::class] = function () use ($componizer) {
             return new WidgetParser($componizer);
         };
 
-        $this->container[ContentParser::class] = function () use ($componizer) {
+        $this->dependencyContainer[ContentParser::class] = function () use ($componizer) {
             return new ContentParser($componizer);
         };
 
-        $this->container[ContentProcessor::class] = function () use ($componizer) {
+        $this->dependencyContainer[ContentProcessor::class] = function () use ($componizer) {
             return new ContentProcessor($componizer);
         };
     }
@@ -193,7 +193,7 @@ class Componizer
      */
     private function removeBrokenSymlinks()
     {
-        $publicDir = $this->config->get(Config::CONFIG_PUBLIC_DIR);
+        $publicDir = $this->config->get(ComponizerConfig::CONFIG_PUBLIC_DIR);
 
         /** @var FsHelper $fsHelper */
         $fsHelper = $this->resolve(FsHelper::class);

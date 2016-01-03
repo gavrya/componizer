@@ -16,9 +16,8 @@ use DOMNode;
 use DOMNodeList;
 
 /**
- * Contains helpfull methods for working with DOM document and its elements.
+ * Class DomHelper contains helpfull methods for working with DOM document and its elements.
  *
- * Class DomHelper
  * @package Gavrya\Componizer\Helper
  */
 class DomHelper
@@ -27,8 +26,8 @@ class DomHelper
     /**
      * Creates a new DOM document from a UTF-8 encoded string.
      *
-     * @param string $htmlFragment String containing HTML fragment
-     * @return DOMDocument Newly created DOM document
+     * @param string $htmlFragment
+     * @return DOMDocument
      */
     public function createDoc($htmlFragment)
     {
@@ -63,8 +62,8 @@ class DomHelper
      *
      * @see createDoc
      *
-     * @param DOMDocument $doc Document to search root element for
-     * @return DOMElement|null Document root element, null otherwise
+     * @param DOMDocument $doc
+     * @return DOMElement|null
      */
     public function getDocRoot(DOMDocument $doc)
     {
@@ -74,8 +73,8 @@ class DomHelper
     /**
      * Returns the HTML content of the DOM node (aka inner HTML).
      *
-     * @param DOMNode $domNode DOM node
-     * @return string Inner HTML content of the DOM node
+     * @param DOMNode $domNode
+     * @return string
      */
     function getInnerHtml(DOMNode $domNode)
     {
@@ -91,8 +90,8 @@ class DomHelper
     /**
      * Replaces DOM node from the owned DOM document with the provided HTML string (aka outer HTML).
      *
-     * @param DOMNode $domNode DOM node to be replaced
-     * @param string $htmlFragment String containing HTML
+     * @param DOMNode $domNode
+     * @param string $htmlFragment
      */
     function replaceNodeWith(DOMNode $domNode, $htmlFragment)
     {
@@ -150,8 +149,8 @@ class DomHelper
      * Removes all event based on* attributes from each HTML element.
      * Replaces all bookmarklet links href values with the dummy anchor hash.
      *
-     * @param string $htmlFragment HTML fragment that need to be cleared from JavaScript
-     * @return string HTML fragment cleared from JavaScript
+     * @param string $htmlFragment
+     * @return string
      */
     function clearHtmlFromJavaScript($htmlFragment)
     {

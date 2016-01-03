@@ -18,9 +18,8 @@ use RecursiveIteratorIterator;
 use SplFileInfo;
 
 /**
- * Contains helpfull methods for working with file system.
+ * Class FsHelper contains helpfull methods for working with file system.
  *
- * Class FsHelper
  * @package Gavrya\Componizer\Helper
  */
 class FsHelper
@@ -37,9 +36,9 @@ class FsHelper
     /**
      * Returns absolute path to the composer vendor directory.
      *
-     * @return string|null Directory absolute path without trailing slash, null if no directory found
+     * @return string|null
      */
-    public function composerVendorDir()
+    public function getComposerVendorDir()
     {
         $path = dirname(__FILE__);
 
@@ -72,11 +71,11 @@ class FsHelper
     /**
      * Returns componizer plugins JSON files.
      *
-     * @param string $path Directory absolute path to search in
-     * @param string $fileName Target JSON file name including extension
-     * @return SplFileInfo[]|array An array of found JSON files filled with \SplFileInfo or an empty array
+     * @param string $path
+     * @param string $fileName
+     * @return SplFileInfo[]|array
      */
-    public function pluginsJsonFiles($path, $fileName)
+    public function getPluginsJsonFiles($path, $fileName)
     {
         $jsonFiles = [];
 
@@ -132,10 +131,10 @@ class FsHelper
     /**
      * Returns collected plugins JSON data from provided list of plugins JSON files.
      *
-     * @param array $jsonFiles An array of JSON files filled with \SplFileInfo objects
-     * @return array An array of array each with plugin related JSON data
+     * @param array $jsonFiles
+     * @return array
      */
-    public function pluginsJsonData(array $jsonFiles)
+    public function getPluginsJsonData(array $jsonFiles)
     {
         $jsonData = [];
 
@@ -163,9 +162,9 @@ class FsHelper
     /**
      * Creates a symbolic link from source to the existing target directory.
      *
-     * @param string $sourceDir Source directory absolute path to create symlink from
-     * @param string $targetDir Target directory absolute path to create symlink to
-     * @return bool true if symlink was created, false otherwise
+     * @param string $sourceDir
+     * @param string $targetDir
+     * @return bool
      */
     public function createSymlink($sourceDir, $targetDir)
     {
@@ -187,8 +186,8 @@ class FsHelper
     /**
      * Removes a symbolic link with the source path.
      *
-     * @param string $sourceDir Symlink directory absolute path
-     * @return bool true if symlink was removed, false otherwise
+     * @param string $sourceDir
+     * @return bool
      */
     public function removeSymlink($sourceDir)
     {
@@ -202,7 +201,7 @@ class FsHelper
     /**
      * Iterates over directory and removes broken symlinks.
      *
-     * @param string $dir Directory absolute path to remove broken symlinks in
+     * @param string $dir
      */
     public function removeBrokenSymlinks($dir)
     {
@@ -230,7 +229,7 @@ class FsHelper
     /**
      * Creates new directory if not already exists.
      *
-     * @param string $dir Directory absolute path
+     * @param string $dir
      */
     public function makeDir($dir)
     {
@@ -242,7 +241,7 @@ class FsHelper
     /**
      * Removes directory with all of the content inside it.
      *
-     * @param string $dir Directory absolute path
+     * @param string $dir
      */
     public function removeDir($dir)
     {
@@ -265,8 +264,8 @@ class FsHelper
     /**
      * Removes all directories inside target directory which names are not in list.
      *
-     * @param string $dir Target directory absolute path to search in
-     * @param array $dirNames An array of directory names to leave
+     * @param string $dir
+     * @param array $dirNames
      */
     public function removeDirs($dir, $dirNames)
     {

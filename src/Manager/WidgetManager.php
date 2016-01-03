@@ -10,20 +10,32 @@ namespace Gavrya\Componizer\Manager;
 
 
 use Gavrya\Componizer\Asset\AssetsCollection;
-use Gavrya\Componizer\Component\ComponentInterface;
+use Gavrya\Componizer\Component\AbstractPluginComponent;
 use Gavrya\Componizer\Component\AbstractWidgetComponent;
 use Gavrya\Componizer\Componizer;
 
+/**
+ * Class WidgetManager is used for widget management.
+ *
+ * @package Gavrya\Componizer\Manager
+ */
 class WidgetManager
 {
 
-    // Componizer
+    /**
+     * @var Componizer
+     */
     private $componizer = null;
 
     //-----------------------------------------------------
-    // Instance creation/init section
+    // Constructor section
     //-----------------------------------------------------
 
+    /**
+     * WidgetManager constructor.
+     *
+     * @param Componizer $componizer
+     */
     public function __construct(Componizer $componizer)
     {
         $this->componizer = $componizer;
@@ -33,9 +45,14 @@ class WidgetManager
     // Validation section
     //-----------------------------------------------------
 
+    /**
+     * Tells if widget valid.
+     *
+     * @param AbstractWidgetComponent $widget
+     * @return bool
+     */
     public function isWidgetValid($widget)
     {
-        // check instance
         if (!($widget instanceof AbstractWidgetComponent)) {
             return false;
         }
@@ -43,20 +60,15 @@ class WidgetManager
         /** @var ComponentManager $componentManager */
         $componentManager = $this->componizer->resolve(ComponentManager::class);
 
-        // validate component
         if (!$componentManager->isComponentValid($widget)) {
             return false;
         }
 
-        // check widget editor assets
         if (!($widget->getEditorAssets() instanceof AssetsCollection)) {
-            // todo: check if empty
             return false;
         }
 
-        // check widget display assets
         if (!($widget->getDisplayAssets() instanceof AssetsCollection)) {
-            // todo: check if empty
             return false;
         }
 
@@ -67,6 +79,11 @@ class WidgetManager
     // Get/find section
     //-----------------------------------------------------
 
+    /**
+     * Returns all widgets.
+     *
+     * @return AbstractWidgetComponent[]
+     */
     public function getAllWidgets()
     {
         /** @var PluginManager $pluginManager */
@@ -75,6 +92,12 @@ class WidgetManager
         return $this->findWidgetComponents($pluginManager->getAllPlugins());
     }
 
+    /**
+     * Finds widget by id or instance.
+     *
+     * @param AbstractWidgetComponent|string $widget
+     * @return AbstractWidgetComponent|null
+     */
     public function findWidget($widget)
     {
         return $this->findWidgetComponent($widget, $this->getAllWidgets());
@@ -84,6 +107,11 @@ class WidgetManager
     // Enabled/disabled section
     //-----------------------------------------------------
 
+    /**
+     * Returns all enabled widgets.
+     *
+     * @return AbstractWidgetComponent[]
+     */
     public function getEnabledWidgets()
     {
         /** @var PluginManager $pluginManager */
@@ -92,6 +120,11 @@ class WidgetManager
         return $this->findWidgetComponents($pluginManager->getEnabledPlugins());
     }
 
+    /**
+     * Returns all disabled widgets.
+     *
+     * @return AbstractWidgetComponent[]
+     */
     public function getDisabledWidgets()
     {
         /** @var PluginManager $pluginManager */
@@ -100,11 +133,23 @@ class WidgetManager
         return $this->findWidgetComponents($pluginManager->getDisabledPlugins());
     }
 
+    /**
+     * Finds enabled widget.
+     *
+     * @param AbstractWidgetComponent|string $widget
+     * @return AbstractWidgetComponent|null
+     */
     public function findEnabledWidget($widget)
     {
         return $this->findWidgetComponent($widget, $this->getEnabledWidgets());
     }
 
+    /**
+     * Tells if widget enabled.
+     *
+     * @param AbstractWidgetComponent|string $widget
+     * @return bool
+     */
     public function isWidgetEnabled($widget)
     {
         return $this->findEnabledWidget($widget) !== null;
@@ -115,9 +160,9 @@ class WidgetManager
     //-----------------------------------------------------
 
     /**
-     * Returns enabled and allowed widget for "editor content" rendering.
+     * Returns allowed widgets.
      *
-     * @return array
+     * @return AbstractWidgetComponent[]
      */
     public function getAllowedWidgets()
     {
@@ -125,34 +170,57 @@ class WidgetManager
         return $this->getEnabledWidgets();
     }
 
+    /**
+     * Returns denied widgets.
+     *
+     * @return AbstractWidgetComponent[]
+     */
     public function getDeniedWidgets()
     {
         // todo: implement using SettingsManager in future
         return $this->getDisabledWidgets();
     }
 
+    /**
+     * Finds allowed widget.
+     *
+     * @param AbstractWidgetComponent|string $widget
+     * @return AbstractWidgetComponent
+     */
     public function findAllowedWidget($widget)
     {
         return $this->findWidgetComponent($widget, $this->getAllowedWidgets());
     }
 
+    /**
+     * Tells if widget allowed.
+     *
+     * @param AbstractWidgetComponent|string $widget
+     * @return bool
+     */
     public function isWidgetAllowed($widget)
     {
         return $this->findAllowedWidget($widget) !== null;
     }
 
     //-----------------------------------------------------
-    // Internal methods section
+    // Pivate methods section
     //-----------------------------------------------------
 
+    /**
+     * Finds widgets by plugins.
+     *
+     * @param AbstractPluginComponent[] $plugins
+     * @return AbstractWidgetComponent[]
+     */
     private function findWidgetComponents(array $plugins)
     {
         $widgets = [];
 
-        /** @var \Gavrya\Componizer\Skeleton\ComponizerPlugin $plugin */
+        /** @var AbstractPluginComponent $plugin */
         foreach ($plugins as $plugin) {
-            /** @var ComponentInterface|AbstractWidgetComponent $widget */
-            foreach ($plugin->widgets() as $widget) {
+            /** @var AbstractWidgetComponent $widget */
+            foreach ($plugin->getWidgets() as $widget) {
                 $widgets[$widget->getId()] = $widget;
             }
         }
@@ -160,6 +228,13 @@ class WidgetManager
         return $widgets;
     }
 
+    /**
+     * Finds widget by id or instanve in widgets array.
+     *
+     * @param AbstractWidgetComponent|string $widget
+     * @param AbstractWidgetComponent[] $widgets
+     * @return AbstractWidgetComponent|null
+     */
     private function findWidgetComponent($widget, array $widgets)
     {
         $widgetId = null;
