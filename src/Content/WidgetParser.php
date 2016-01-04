@@ -100,8 +100,8 @@ class WidgetParser
 
             if(
                 !is_string($widgetDisplayContent) ||
-                empty(trim($widgetDisplayContent)) ||
-                !empty($this->parseWidgetIds($widgetDisplayContent))
+                empty(trim($widgetDisplayContent))
+                //!empty($this->parseWidgetIds($widgetDisplayContent))
             ) {
                 $comment = sprintf(
                     '<!-- Widget component with invalid content: id: %s, name: %s -->',

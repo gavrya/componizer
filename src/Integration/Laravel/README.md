@@ -6,4 +6,4 @@ Gavrya\Componizer\Integration\Laravel\ComponizerServiceProvider::class,
 
 Facade:
 
-'Componizer' => Integration\Laravel\ComponizerFacade::class,
+'Componizer' => Integration\Laravel\ComponizerEditor::class,
