@@ -263,7 +263,7 @@ class PluginManager
 
             $componentManager->disableComponent($plugin);
 
-            foreach ($plugin->components() as $component) {
+            foreach ($plugin->getComponents() as $component) {
                 if ($component instanceof ComponentInterface) {
                     $componentManager->disableComponent($component);
                 }

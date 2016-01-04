@@ -229,7 +229,7 @@ class WidgetManager
     }
 
     /**
-     * Finds widget by id or instanve in widgets array.
+     * Finds widget by id or instanve in widgets.
      *
      * @param AbstractWidgetComponent|string $widget
      * @param AbstractWidgetComponent[] $widgets

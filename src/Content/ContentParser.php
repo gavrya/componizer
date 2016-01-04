@@ -38,6 +38,7 @@ class ContentParser implements ContentParserInterface
     public function __construct(Componizer $componizer)
     {
         $this->componizer = $componizer;
+
         ini_set('xdebug.max_nesting_level', 500);
     }
 
@@ -66,12 +67,11 @@ class ContentParser implements ContentParserInterface
 
         $doc = $domHelper->createDoc($editorContent);
         $docRoot = $domHelper->getDocRoot($doc);
-        $docXpath = new DOMXpath($doc);
 
         /** @var WidgetParser $widgetParser */
         $widgetParser = $this->componizer->resolve(WidgetParser::class);
 
-        $widgetElement = $widgetParser->findWidgetElement($docXpath, $docRoot);
+        $widgetElement = $widgetParser->findWidgetElement($doc, $docRoot);
 
         if ($widgetElement === null) {
             return $editorContent;

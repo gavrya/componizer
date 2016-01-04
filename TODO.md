@@ -2,24 +2,16 @@ Important:
 
 -- Update phpdocs
 
--- Update example plugin and widget
+-- Add getRequiredPlugins() to ContentProcessor
 
--- Rename ComponizerConfig to ComponizerConfig
+-- Change namespaces (Asset ->Asses, Component -> Components)
 
--- Add required plugins to ContentProcessor
+-- Add array of attributes to the Assets implementation classes
 
 Unimportant:
 
--- Assets add array of parameters
-
--- Add Integration dir for Laravel and other frameworks integration
-
 -- Add ComponizerMetaAsset ?
-
 -- Add ComponizerTemplateAsset ?
-
--- ContentProcessor: add ability to pass array of content with target keys ($editorContent, $targetKeys = null).
-   Usefull for parsing results from database rows with multiple "editor content" fields in each row.
 
 -- Add ScopeManager/SettingsManager
 
@@ -28,8 +20,6 @@ Unimportant:
 -- How to link widgets with related plugin to group inside hwysiwyg editor?
 
 -- Add type of preferred color theme: "dark" or "light"  ?
-
--- Create Laravel ServiceProvider ?
 
 Code formatting (http://symfony.com/doc/current/contributing/code/standards.html):
 

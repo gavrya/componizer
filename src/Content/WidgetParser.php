@@ -9,6 +9,7 @@
 namespace Gavrya\Componizer\Content;
 
 
+use DOMDocument;
 use DOMElement;
 use DOMNodeList;
 use DOMXpath;
@@ -61,7 +62,7 @@ class WidgetParser
         $domHelper = $this->componizer->resolve(DomHelper::class);
 
         if (!$this->isValidWidgetElement($widgetElement)) {
-            $domHelper->replaceNodeWith($widgetElement, '<!-- Removed invalid widget component -->');
+            $domHelper->replaceNodeWith($widgetElement, '<!-- Widget component removed -->');
 
             return;
         }
@@ -148,10 +149,9 @@ class WidgetParser
 
         $doc = $domHelper->createDoc($editorContent);
         $docRoot = $domHelper->getDocRoot($doc);
-        $docXpath = new DOMXpath($doc);
 
         /** @var DOMNodeList $widgetElements */
-        $widgetElements = $this->findWidgetElements($docXpath, $docRoot);
+        $widgetElements = $this->findWidgetElements($doc, $docRoot);
 
         if ($widgetElements instanceof DOMNodeList) {
             /** @var DOMElement $widgetElement */
@@ -170,24 +170,28 @@ class WidgetParser
     /**
      * Finds first widget element.
      *
-     * @param DOMXpath $docXpath
+     * @param DOMDocument $domDoc
      * @param DOMElement $docRoot
      * @return DOMElement|null
      */
-    public function findWidgetElement(DOMXpath $docXpath, DOMElement $docRoot)
+    public function findWidgetElement(DOMDocument $domDoc, DOMElement $docRoot)
     {
+        $docXpath = new DOMXpath($domDoc);
+
         return $docXpath->query('(//*[@' . ContentParserInterface::WIDGET_ATTR . '])[1]', $docRoot)->item(0);
     }
 
     /**
      * Finds all widget elements.
      *
-     * @param DOMXpath $docXpath
+     * @param DOMDocument $domDoc
      * @param DOMElement $docRoot
      * @return DOMNodeList|bool
      */
-    public function findWidgetElements(DOMXpath $docXpath, DOMElement $docRoot)
+    public function findWidgetElements(DOMDocument $domDoc, DOMElement $docRoot)
     {
+        $docXpath = new DOMXpath($domDoc);
+
         return $docXpath->query('(//*[@' . ContentParserInterface::WIDGET_ATTR . '])', $docRoot);
     }
 
