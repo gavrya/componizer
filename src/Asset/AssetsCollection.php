@@ -58,7 +58,7 @@ class AssetsCollection
      */
     public function hasAssets()
     {
-        return $this->hasAddedAssets() && $this->hasInjectedAssets();
+        return $this->hasAddedAssets() || $this->hasInjectedAssets();
     }
 
     /**

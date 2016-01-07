@@ -106,12 +106,6 @@ echo PHP_EOL;
 echo $contentProcessor->initEditorContent($editorContent);
 echo PHP_EOL;
 
-$timerStop = microtime(true);
-
-echo PHP_EOL;
-echo round($timerStop - $timerStart, 3);
-echo PHP_EOL;
-
 echo PHP_EOL;
 echo 'Required widgets: ' . count($contentProcessor->getRequiredWidgets());
 echo PHP_EOL;
@@ -119,6 +113,8 @@ echo PHP_EOL;
 echo PHP_EOL;
 echo $contentProcessor->makeDisplayContent($editorContent);
 echo PHP_EOL;
+
+echo $contentProcessor->getRequiredDisplayAssets()->getHeadAssetsHtml() . PHP_EOL;
 
 $timerStop = microtime(true);
 
