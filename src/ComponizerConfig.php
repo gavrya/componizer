@@ -29,6 +29,10 @@ class ComponizerConfig
     const CONFIG_PUBLIC_DIR = 'public_dir';
     const CONFIG_PREVIEW_URL = 'preview_url';
 
+    // Default values
+    const CACHE_DIR_NAME = 'componizer';
+    const PUBLIC_DIR_NAME = 'componizer';
+
     /**
      * @var array
      */
@@ -167,8 +171,8 @@ class ComponizerConfig
 
             $this->config[static::CONFIG_CACHE_DIR] = $dirPath;
 
-            if (basename($dirPath) != static::CONFIG_CACHE_DIR) {
-                $dirPath = $dirPath . DIRECTORY_SEPARATOR . static::CONFIG_CACHE_DIR;
+            if (basename($dirPath) != static::CACHE_DIR_NAME) {
+                $dirPath = $dirPath . DIRECTORY_SEPARATOR . static::CACHE_DIR_NAME;
 
                 if (file_exists($dirPath) && is_dir($dirPath) && !is_writable($dirPath)) {
                     throw new Exception('Cache directory is not writable');
@@ -213,8 +217,8 @@ class ComponizerConfig
 
             $this->config[static::CONFIG_PUBLIC_DIR] = $dirPath;
 
-            if (basename($dirPath) != static::CONFIG_PUBLIC_DIR) {
-                $dirPath = $dirPath . DIRECTORY_SEPARATOR . static::CONFIG_PUBLIC_DIR;
+            if (basename($dirPath) != static::PUBLIC_DIR_NAME) {
+                $dirPath = $dirPath . DIRECTORY_SEPARATOR . static::PUBLIC_DIR_NAME;
 
                 if (file_exists($dirPath) && is_dir($dirPath) && !is_writable($dirPath)) {
                     throw new Exception('Public directory is not writable');

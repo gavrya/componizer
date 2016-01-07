@@ -14,7 +14,7 @@ Important:
 
 -- Rename Componizer to ComponizerEditor, laravel facade ComponizerEditor to Componizer
 
--- Parsing not working with two sibling element came from makeDisplayContent(): <div>content</div><p>content</p> -> <div>content</div> vs <div>content</div><p>content</p>
+-- Add prepareDirs() to Componizer to create dirs validates in ComponizerConfig. ComponizerConfig is only for checking config, not for creating.
 
 Unimportant:
 

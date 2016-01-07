@@ -31,9 +31,6 @@ class Componizer
 
     // General constants
     const VERSION = '0.0.1';
-    const PLUGIN_JSON_FILE_NAME = 'componizer.json';
-    const CACHE_DIR_NAME = 'componizer';
-    const PUBLIC_DIR_NAME = 'componizer';
 
     /**
      * @var ComponizerConfig

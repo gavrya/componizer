@@ -27,6 +27,9 @@ class PluginManager
     // Storage key constant
     const STORAGE_ENABLED_PLUGINS = 'enabled_plugins';
 
+    // Plugins JSON file name
+    const PLUGIN_JSON_FILE_NAME = 'componizer.json';
+
     // Plugin JSON constants
     const JSON_VAR_COMPONIZER = 'componizer';
     const JSON_VAR_VERSION = 'version';
@@ -83,7 +86,7 @@ class PluginManager
             return [];
         }
 
-        $pluginsJsonFiles = $fsHelper->getPluginsJsonFiles($vendorPath, Componizer::PLUGIN_JSON_FILE_NAME);
+        $pluginsJsonFiles = $fsHelper->getPluginsJsonFiles($vendorPath, static::PLUGIN_JSON_FILE_NAME);
 
         $pluginsJsonData = $fsHelper->getPluginsJsonData($pluginsJsonFiles);
 
