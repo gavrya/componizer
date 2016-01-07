@@ -27,13 +27,18 @@ class InternalJsAsset implements AssetInterface
     /**
      * @var string
      */
+    private $position = null;
+
+    /**
+     * @var string
+     */
     private $script = null;
 
     //-----------------------------------------------------
     // Constructor section
     //-----------------------------------------------------
 
-    public function __construct($script)
+    public function __construct($script, $position = AssetInterface::POSITION_HEAD)
     {
         if (
             $script === null ||
@@ -44,7 +49,18 @@ class InternalJsAsset implements AssetInterface
             throw new InvalidArgumentException('Invalid script');
         }
 
+        $positions = [
+            AssetInterface::POSITION_HEAD,
+            AssetInterface::POSITION_BODY_TOP,
+            AssetInterface::POSITION_BODY_BOTTOM,
+        ];
+
+        if (!in_array($position, $positions)) {
+            throw new InvalidArgumentException(sprintf('Invalid position: %s', $position));
+        }
+
         $this->hash = md5($script);
+        $this->position = $position;
         $this->script = $script;
     }
 
@@ -85,7 +101,7 @@ class InternalJsAsset implements AssetInterface
      */
     public function getPosition()
     {
-        return AssetInterface::POSITION_HEAD;
+        $this->position;
     }
 
     /**
