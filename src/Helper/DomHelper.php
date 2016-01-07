@@ -99,7 +99,7 @@ class DomHelper
 
         $fragment = $dom->createDocumentFragment();
 
-        $bodyElement = $dom->getElementsByTagName('body')->item(0);
+        $bodyElement = $this->getDocRoot($dom);
 
         foreach ($bodyElement->childNodes as $childNode) {
             $fragment->appendChild($childNode);

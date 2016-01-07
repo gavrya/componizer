@@ -266,6 +266,7 @@ class WidgetParser
     public function parseWidgetProperties(DOMElement $widgetElement)
     {
         $widgetProperties = trim($widgetElement->getAttribute(ContentParserInterface::WIDGET_ATTR_PROPERTIES));
+        $widgetProperties = html_entity_decode($widgetProperties, null, 'UTF-8');
         $widgetProperties = json_decode($widgetProperties, true);
 
         if (!is_array($widgetProperties)) {

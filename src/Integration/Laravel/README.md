@@ -1,9 +1,13 @@
-Laravel 5.x:
+###Laravel 5.x:
 
-Service provider:
+Add service provider to the 'providers' array in config/app.php:
 
+```
 Gavrya\Componizer\Integration\Laravel\ComponizerServiceProvider::class,
+```
 
-Facade:
+Add facade alias to the 'aliases' array in config/app.php:
 
-'Componizer' => Integration\Laravel\ComponizerEditor::class,
+```
+'ComponizerEditor' => Gavrya\Componizer\Integration\Laravel\ComponizerEditor::class,
+```

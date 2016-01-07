@@ -8,6 +8,14 @@ Important:
 
 -- Add array of attributes to the Assets implementation classes
 
+-- Add helper methods to the laravel componizer facade. ComponizerEditor::getHeadAssetsHtml();
+
+-- Separate enablePlugin and enablePlugins
+
+-- Rename Componizer to ComponizerEditor, laravel facade ComponizerEditor to Componizer
+
+-- Parsing not working with two sibling element came from makeDisplayContent(): <div>content</div><p>content</p> -> <div>content</div> vs <div>content</div><p>content</p>
+
 Unimportant:
 
 -- Add ComponizerMetaAsset ?

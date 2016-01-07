@@ -43,7 +43,7 @@ class Componizer
     /**
      * @var array
      */
-    private $dependencyContainer = [];
+    private $dependencies = [];
 
     //-----------------------------------------------------
     // Constructor section
@@ -120,10 +120,10 @@ class Componizer
      */
     public function resolve($className)
     {
-        if (array_key_exists($className, $this->dependencyContainer)) {
-            $dependency = $this->dependencyContainer[$className];
+        if (array_key_exists($className, $this->dependencies)) {
+            $dependency = $this->dependencies[$className];
 
-            return $dependency instanceof Closure ? $this->dependencyContainer[$className] = $dependency() : $dependency;
+            return $dependency instanceof Closure ? $this->dependencies[$className] = $dependency() : $dependency;
         }
 
         return null;
@@ -137,39 +137,39 @@ class Componizer
         // alias
         $componizer = $this;
 
-        $this->dependencyContainer[FsHelper::class] = function () {
+        $this->dependencies[FsHelper::class] = function () {
             return new FsHelper();
         };
 
-        $this->dependencyContainer[StorageHelper::class] = function () use ($componizer) {
+        $this->dependencies[StorageHelper::class] = function () use ($componizer) {
             return new StorageHelper($componizer->getConfig()->get(ComponizerConfig::CONFIG_CACHE_DIR));
         };
 
-        $this->dependencyContainer[DomHelper::class] = function () {
+        $this->dependencies[DomHelper::class] = function () {
             return new DomHelper();
         };
 
-        $this->dependencyContainer[PluginManager::class] = function () use ($componizer) {
+        $this->dependencies[PluginManager::class] = function () use ($componizer) {
             return new PluginManager($componizer);
         };
 
-        $this->dependencyContainer[ComponentManager::class] = function () use ($componizer) {
+        $this->dependencies[ComponentManager::class] = function () use ($componizer) {
             return new ComponentManager($componizer);
         };
 
-        $this->dependencyContainer[WidgetManager::class] = function () use ($componizer) {
+        $this->dependencies[WidgetManager::class] = function () use ($componizer) {
             return new WidgetManager($componizer);
         };
 
-        $this->dependencyContainer[WidgetParser::class] = function () use ($componizer) {
+        $this->dependencies[WidgetParser::class] = function () use ($componizer) {
             return new WidgetParser($componizer);
         };
 
-        $this->dependencyContainer[ContentParser::class] = function () use ($componizer) {
+        $this->dependencies[ContentParser::class] = function () use ($componizer) {
             return new ContentParser($componizer);
         };
 
-        $this->dependencyContainer[ContentProcessor::class] = function () use ($componizer) {
+        $this->dependencies[ContentProcessor::class] = function () use ($componizer) {
             return new ContentProcessor($componizer);
         };
     }

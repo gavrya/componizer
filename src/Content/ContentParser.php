@@ -9,7 +9,6 @@
 namespace Gavrya\Componizer\Content;
 
 
-use DOMXPath;
 use Gavrya\Componizer\Componizer;
 use Gavrya\Componizer\Helper\DomHelper;
 

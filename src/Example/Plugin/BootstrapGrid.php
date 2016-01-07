@@ -10,7 +10,10 @@ namespace Gavrya\Componizer\Example\Plugin;
 
 
 use Gavrya\Componizer\Component\AbstractPluginComponent;
+use Gavrya\Componizer\Example\Widget\BootstrapAlert;
 use Gavrya\Componizer\Example\Widget\BootstrapColumn;
+use Gavrya\Componizer\Example\Widget\BootstrapCustom;
+use Gavrya\Componizer\Example\Widget\BootstrapJumbotron;
 use Gavrya\Componizer\Example\Widget\BootstrapRow;
 
 
@@ -26,7 +29,13 @@ class BootstrapGrid extends AbstractPluginComponent
 
     public function __construct()
     {
-        $this->widgets = [new BootstrapRow(), new BootstrapColumn()];
+        $this->widgets = [
+            new BootstrapRow(),
+            new BootstrapColumn(),
+            new BootstrapAlert(),
+            new BootstrapJumbotron(),
+            new BootstrapCustom(),
+        ];
     }
 
     //-----------------------------------------------------

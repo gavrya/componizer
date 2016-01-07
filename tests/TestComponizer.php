@@ -14,22 +14,23 @@ $config = [
     ComponizerConfig::CONFIG_PREVIEW_URL => '/preview.php',
 ];
 
-var_dump($config);
+//var_dump($config);
 
 $componnizerConfig = new ComponizerConfig($config);
 
-
-var_dump($componnizerConfig);
+//var_dump($componnizerConfig);
 
 $componizer = new Componizer($componnizerConfig);
 
-var_dump($componizer);
+//var_dump($componizer);
 
 $pluginManager = $componizer->getPluginManager();
 
 $pluginManager->enablePlugin($pluginManager->getDisabledPlugins());
 
-var_dump($pluginManager->getEnabledPlugins());
+foreach($pluginManager->getEnabledPlugins() as $plugin) {
+    echo $plugin->getName() . PHP_EOL;
+}
 
 $editorContent = <<<EOD
         <div
@@ -47,7 +48,7 @@ $editorContent = <<<EOD
                  data-componizer-widget-properties='{"class": "col-md-6"}'
                  data-componizer-widget-content-type="mixed">
                     <div data-componizer-widget-content>
-                        First column
+                        Some crazy content
                     </div>
                 </div>
 
@@ -58,10 +59,43 @@ $editorContent = <<<EOD
                  data-componizer-widget-properties='{"class": "col-md-6"}'
                  data-componizer-widget-content-type="mixed">
                     <div data-componizer-widget-content>
-                        Second column
+                        Some crazy content
                     </div>
                 </div>
 
+            </div>
+        </div>
+
+        <div
+         data-componizer-widget
+         data-componizer-widget-id="99999999"
+         data-componizer-widget-name="Bootstrap alerts widget"
+         data-componizer-widget-properties='{"type": "info"}'
+         data-componizer-widget-content-type="mixed">
+            <div data-componizer-widget-content>
+                Some crazy content
+            </div>
+        </div>
+
+        <div
+         data-componizer-widget
+         data-componizer-widget-id="77777777"
+         data-componizer-widget-name="Bootstrap jumbotron widget"
+         data-componizer-widget-properties='{"class": "col-md-6"}'
+         data-componizer-widget-content-type="mixed">
+            <div data-componizer-widget-content>
+                Some crazy content
+            </div>
+        </div>
+
+        <div
+         data-componizer-widget
+         data-componizer-widget-id="88888888"
+         data-componizer-widget-name="Bootstrap custom widget"
+         data-componizer-widget-properties='{}'
+         data-componizer-widget-content-type="mixed">
+            <div data-componizer-widget-content>
+                Some crazy content
             </div>
         </div>
 EOD;
@@ -70,6 +104,12 @@ $contentProcessor = $componizer->getContentProcessor();
 
 echo PHP_EOL;
 echo $contentProcessor->initEditorContent($editorContent);
+echo PHP_EOL;
+
+$timerStop = microtime(true);
+
+echo PHP_EOL;
+echo round($timerStop - $timerStart, 3);
 echo PHP_EOL;
 
 echo PHP_EOL;
