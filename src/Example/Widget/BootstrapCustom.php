@@ -142,7 +142,7 @@ class BootstrapCustom extends AbstractWidgetComponent
 
         $content = isset($content) ? $contentParser->parseDisplayContent($content) : '';
 
-        return sprintf('<div class="custom">%s<p class="blabla">blabla</p></div>', $content);
+        return sprintf('<div class="custom">%s</div><p class="blabla">blabla</p>', $content);
     }
 
 }

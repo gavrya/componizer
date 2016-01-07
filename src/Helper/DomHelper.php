@@ -80,7 +80,7 @@ class DomHelper
     {
         $innerHtml = '';
 
-        foreach ($domNode->childNodes as $child) {
+        foreach ($this->getDomNodes($domNode->childNodes) as $child) {
             $innerHtml .= trim($child->ownerDocument->saveHTML($child));
         }
 
@@ -95,19 +95,34 @@ class DomHelper
      */
     function replaceNodeWith(DOMNode $domNode, $htmlFragment)
     {
-        $dom = $this->createDoc($htmlFragment);
+        $doc = $this->createDoc($htmlFragment);
+        $docRoot = $this->getDocRoot($doc);
+        $fragment = $doc->createDocumentFragment();
 
-        $fragment = $dom->createDocumentFragment();
-
-        $bodyElement = $this->getDocRoot($dom);
-
-        foreach ($bodyElement->childNodes as $childNode) {
+        foreach($this->getDomNodes($docRoot->childNodes) as $childNode) {
             $fragment->appendChild($childNode);
         }
 
         $newNode = $domNode->ownerDocument->importNode($fragment, true);
 
         $domNode->parentNode->replaceChild($newNode, $domNode);
+    }
+
+    /**
+     * Returns array of nodes in node list.
+     *
+     * @param DOMNodeList $nodeList
+     * @return DOMNode[]
+     */
+    function getDomNodes(DOMNodeList $nodeList)
+    {
+        $nodes = [];
+
+        foreach ($nodeList as $node) {
+            $nodes[] = $node;
+        }
+
+        return $nodes;
     }
 
     /**
@@ -133,7 +148,7 @@ class DomHelper
      */
     function findFirstChildByAttribute(DOMNode $domNode, $attributeName)
     {
-        foreach ($domNode->childNodes as $childNode) {
+        foreach ($this->getDomNodes($domNode->childNodes) as $childNode) {
             if ($childNode instanceof DOMElement && $childNode->hasAttribute($attributeName)) {
                 return $childNode;
             }
@@ -163,10 +178,7 @@ class DomHelper
         /** @var DOMNodeList $nodeList */
         $nodeList = $doc->getElementsByTagName('*');
 
-        for ($i = $nodeList->length; --$i >= 0;) {
-            /** @var DOMElement $domElement */
-            $domElement = $nodeList->item($i);
-
+        foreach($this->getDomNodes($nodeList) as $domElement) {
             $tagName = strtolower(trim($domElement->tagName));
 
             if ($tagName === 'script') {
