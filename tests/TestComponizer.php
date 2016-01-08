@@ -114,7 +114,11 @@ echo PHP_EOL;
 echo $contentProcessor->makeDisplayContent($editorContent);
 echo PHP_EOL;
 
-echo $contentProcessor->getRequiredDisplayAssets()->getHeadAssetsHtml() . PHP_EOL;
+//echo $contentProcessor->getRequiredDisplayAssets()->getBodyTopAssetsHtml() . PHP_EOL;
+
+//echo $componizer->getWidgetManager()->findWidget('88888888')->getDisplayAssets()->getBodyTopAssetsHtml();
+
+//var_dump($componizer->getWidgetManager()->findWidget('88888888')->getDisplayAssets());
 
 $timerStop = microtime(true);
 

@@ -51,8 +51,8 @@ class BootstrapCustom extends AbstractWidgetComponent
         $intJsBodyTop = new InternalJsAsset('<script>console.log("int js body top");</script>', AssetInterface::POSITION_BODY_TOP);
         $intJsBodyBottom = new InternalJsAsset('<script>console.log("int js body bottom");</script>', AssetInterface::POSITION_BODY_BOTTOM);
 
-        $extCssHead = new ExternalCssAsset('/componizer/' . $this->id . '/css/custom_head.css', AssetInterface::POSITION_HEAD);
-        $intCssHead = new InternalCssAsset('<style>.blabla { background-color: darkgrey;}</style>', AssetInterface::POSITION_HEAD);
+        $extCssHead = new ExternalCssAsset('/componizer/' . $this->id . '/css/custom_head.css');
+        $intCssHead = new InternalCssAsset('<style>.blabla { background-color: darkgrey;}</style>');
 
         $this->diasplayAssetsCollection = new AssetsCollection();
         $this->diasplayAssetsCollection->add([

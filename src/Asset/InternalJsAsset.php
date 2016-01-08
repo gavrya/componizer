@@ -101,7 +101,7 @@ class InternalJsAsset implements AssetInterface
      */
     public function getPosition()
     {
-        $this->position;
+        return $this->position;
     }
 
     /**
