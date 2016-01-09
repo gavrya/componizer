@@ -23,15 +23,15 @@ use InvalidArgumentException;
 class ComponizerConfig
 {
 
+    // Dir names
+    const CACHE_DIR_NAME = 'componizer';
+    const PUBLIC_DIR_NAME = 'componizer';
+
     // ComponizerConfig keys
     const CONFIG_LANG = 'lang';
     const CONFIG_CACHE_DIR = 'cache_dir';
     const CONFIG_PUBLIC_DIR = 'public_dir';
     const CONFIG_PREVIEW_URL = 'preview_url';
-
-    // Default values
-    const CACHE_DIR_NAME = 'componizer';
-    const PUBLIC_DIR_NAME = 'componizer';
 
     /**
      * @var array
@@ -134,10 +134,6 @@ class ComponizerConfig
             if (!isset($this->config[static::CONFIG_LANG])) {
                 $this->config[static::CONFIG_LANG] = 'en';
             }
-
-            if (!in_array($this->config[static::CONFIG_LANG], ['en', 'ru'])) {
-                throw new Exception('Invalid language code');
-            }
         } catch (Exception $ex) {
             $this->addValidationError(static::CONFIG_LANG, $ex->getMessage());
         }
@@ -171,15 +167,11 @@ class ComponizerConfig
 
             $this->config[static::CONFIG_CACHE_DIR] = $dirPath;
 
-            if (basename($dirPath) != static::CACHE_DIR_NAME) {
+            if (basename($dirPath) !== static::CACHE_DIR_NAME) {
                 $dirPath = $dirPath . DIRECTORY_SEPARATOR . static::CACHE_DIR_NAME;
 
                 if (file_exists($dirPath) && is_dir($dirPath) && !is_writable($dirPath)) {
                     throw new Exception('Cache directory is not writable');
-                }
-
-                if ((!file_exists($dirPath) || !is_dir($dirPath)) && !mkdir($dirPath)) {
-                    throw new Exception('Unable to create cache directory');
                 }
 
                 $this->config[static::CONFIG_CACHE_DIR] = $dirPath;
@@ -217,15 +209,11 @@ class ComponizerConfig
 
             $this->config[static::CONFIG_PUBLIC_DIR] = $dirPath;
 
-            if (basename($dirPath) != static::PUBLIC_DIR_NAME) {
+            if (basename($dirPath) !== static::PUBLIC_DIR_NAME) {
                 $dirPath = $dirPath . DIRECTORY_SEPARATOR . static::PUBLIC_DIR_NAME;
 
                 if (file_exists($dirPath) && is_dir($dirPath) && !is_writable($dirPath)) {
                     throw new Exception('Public directory is not writable');
-                }
-
-                if ((!file_exists($dirPath) || !is_dir($dirPath)) && !mkdir($dirPath)) {
-                    throw new Exception('Unable to create public directory');
                 }
 
                 $this->config[static::CONFIG_PUBLIC_DIR] = $dirPath;

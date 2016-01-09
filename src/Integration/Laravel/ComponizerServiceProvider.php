@@ -20,7 +20,7 @@ class ComponizerServiceProvider extends ServiceProvider
      *
      * @var bool
      */
-    protected $defer = false;
+    protected $defer = true;
 
     /**
      * Bootstrap the application services.
@@ -50,6 +50,6 @@ class ComponizerServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        return ['componizer'];
+        return [Componizer::class];
     }
 }

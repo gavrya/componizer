@@ -10,15 +10,15 @@ namespace Gavrya\Componizer;
 
 
 use Closure;
-use Gavrya\Componizer\Content\ContentParser;
-use Gavrya\Componizer\Content\ContentProcessor;
-use Gavrya\Componizer\Content\WidgetParser;
-use Gavrya\Componizer\Helper\DomHelper;
-use Gavrya\Componizer\Helper\FsHelper;
-use Gavrya\Componizer\Helper\StorageHelper;
-use Gavrya\Componizer\Manager\ComponentManager;
-use Gavrya\Componizer\Manager\PluginManager;
-use Gavrya\Componizer\Manager\WidgetManager;
+use Gavrya\Componizer\Helpers\DomHelper;
+use Gavrya\Componizer\Helpers\FsHelper;
+use Gavrya\Componizer\Helpers\StorageHelper;
+use Gavrya\Componizer\Managers\ComponentManager;
+use Gavrya\Componizer\Managers\PluginManager;
+use Gavrya\Componizer\Managers\WidgetManager;
+use Gavrya\Componizer\Processing\ContentParser;
+use Gavrya\Componizer\Processing\ContentProcessor;
+use Gavrya\Componizer\Processing\WidgetParser;
 use InvalidArgumentException;
 
 /**
@@ -181,6 +181,7 @@ class Componizer
     private function init()
     {
         $this->initDependecyContainer();
+        $this->prepareConfigDirs();
         $this->removeBrokenSymlinks();
         // todo: remove unused cache dirs of removed components
     }
@@ -196,6 +197,21 @@ class Componizer
         $fsHelper = $this->resolve(FsHelper::class);
 
         $fsHelper->removeBrokenSymlinks($publicDir);
+    }
+
+    /**
+     * Creates config dirs if not exits.
+     */
+    private function prepareConfigDirs()
+    {
+        $publicDir = $this->config->get(ComponizerConfig::CONFIG_PUBLIC_DIR);
+        $cacheDir = $this->config->get(ComponizerConfig::CONFIG_CACHE_DIR);
+
+        /** @var FsHelper $fsHelper */
+        $fsHelper = $this->resolve(FsHelper::class);
+
+        $fsHelper->makeDir($publicDir);
+        $fsHelper->makeDir($cacheDir);
     }
 
 }

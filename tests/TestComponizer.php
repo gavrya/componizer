@@ -26,7 +26,7 @@ $componizer = new Componizer($componnizerConfig);
 
 $pluginManager = $componizer->getPluginManager();
 
-$pluginManager->enablePlugin($pluginManager->getDisabledPlugins());
+$pluginManager->enablePlugins($pluginManager->getDisabledPlugins());
 
 foreach($pluginManager->getEnabledPlugins() as $plugin) {
     echo $plugin->getName() . PHP_EOL;

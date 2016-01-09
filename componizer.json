@@ -3,6 +3,6 @@
     "version" : "0.0.1"
   },
   "plugin": {
-    "class" : "\\Gavrya\\Componizer\\Example\\Plugin\\BootstrapGrid"
+    "class" : "\\Gavrya\\Componizer\\Examples\\Plugins\\BootstrapGrid"
   }
 }

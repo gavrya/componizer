@@ -1,10 +1,10 @@
 <?php
 
-use Gavrya\Componizer\Asset\AssetsCollection;
-use Gavrya\Componizer\Asset\ExternalCssAsset;
-use Gavrya\Componizer\Asset\ExternalJsAsset;
-use Gavrya\Componizer\Asset\InternalCssAsset;
-use Gavrya\Componizer\Asset\InternalJsAsset;
+use Gavrya\Componizer\Assets\AssetsCollection;
+use Gavrya\Componizer\Assets\ExternalCssAsset;
+use Gavrya\Componizer\Assets\ExternalJsAsset;
+use Gavrya\Componizer\Assets\InternalCssAsset;
+use Gavrya\Componizer\Assets\InternalJsAsset;
 
 include('init.php');
 
